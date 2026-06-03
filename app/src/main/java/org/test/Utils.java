@@ -22,18 +22,19 @@ public class Utils {
 	public static void DrawLevelText(SpriteBatch spriteBatch, LFont font,
 			String text, boolean locked, Vector2f position) {
 		LColor white = LColor.white;
+		float statusY = position.y + Constants.s(14f);
 		if (locked) {
 			white = LColor.gray;
 			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getLocked(), position.add(0f, 14f),
+					LanguageResources.getLocked(), position.x, statusY,
 					LColor.red);
 		} else {
 			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getUnlocked(), position.add(0f, 14f),
+					LanguageResources.getUnlocked(), position.x, statusY,
 					new LColor(0f, 1f, 0f, 1f));
 		}
-		DrawStringAlignCenter(spriteBatch, font, text.toUpperCase(), position,
-				white);
+		DrawStringAlignCenter(spriteBatch, font, text.toUpperCase(), position.x,
+				position.y, white);
 	}
 
 	private static Vector2f pos = new Vector2f();
