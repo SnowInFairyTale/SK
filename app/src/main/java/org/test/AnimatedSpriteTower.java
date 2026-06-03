@@ -7,7 +7,8 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 	
 	public AnimatedSpriteTower(MainGame game, String textureFile,
 			Vector2f position, int spriteCount) {
-		super(game, textureFile, position, 6, spriteCount, 320, 320, 1f);
+		super(game, textureFile, position, 6, spriteCount, Constants.s(80),
+				Constants.s(80), 1f);
 		super.setAnimationSpeedRatio(3);
 	}
 
@@ -45,8 +46,9 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 
 		RefObject<Integer> num2 = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
-				towerType, "png/", num2), towerToolbarDrawPosition.add(-2f,
-				-34f), 6, num2.argvalue, 320, 320, scale);
+				towerType, "png/", num2), towerToolbarDrawPosition.add(
+				Constants.s(-2f), Constants.s(-34f)), 6, num2.argvalue,
+				Constants.s(80), Constants.s(80), scale);
 
 		return tempVar;
 	}

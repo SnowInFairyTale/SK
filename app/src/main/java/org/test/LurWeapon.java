@@ -27,7 +27,7 @@ public class LurWeapon extends DrawableGameComponent implements IGameComponent {
 		this.setHasHitTarget(false);
 		this.targetMonsters = targetMonsters;
 
-		this.bashRadius = 20;
+		this.bashRadius = Constants.s(20);
 		for (Monster monster : targetMonsters) {
 			monster.addReservedHitPoints(this.damage);
 		}
@@ -59,7 +59,7 @@ public class LurWeapon extends DrawableGameComponent implements IGameComponent {
 			}
 			this.game.Components().remove(this);
 		} else {
-			this.bashRadius += 2;
+			this.bashRadius += Constants.s(2);
 		}
 	}
 

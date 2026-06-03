@@ -21,7 +21,7 @@ public class Cash extends DrawableGameComponent implements IGameComponent {
 	public Cash(MainGame game, int cash) {
 		super(game);
 		this.textureFile = "assets/cash.png";
-		this.position = new Vector2f(250f, 0f);
+		this.position = new Vector2f(Constants.HUD_CASH_X, Constants.HUD_CASH_Y);
 		this.game = game;
 		this.cash = cash;
 	}
@@ -36,8 +36,8 @@ public class Cash extends DrawableGameComponent implements IGameComponent {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, this.position, LColor.white);
 		Utils.DrawStringAlignRight(batch, this.font, (new Integer(this.cash))
-				.toString(), this.position.x + 46f,
-				this.position.y + 3f, LColor.white);
+				.toString(), this.position.x + Constants.s(46f),
+				this.position.y + Constants.s(3f), LColor.white);
 		super.draw(batch,gameTime);
 	}
 

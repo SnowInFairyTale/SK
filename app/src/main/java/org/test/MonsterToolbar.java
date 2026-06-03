@@ -25,7 +25,7 @@ public class MonsterToolbar extends DrawableGameComponent implements
 		super(game);
 		this.game = game;
 		this.monster = monster;
-		this.drawPosition = new Vector2f(40f, 1680f);
+		this.drawPosition = new Vector2f(Constants.s(10f), Constants.s(420f));
 		this.drawPositionFont = this.drawPosition.add(Constants.s(78f),
 				Constants.s(12f));
 		this.animatedSpriteMonster = AnimatedSpriteMonster

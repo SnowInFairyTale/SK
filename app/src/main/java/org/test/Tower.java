@@ -251,7 +251,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	}
 
 	public final void SetValuesFromTowerLevel(int level) {
-		this.setRange(this.getTowerLevels()[level].getRange());
+		this.setRange(Constants.s(this.getTowerLevels()[level].getRange()));
 		this.setReleaseTime(this.getTowerLevels()[level].getReleaseTime());
 		this.setReloadTime(this.getTowerLevels()[level].getReloadTime());
 		this.setDamage(this.getTowerLevels()[level].getDamage());
@@ -270,10 +270,12 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.game.getGameplayScreen().getCash().Decrease(this.getUpgradeCost());
 		this.setValue(this.getValue() + this.getUpgradeCost());
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			this.upgradeProgressBar = new ProgressBar(this.game, Constants.s(10),
+			int upgradeBarW = Constants.s(10);
+			this.upgradeProgressBar = new ProgressBar(this.game, upgradeBarW,
 					false);
-			this.upgradeProgressBar.setPosition(this.getDrawPosition().add(
-					Constants.s(5f), Constants.s(10f)));
+			this.upgradeProgressBar.setPosition(new Vector2f(
+					this.getPosition().x - upgradeBarW / 2f,
+					this.getPosition().y + Constants.s(8f)));
 			this.game.Components().add(this.upgradeProgressBar);
 			this.isUpgrading = true;
 			this.upgradeTimeLeft = this.getUpgradeTime() * 1000f;

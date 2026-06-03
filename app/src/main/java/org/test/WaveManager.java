@@ -29,7 +29,7 @@ public class WaveManager extends DrawableGameComponent implements
 		super(game);
 		this.waves = new java.util.ArrayList<Wave>();
 		this.activeWaves = new java.util.ArrayList<Wave>();
-		this.drawPosition = new Vector2f(70f, -4f);
+		this.drawPosition = new Vector2f(Constants.HUD_WAVE_X, Constants.HUD_WAVE_Y);
 		this.game = game;
 		switch (difficulty) {
 		case Easy:
@@ -253,16 +253,17 @@ public class WaveManager extends DrawableGameComponent implements
 		batch.draw(this.texture, this.drawPosition, LColor.white);
 		batch.drawString(this.font, LanguageResources.getWave() + " "
 				+ this.waveNumber + " " + LanguageResources.getof() + " "
-				+ this.waves.size(), this.drawPosition.x + 17f,
-				this.drawPosition.y + 2f, LColor.white);
+				+ this.waves.size(), this.drawPosition.x + Constants.s(17f),
+				this.drawPosition.y + Constants.s(2f), LColor.white);
 		if (!this.isLastWave) {
 			Utils.DrawStringAlignRight(batch, this.font,
-					LanguageResources.getNext(), this.drawPosition.x + 136f,
-					this.drawPosition.y + 7f, LColor.white);
+					LanguageResources.getNext(), this.drawPosition.x
+							+ Constants.s(136f),
+					this.drawPosition.y + Constants.s(7f), LColor.white);
 			int num2 = ((int) Math.ceil(this.timeUntilNextWave)) / 0x3e8;
 			batch.drawString(this.font, LanguageResources.getNextWave() + " "
-					+ num2, this.drawPosition.x + 17f,
-					this.drawPosition.y + 18f, LColor.white);
+					+ num2, this.drawPosition.x + Constants.s(17f),
+					this.drawPosition.y + Constants.s(18f), LColor.white);
 		}
 	}
 

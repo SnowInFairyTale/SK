@@ -24,7 +24,7 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 		this.numMonsters = num_monsters;
 		this.startHitPoints = startHitPoints;
 		this.speed = speed;
-		this.spread = spread;
+		this.spread = spread * Constants.DisplayScale;
 		this.value = value;
 		this.setMonsterType(monsterType);
 		this.setWaveState(WaveState.NotStarted);

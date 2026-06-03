@@ -9,10 +9,10 @@ public class AnimatedSpriteMonster {
 			MainGame game) {
 
 		java.util.ArrayList<AnimatedSprite> list = new java.util.ArrayList<AnimatedSprite>();
-		int num = 8;
+		int num = Constants.s(8);
 		int num2 = Constants.s(0xe8);
-		int spriteWidth = 320;
-		int spriteHeight = 320;
+		int spriteWidth = Constants.s(80);
+		int spriteHeight = Constants.s(80);
 
 		RefObject<Integer> numValue = new RefObject<Integer>(0);
 
@@ -72,7 +72,9 @@ public class AnimatedSpriteMonster {
 		RefObject<Integer> tempRef_num = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
 				monsterType, "png/", tempRef_num),
-				monsterToolbarDrawPosition.add(-8f, -136f), 6, tempRef_num.argvalue, 320, 320, 1f);
+				monsterToolbarDrawPosition.add(Constants.s(-2f),
+				Constants.s(-34f)), 6, tempRef_num.argvalue, Constants.s(80),
+				Constants.s(80), 1f);
 		return tempVar;
 	}
 
@@ -80,8 +82,9 @@ public class AnimatedSpriteMonster {
 			MonsterType monsterType) {
 		RefObject<Integer> tempRef_num = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
-				monsterType, "", tempRef_num), new Vector2f(800f, -16f), 12,
-				tempRef_num.argvalue, 320, 320, 0.5f);
+				monsterType, "", tempRef_num), new Vector2f(Constants.s(200f),
+				Constants.s(-4f)), 12,
+				tempRef_num.argvalue, Constants.s(80), Constants.s(80), 0.5f);
 		return tempVar;
 	}
 

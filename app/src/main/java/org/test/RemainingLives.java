@@ -21,7 +21,8 @@ public class RemainingLives extends DrawableGameComponent implements
 	public RemainingLives(MainGame game, int remainingLives) {
 		super(game);
 		this.textureFile = "assets/heart.png";
-		this.drawPosition = new Vector2f(0f, 0f);
+		this.drawPosition = new Vector2f(Constants.HUD_HEART_X,
+				Constants.HUD_HEART_Y);
 		this.setNumRemainingLives(remainingLives);
 	}
 
@@ -36,7 +37,8 @@ public class RemainingLives extends DrawableGameComponent implements
 		batch.draw(this.texture, this.drawPosition, LColor.white);
 		if (this.getNumRemainingLives() >= 0) {
 			batch.drawString(this.font, "" + this.getNumRemainingLives(),
-					this.drawPosition.x + 15f, this.drawPosition.y + 3f,
+					this.drawPosition.x + Constants.s(15f),
+					this.drawPosition.y + Constants.s(3f),
 					LColor.white);
 		}
 		super.draw(batch, gameTime);

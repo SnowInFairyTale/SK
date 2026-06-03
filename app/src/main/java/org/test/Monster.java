@@ -131,7 +131,7 @@ public abstract class Monster extends AnimatedSprite {
 			float speed) {
 		this.setStartHitPoints(startHitPoints);
 		this.setHitPoints(startHitPoints);
-		this.setSpeed(speed);
+		this.setSpeed(Constants.s(speed));
 		this.setHealthBar(new ProgressBar(game, Constants.s(20), true));
 		this.getHealthBar().setDrawOrder(1);
 		this.getHealthBar().setDrawBorder(true);
@@ -181,7 +181,7 @@ public abstract class Monster extends AnimatedSprite {
 	public void update(GameTime gameTime) {
 		super.update(gameTime);
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			if (Utils.GetDistance(this.getPosition(), this.destinationPosition) < 1f) {
+			if (Utils.GetDistance(this.getPosition(), this.destinationPosition) < Constants.s(1f)) {
 				if (this.game.getGameplayScreen().getLevelSettings()
 						.getTowerBlockingGridCells()
 						.contains(this.getGridPosition())
@@ -281,12 +281,20 @@ public abstract class Monster extends AnimatedSprite {
 	public final void setPosition(Vector2f value) {
 		this.position = value;
 		super.setDrawPosition(new Vector2f(value.x
-				- (super.getSpriteWidth() / 2), value.y
-				- (super.getSpriteHeight() / 2)));
+				- (super.getSpriteWidth() / 2f), value.y
+				- (super.getSpriteHeight() / 2f)));
+		updateHealthBarPosition(value);
+	}
+
+	private void updateHealthBarPosition(Vector2f value) {
+		if (this.getHealthBar() == null) {
+			return;
+		}
+		float barW = Constants.s(20);
+		float topY = value.y - (super.getSpriteHeight() / 2f);
 		this.getHealthBar().setPosition(
-				new Vector2f((value.x - (super.getSpriteWidth() / 2f))
-						+ Constants.s(4f), value.y - (super.getSpriteHeight() / 2f)
-						+ Constants.s(18f)));
+				new Vector2f(value.x - barW / 2f, topY
+						- this.getHealthBar().getHeight() - Constants.s(2f)));
 	}
 
 	private float privateRadius;

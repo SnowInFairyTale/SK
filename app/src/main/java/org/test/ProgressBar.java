@@ -11,6 +11,12 @@ import loon.core.timer.GameTime;
 
 public class ProgressBar extends DrawableGameComponent implements
 		IGameComponent {
+
+	/** Source atlas layout in 1x assets (healthBar.png is 20×6). */
+	private static final int FILL_SRC_Y = 5;
+	private static final int FILL_SRC_H = 4;
+	private static final int BORDER_SRC_H = 4;
+
 	private LColor backColor;
 	private LColor frontColor;
 	private LColor frontColorLow;
@@ -43,30 +49,33 @@ public class ProgressBar extends DrawableGameComponent implements
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
+		int srcFillY = Constants.s(FILL_SRC_Y);
+		int srcFillH = Constants.s(FILL_SRC_H);
+		int srcBorderH = Constants.s(BORDER_SRC_H);
+		int texW = this.texture.getWidth();
+		float x = this.getPosition().x;
+		float y = this.getPosition().y;
+
 		if (this.getCurrentPercent() < 100) {
-			batch.draw(this.texture, this.getPosition().x,
-					(int) this.getPosition().y, this.width, this.getHeight(),
-					0, 5, this.texture.getWidth(), 4, this.backColor);
+			batch.draw(this.texture, x, (int) y, this.width, this.getHeight(),
+					0, srcFillY, texW, srcFillH, this.backColor);
 		}
 		float num = ((float) this.getCurrentPercent()) / 100f;
 		LColor color = (num < this.lowColorLimit) ? this.frontColorLow
 				: this.frontColor;
-		if (this.game
-				.getGameplayScreen()
-				.getGameOpacity()
-				.equals(this.game.getGameplayScreen()
-						.getGameOpacityWhenPaused())) {
+		if (this.game.getGameplayScreen() != null
+				&& this.game.getGameplayScreen().getGameOpacity()
+						.equals(this.game.getGameplayScreen()
+								.getGameOpacityWhenPaused())) {
 			LColor col = new LColor(color);
 			col.mul(0.3f);
 			color = col;
 		}
-		batch.draw(this.texture, this.getPosition().x, this.getPosition().y,
-				(this.width * num), this.getHeight(), 0, 5,
-				this.texture.getWidth(), 4, color);
+		batch.draw(this.texture, x, y, (this.width * num), this.getHeight(), 0,
+				srcFillY, texW, srcFillH, color);
 		if (this.getDrawBorder()) {
-			batch.draw(this.texture, this.getPosition().x,
-					this.getPosition().y, this.texture.getWidth(), 4, 0, 0,
-					this.texture.getWidth(), 4, LColor.white);
+			batch.draw(this.texture, x, y, this.width, srcBorderH, 0, 0, texW,
+					srcBorderH, LColor.white);
 		}
 	}
 

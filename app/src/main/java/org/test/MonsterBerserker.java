@@ -7,7 +7,7 @@ public class MonsterBerserker extends Monster
 		super(game, wave, startHitPoints, speed, value, "assets/berserker.png", 8,
 				8, Constants.s(0x20), Constants.s(0x20));
 		super.setMonsterType( MonsterType.Berserker);
-		super.setRadius( 5f);
+		super.setRadius(Constants.s(5f));
 		super.setAnimationSpeedRatio( 3);
 	}
 }

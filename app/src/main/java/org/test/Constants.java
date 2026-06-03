@@ -51,4 +51,12 @@ public final class Constants {
 	/** Tower building sprite anchor from logical position (was 26, 38). */
 	public static final float TOWER_DRAW_OFFSET_X = s(26f);
 	public static final float TOWER_DRAW_OFFSET_Y = s(38f);
+
+	/** Top HUD strip (4× asset widths: heart 284, wave 712, cash 284). */
+	public static final float HUD_HEART_X = 0f;
+	public static final float HUD_HEART_Y = 0f;
+	public static final float HUD_WAVE_X = 284f;
+	public static final float HUD_WAVE_Y = 0f;
+	public static final float HUD_CASH_X = 996f;
+	public static final float HUD_CASH_Y = 0f;
 }

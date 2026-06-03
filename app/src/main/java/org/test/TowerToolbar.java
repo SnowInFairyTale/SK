@@ -34,8 +34,9 @@ public class TowerToolbar extends DrawableGameComponent implements
 		super(game);
 		this.game = game;
 		this.tower = tower;
-		this.drawPosition = new Vector2f(40f, 1680f);
-		this.drawPositionUpgradeButton = this.drawPosition.add(600f, 0f);
+		this.drawPosition = new Vector2f(Constants.s(10f), Constants.s(420f));
+		this.drawPositionUpgradeButton = this.drawPosition
+				.add(Constants.s(150f), 0f);
 		this.animatedSpriteTower = AnimatedSpriteTower
 				.GetAnimatedSpriteTowerForTowerToolbar(game, this.drawPosition,
 						tower.getTowerType(), 1f);
@@ -44,8 +45,10 @@ public class TowerToolbar extends DrawableGameComponent implements
 		this.animatedSpriteTower.setObeyGameOpacity(false);
 		this.animatedSpriteTower.setOnlyAnimateIfGameStateStarted(false);
 		super.setDrawOrder(1);
-		this.sellButtonArea = new RectBox(((int) this.drawPosition.x) + 0x424,
-				((int) this.drawPosition.y) + 20, 0xb4, 0xb4);
+		this.sellButtonArea = new RectBox(
+				((int) this.drawPosition.x) + Constants.s(0x109),
+				((int) this.drawPosition.y) + Constants.s(5),
+				Constants.s(0x2d), Constants.s(0x2d));
 		game.Components().add(this.animatedSpriteTower);
 	}
 
@@ -69,37 +72,43 @@ public class TowerToolbar extends DrawableGameComponent implements
 		batch.draw(this.textureUpgradeButton, this.drawPositionUpgradeButton,
 				LColor.white);
 		batch.drawString(this.font, LanguageResources.getRange(),
-				this.drawPosition.x + 64f, this.drawPosition.y + 33f,
+				this.drawPosition.x + Constants.s(64f),
+				this.drawPosition.y + Constants.s(33f),
 				this.upgradeButtonWhiteColor);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + this.tower.getRange(), this.drawPosition.add(480f, 132f),
+				"" + (int) (this.tower.getRange() / Constants.DisplayScale),
+				this.drawPosition.add(Constants.s(120f), Constants.s(33f)),
 				this.upgradeButtonGreenColor);
 		batch.drawString(this.font, LanguageResources.getPower(),
-				this.drawPosition.add(256f, 60f), this.upgradeButtonWhiteColor);
+				this.drawPosition.add(Constants.s(64f), Constants.s(15f)),
+				this.upgradeButtonWhiteColor);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + this.tower.getDamage(), this.drawPosition.add(480f, 60f),
+				"" + this.tower.getDamage(),
+				this.drawPosition.add(Constants.s(120f), Constants.s(15f)),
 				this.upgradeButtonRedColor);
 		batch.drawString(this.font, LanguageResources.getUpgrade(),
-				this.drawPositionUpgradeButton.add(23f, 15f),
-				this.upgradeButtonWhiteColor);
+				this.drawPositionUpgradeButton.add(Constants.s(23f),
+						Constants.s(15f)), this.upgradeButtonWhiteColor);
 		batch.drawString(this.font, LanguageResources.getSell(),
-				this.drawPosition.add(1096f, 60f), LColor.white);
+				this.drawPosition.add(Constants.s(274f), Constants.s(15f)),
+				LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font,
 				"" + this.tower.GetSellValue(),
-				this.drawPosition.add(1148f, 132f), LColor.white);
+				this.drawPosition.add(Constants.s(287f), Constants.s(33f)),
+				LColor.white);
 		if (this.tower.IsMoreUpgradeLevelsAvailable()) {
 			Utils.DrawStringAlignCenter(batch, this.font, this.tower
 					.GetUpgradeCost().toString(),
-					this.drawPositionUpgradeButton.add(77f, 15f),
-					this.upgradeButtonWhiteColor);
+					this.drawPositionUpgradeButton.add(Constants.s(77f),
+							Constants.s(15f)), this.upgradeButtonWhiteColor);
 			Utils.DrawStringAlignCenter(batch, this.font, this.tower
 					.GetUpgradeDamage().toString(),
-					this.drawPositionUpgradeButton.add(44f, 33f),
-					this.upgradeButtonRedColor);
+					this.drawPositionUpgradeButton.add(Constants.s(44f),
+							Constants.s(33f)), this.upgradeButtonRedColor);
 			Utils.DrawStringAlignCenter(batch, this.font, this.tower
 					.GetUpgradeRange().toString(),
-					this.drawPositionUpgradeButton.add(74f, 33f),
-					this.upgradeButtonGreenColor);
+					this.drawPositionUpgradeButton.add(Constants.s(74f),
+							Constants.s(33f)), this.upgradeButtonGreenColor);
 		}
 		super.draw(batch, gameTime);
 	}
