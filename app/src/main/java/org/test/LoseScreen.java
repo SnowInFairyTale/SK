@@ -11,7 +11,7 @@ public class LoseScreen extends MenuScreen {
 		this.game = game;
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(96f, 396f));
+		item.setPosition(new Vector2f(384f, 1584f));
 		item.setnoButtonBackgroundSize(new Vector2f(560f, 200f));
 
 		item.Selected = new GameEvent() {

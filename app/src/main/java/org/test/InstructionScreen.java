@@ -1,4 +1,4 @@
-package org.test;
+﻿package org.test;
 
 import loon.core.geom.Vector2f;
 import loon.core.input.LInput;
@@ -18,16 +18,16 @@ public class InstructionScreen extends MenuScreen
 		super.setTransitionOffTime(0.5f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(7f, 1700f));
-		item.setnoButtonBackgroundSize(new Vector2f(94f, 38f));
+		item.setPosition(new Vector2f(28f, 1700f));
+		item.setnoButtonBackgroundSize(new Vector2f(376f, 152f));
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(128f, 1700f));
-		entry2.setnoButtonBackgroundSize(new Vector2f(94f, 38f));
+		entry2.setPosition(new Vector2f(512f, 1700f));
+		entry2.setnoButtonBackgroundSize(new Vector2f(376f, 152f));
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(250f, 1700f));
-		entry3.setnoButtonBackgroundSize(new Vector2f(58f, 38f));
+		entry3.setPosition(new Vector2f(1000f, 1700f));
+		entry3.setnoButtonBackgroundSize(new Vector2f(232f, 152f));
 
 		entry2.Selected =new GameEvent() {
 			

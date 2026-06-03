@@ -1,5 +1,6 @@
 package org.test;
 
+import loon.core.geom.Vector2f;
 import loon.core.graphics.LFont;
 
 public final class Constants {
@@ -30,5 +31,17 @@ public final class Constants {
 
 	public static LFont uiFont(int baseSize) {
 		return LFont.getFont(baseSize * DisplayScale);
+	}
+
+	/** Menu row hit area (matches DrawLevelText / menu label rows). */
+	public static final float MENU_HIT_W = 440f;
+	public static final float MENU_HIT_H = 164f;
+
+	public static Vector2f menuHitSize() {
+		return new Vector2f(MENU_HIT_W, MENU_HIT_H);
+	}
+
+	public static Vector2f menuHitAtCenterY(float centerY) {
+		return new Vector2f(ScreenCenterX - MENU_HIT_W / 2f, centerY - MENU_HIT_H / 2f);
 	}
 }

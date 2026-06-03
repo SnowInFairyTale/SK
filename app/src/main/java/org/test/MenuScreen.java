@@ -9,9 +9,7 @@ import loon.core.input.LInput;
 import loon.core.input.LInputFactory;
 import loon.core.input.LTouchCollection;
 import loon.core.input.LInputFactory.Key;
-import loon.core.input.LInputFactory.Touch;
 import loon.core.input.LTouchLocation;
-import loon.core.input.LTouchLocationState;
 import loon.core.timer.GameTime;
 
 public abstract class MenuScreen extends GameScreen {
@@ -69,11 +67,12 @@ public abstract class MenuScreen extends GameScreen {
 		LTouchCollection collection = LInputFactory.getTouchState();
 		if (collection.size() > 0) {
 			for (LTouchLocation touch : collection) {
-				if (touch.getPrevState() == LTouchLocationState.Pressed) {
+				if (touch.isDown()) {
+					float tx = touch.getPosition().x;
+					float ty = touch.getPosition().y;
 					for (int i = 0; i < this.menuEntries.size(); i++) {
 						MenuEntry entry = this.menuEntries.get(i);
-						if (this.GetMenuEntryHitBounds(entry).contains(
-								Touch.x(), Touch.y())) {
+						if (this.GetMenuEntryHitBounds(entry).contains(tx, ty)) {
 							this.OnSelectEntry(i);
 						}
 					}
@@ -123,7 +122,7 @@ public abstract class MenuScreen extends GameScreen {
 				2.0);
 		Vector2f vector = new Vector2f(0f, (float) ((super.getScreenManager()
 				.getGame().getHeight() / 2) - (this.menuEntries.get(0)
-				.GetHeight(this) + (70 * this.menuEntries.size()))));
+				.GetHeight(this) + (Constants.s(70) * this.menuEntries.size()))));
 		for (int i = 0; i < this.menuEntries.size(); i++) {
 			MenuEntry entry = this.menuEntries.get(i);
 			vector.x = (LSystem.screenRect.width / 2)
@@ -134,7 +133,7 @@ public abstract class MenuScreen extends GameScreen {
 				vector.x += num * 512f;
 			}
 			entry.setPosition(vector);
-			vector.y += entry.GetHeight(this) + 70;
+			vector.y += entry.GetHeight(this) + Constants.s(70);
 		}
 	}
 

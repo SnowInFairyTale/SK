@@ -34,23 +34,23 @@ public class SelectLevelScreen extends MenuScreen {
 		this.game = game;
 		super.setScreenType(ScreenType.SelectLevelScreen);
 		this.difficulty = difficulty;
-		Vector2f vector = new Vector2f(110f, 41f);
+		Vector2f rowHit = Constants.menuHitSize();
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(86f, 210f));
-		item.setnoButtonBackgroundSize(vector);
+		item.setPosition(Constants.menuHitAtCenterY(876f));
+		item.setnoButtonBackgroundSize(rowHit);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(86f, 270f));
-		entry2.setnoButtonBackgroundSize(vector);
+		entry2.setPosition(Constants.menuHitAtCenterY(1116f));
+		entry2.setnoButtonBackgroundSize(rowHit);
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(86f, 330f));
-		entry3.setnoButtonBackgroundSize(vector);
+		entry3.setPosition(Constants.menuHitAtCenterY(1356f));
+		entry3.setnoButtonBackgroundSize(rowHit);
 		MenuEntry entry4 = new MenuEntry("");
 		entry4.setuseButtonBackground(false);
-		entry4.setPosition(new Vector2f(86f, 390f));
-		entry4.setnoButtonBackgroundSize(vector);
+		entry4.setPosition(Constants.menuHitAtCenterY(1608f));
+		entry4.setnoButtonBackgroundSize(rowHit);
 		super.getMenuEntries().add(item);
 		super.getMenuEntries().add(entry2);
 		super.getMenuEntries().add(entry3);
@@ -133,11 +133,11 @@ public class SelectLevelScreen extends MenuScreen {
 				.getMainMenu().toUpperCase(), result, LColor.white);
 
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel1,
-				244f, 235f, this.font);
+				976f, 940f, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel2,
-				244f, 295f, this.font);
+				976f, 1180f, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel3,
-				244f, 355f, this.font);
+				976f, 1420f, this.font);
 		super.draw(batch, gameTime);
 	}
 
@@ -147,8 +147,8 @@ public class SelectLevelScreen extends MenuScreen {
 			batch.draw(this.textureFlagGreen, x, y, LColor.white);
 			Utils.DrawStringAlignRight(batch, font, (new Integer(
 					remainingLivesRecord)).toString() + "/" + 20, new Vector2f(
-					83f, y), LColor.white);
-			batch.draw(this.textureHeart, 84f, y + 3f, LColor.white);
+					332f, y), LColor.white);
+			batch.draw(this.textureHeart, 336f, y + 12f, LColor.white);
 		} else {
 			batch.draw(this.textureFlagRed, x, y, LColor.white);
 		}

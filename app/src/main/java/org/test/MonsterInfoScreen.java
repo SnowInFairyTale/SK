@@ -21,7 +21,7 @@ public class MonsterInfoScreen extends MenuScreen {
 
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(110f, 422f));
+		item.setPosition(new Vector2f(440f, 1688f));
 		item.setnoButtonBackgroundSize(new Vector2f(480f, 152f));
 
 		item.Selected = new GameEvent() {

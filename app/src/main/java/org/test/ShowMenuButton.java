@@ -41,7 +41,7 @@ public class ShowMenuButton extends DrawableGameComponent implements
 				.getGameplayScreen().getGameOpacity());
 		Utils.DrawStringAlignCenter(batch, this.font,
 				"" + LanguageResources.getMenu(),
-				this.drawPosition.add(Constants.ScreenCenterX, 80f), LColor.white);
+				this.drawPosition.add(160f, 80f), LColor.white);
 		super.draw(batch, gameTime);
 	}
 

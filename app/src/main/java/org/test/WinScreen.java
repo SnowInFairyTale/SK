@@ -48,12 +48,12 @@ public class WinScreen extends MenuScreen
 		}
 		if (((game.getGameplayScreen().getDifficulty() == Difficulty.Hard) && flag) && (flag2 && flag3))
 		{
-			vector = new Vector2f(96f, 431f);
+			vector = new Vector2f(384f, 1724f);
 			this.winScreenSpriteWithText = new GameCompletedScreenSpriteWithText(game);
 		}
 		else
 		{
-			vector = new Vector2f(96f, 396f);
+			vector = new Vector2f(384f, 1584f);
 			this.winScreenSpriteWithText = new WinScreenSpriteWithText(game);
 		}
 		MenuEntry item = new MenuEntry("");

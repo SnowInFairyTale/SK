@@ -17,15 +17,15 @@ public class BuyToGetFeaturesScreen extends MenuScreen {
 		super.setTransitionOnTime(0f);
 		super.setTransitionOffTime(0f);
 		super.setIsPopup(true);
-		Vector2f vector = new Vector2f(60f, 50f);
+		Vector2f btnHit = new Vector2f(240f, 200f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(48f, 1700f));
-		item.setnoButtonBackgroundSize(vector);
+		item.setPosition(new Vector2f(192f, 1700f));
+		item.setnoButtonBackgroundSize(btnHit);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(222f, 1700f));
-		entry2.setnoButtonBackgroundSize(vector);
+		entry2.setPosition(new Vector2f(888f, 1700f));
+		entry2.setnoButtonBackgroundSize(btnHit);
 
 		item.Selected = new GameEvent() {
 
