@@ -6,14 +6,14 @@ public class MonsterPeon extends Monster {
 	public MonsterPeon(MainGame game, Wave wave, float speed,
 			int startHitPoints, int value) {
 		super(game, wave, startHitPoints, speed, value, "assets/peon.png", 8,
-				8, 0x18, 0x18);
+				8, Constants.s(0x18), Constants.s(0x18));
 		this.Init();
 	}
 
 	public MonsterPeon(MainGame game, Wave wave, float speed,
 			int startHitPoints, int value, Vector2f gridPosition) {
 		super(game, wave, startHitPoints, speed, value, "assets/peon.png", 8,
-				8, 0x18, 0x18, gridPosition);
+				8, Constants.s(0x18), Constants.s(0x18), gridPosition);
 		this.Init();
 	}
 

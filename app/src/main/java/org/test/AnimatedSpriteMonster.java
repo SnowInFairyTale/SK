@@ -9,8 +9,8 @@ public class AnimatedSpriteMonster {
 			MainGame game) {
 
 		java.util.ArrayList<AnimatedSprite> list = new java.util.ArrayList<AnimatedSprite>();
-		int num = 32;
-		int num2 = 0x3a0;
+		int num = 8;
+		int num2 = Constants.s(0xe8);
 		int spriteWidth = 320;
 		int spriteHeight = 320;
 

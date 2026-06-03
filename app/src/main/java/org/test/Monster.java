@@ -136,7 +136,7 @@ public abstract class Monster extends AnimatedSprite {
 		this.getHealthBar().setDrawOrder(1);
 		this.getHealthBar().setDrawBorder(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
-				this.getGridPosition()).add(10f, 10f));
+				this.getGridPosition()).add(Constants.s(10f), Constants.s(10f)));
 		this.destinationPosition = this.getPosition();
 		this.game = game;
 		this.wave = wave;
@@ -193,7 +193,8 @@ public abstract class Monster extends AnimatedSprite {
 				this.setGridPosition(this.GetNextGridPoint(this
 						.getGridPosition()));
 				this.destinationPosition = Utils.ConvertToPositionCoordinates(
-						this.getGridPosition()).add(10f, 10f);
+						this.getGridPosition()).add(Constants.s(10f),
+								Constants.s(10f));
 				if (this.getGridPosition().x >= this.game.getGameplayScreen()
 						.getLevelSettings().getEndPoint().x) {
 					this.Survived();
@@ -283,8 +284,8 @@ public abstract class Monster extends AnimatedSprite {
 				- (super.getSpriteWidth() / 2), value.y
 				- (super.getSpriteHeight() / 2)));
 		this.getHealthBar().setPosition(
-				new Vector2f((value.x - (super.getSpriteWidth() / 2)) + 4f,
-						value.y + 6f));
+				new Vector2f((value.x - (super.getSpriteWidth() / 2))
+						+ Constants.s(4f), value.y + Constants.s(6f)));
 	}
 
 	private float privateRadius;
