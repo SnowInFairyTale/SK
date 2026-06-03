@@ -44,4 +44,11 @@ public final class Constants {
 	public static Vector2f menuHitAtCenterY(float centerY) {
 		return new Vector2f(ScreenCenterX - MENU_HIT_W / 2f, centerY - MENU_HIT_H / 2f);
 	}
+
+	/** Center of a 2×2 tower footprint from grid corner (was 20f at 320×480). */
+	public static final float TOWER_GRID_CENTER_OFFSET = s(20f);
+
+	/** Tower building sprite anchor from logical position (was 26, 38). */
+	public static final float TOWER_DRAW_OFFSET_X = s(26f);
+	public static final float TOWER_DRAW_OFFSET_Y = s(38f);
 }

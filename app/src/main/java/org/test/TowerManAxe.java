@@ -4,6 +4,7 @@ public class TowerManAxe extends TowerMan
 {
 	public TowerManAxe(MainGame game, Tower tower)
 	{
-		super(game, "assets/tower_axeman.png", tower, 0x80, 0x80);
+		super(game, "assets/tower_axeman.png", tower, Constants.s(0x20),
+				Constants.s(0x20));
 	}
 }

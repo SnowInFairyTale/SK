@@ -22,7 +22,8 @@ public abstract class TowerMan extends AnimatedSprite
 
 	private void Init(Vector2f towerDrawPosition)
 	{
-		super.setDrawPosition(towerDrawPosition.add(10f, 4f));
+		super.setDrawPosition(towerDrawPosition.add(Constants.s(10f),
+				Constants.s(4f)));
 		super.setOnlyPlayOnceFeature(true);
 		this.UpdateThrowDirection(new Vector2f(-1f, 0f));
 		super.setDrawOrder(this.tower.getDrawOrder() + 1);

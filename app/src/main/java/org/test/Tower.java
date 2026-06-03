@@ -85,7 +85,8 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	public final RectBox CentralCollisionArea() {
 		return new RectBox((int) this.getDrawPosition().x,
-				(int) this.getDrawPosition().y, 0x24, 0x26);
+				(int) this.getDrawPosition().y, Constants.s(0x24),
+				Constants.s(0x26));
 	}
 
 	@Override
@@ -103,7 +104,9 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 				: this.currentUpgradeLevel;
 		for (int i = 0; i < num; i++) {
 			batch.draw(this.levelTexture,
-					this.getDrawPosition().add((5 + (i * 10)), 35f), this.game
+					this.getDrawPosition().add(
+							(Constants.s(5) + (i * Constants.s(10))),
+							Constants.s(35f)), this.game
 							.getGameplayScreen().getGameOpacity());
 		}
 		if (this.isSelected) {
@@ -267,9 +270,10 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.game.getGameplayScreen().getCash().Decrease(this.getUpgradeCost());
 		this.setValue(this.getValue() + this.getUpgradeCost());
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			this.upgradeProgressBar = new ProgressBar(this.game, 40, false);
-			this.upgradeProgressBar.setPosition(this.getDrawPosition().add(5f,
-					10f));
+			this.upgradeProgressBar = new ProgressBar(this.game, Constants.s(10),
+					false);
+			this.upgradeProgressBar.setPosition(this.getDrawPosition().add(
+					Constants.s(5f), Constants.s(10f)));
 			this.game.Components().add(this.upgradeProgressBar);
 			this.isUpgrading = true;
 			this.upgradeTimeLeft = this.getUpgradeTime() * 1000f;
@@ -288,16 +292,18 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		super.update(gameTime);
 		this.elapsedTime += 0.03333334f;
 		if (!this.getPlaced()) {
-			Vector2f vector = new Vector2f(100f, -160f);
+			Vector2f vector = new Vector2f(Constants.s(25f), Constants.s(-40f));
 			Vector2f point = Utils.ConvertToGridPoint(this.game
 					.getGameplayScreen().getLastTouchPosition().add(vector));
 			this.setGridX(point.x());
 			this.setGridY(point.y());
 			this.setPosition(Utils.ConvertToPositionCoordinates(
-					new Vector2f(this.getGridX(), this.getGridY())).add(80f,
-					80f));
+					new Vector2f(this.getGridX(), this.getGridY())).add(
+					Constants.TOWER_GRID_CENTER_OFFSET,
+					Constants.TOWER_GRID_CENTER_OFFSET));
 			this.occupiedTexturePosition = new Vector2f(
-					this.getPosition().x - 80f, this.getPosition().y - 80f);
+					this.getPosition().x - Constants.TOWER_GRID_CENTER_OFFSET,
+					this.getPosition().y - Constants.TOWER_GRID_CENTER_OFFSET);
 			this.occupiedTexture = this.CanPlace() ? this.occupiedTextureGreen
 					: this.occupiedTextureRed;
 			this.SetDrawOrder();
@@ -440,7 +446,8 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	public final void setPosition(Vector2f value) {
 		this.position = value;
-		this.setDrawPosition(new Vector2f(value.x - 26f, value.y - 38f));
+		this.setDrawPosition(new Vector2f(value.x - Constants.TOWER_DRAW_OFFSET_X,
+				value.y - Constants.TOWER_DRAW_OFFSET_Y));
 	}
 
 	private float privateRange;

@@ -132,7 +132,7 @@ public abstract class Monster extends AnimatedSprite {
 		this.setStartHitPoints(startHitPoints);
 		this.setHitPoints(startHitPoints);
 		this.setSpeed(speed);
-		this.setHealthBar(new ProgressBar(game, 20, true));
+		this.setHealthBar(new ProgressBar(game, Constants.s(20), true));
 		this.getHealthBar().setDrawOrder(1);
 		this.getHealthBar().setDrawBorder(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
@@ -284,8 +284,9 @@ public abstract class Monster extends AnimatedSprite {
 				- (super.getSpriteWidth() / 2), value.y
 				- (super.getSpriteHeight() / 2)));
 		this.getHealthBar().setPosition(
-				new Vector2f((value.x - (super.getSpriteWidth() / 2))
-						+ Constants.s(4f), value.y + Constants.s(6f)));
+				new Vector2f((value.x - (super.getSpriteWidth() / 2f))
+						+ Constants.s(4f), value.y - (super.getSpriteHeight() / 2f)
+						+ Constants.s(18f)));
 	}
 
 	private float privateRadius;
