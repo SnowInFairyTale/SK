@@ -21,7 +21,7 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 		int num = 0x18;
 		for (String str : LanguageResources.getMonsterInfoPar1().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, 100f, num,
+			Utils.DrawStringAlignLeft(batch, this.font, str, 400f, num,
 					LColor.white);
 			num += 20;
 		}
@@ -35,7 +35,7 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 		int num3 = 0x9a;
 		for (String str3 : LanguageResources.getMonsterInfoPar3().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str3, 100f, num3,
+			Utils.DrawStringAlignLeft(batch, this.font, str3, 400f, num3,
 					LColor.white);
 			num3 += 20;
 		}
@@ -49,7 +49,7 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 		int num5 = 290;
 		for (String str5 : LanguageResources.getMonsterInfoPar5().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str5, 100f, num5,
+			Utils.DrawStringAlignLeft(batch, this.font, str5, 400f, num5,
 					LColor.white);
 			num5 += 20;
 		}
@@ -61,12 +61,12 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 			num6 += 20;
 		}
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 435f, LColor.white);
+				.getBack().toUpperCase(), 169f, 1740f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(16);
+		this.font = Constants.uiFont(16);
 	}
 }

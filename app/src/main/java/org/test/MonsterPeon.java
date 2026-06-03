@@ -19,7 +19,7 @@ public class MonsterPeon extends Monster {
 
 	private void Init() {
 		super.setMonsterType(MonsterType.Peon);
-		super.setRadius(5f);
+		super.setRadius(20f);
 		super.setAnimationSpeedRatio(3);
 	}
 }

@@ -24,7 +24,7 @@ public class ProgressBar extends DrawableGameComponent implements
 		this.game = game;
 		this.setCurrentPercent(100);
 		this.width = width;
-		this.setHeight(4);
+		this.setHeight(16);
 		this.setDrawBorder(false);
 		super.setDrawOrder(30);
 		if (isHealthBarMode) {

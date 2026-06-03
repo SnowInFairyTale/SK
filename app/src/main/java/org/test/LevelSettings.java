@@ -13,7 +13,7 @@ public class LevelSettings {
 		this.setTowerBlockingGridCells(new java.util.ArrayList<Vector2f>());
 		this.setLevelSpecificOccupiedGridCells(new java.util.ArrayList<Vector2f>());
 		HashMap<Vector2f, String> textAndRelativePosition = new HashMap<Vector2f, String>();
-		LFont font = LFont.getFont(10);
+		LFont font = Constants.uiFont(10);
 		switch (level) {
 		case 1:
 			this.setStartPoint(new Vector2f(0, 9));

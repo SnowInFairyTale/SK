@@ -287,7 +287,7 @@ public class WaveManager extends DrawableGameComponent implements
 	@Override
 	protected void loadContent() {
 		this.texture = LTextures.loadTexture("assets/wave_x_of_y.png");
-		this.font = LFont.getFont(10);
+		this.font = Constants.uiFont(10);
 		super.loadContent();
 	}
 

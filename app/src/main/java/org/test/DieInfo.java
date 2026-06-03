@@ -50,7 +50,7 @@ public class DieInfo extends DrawableGameComponent implements IGameComponent {
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture("assets/icon_coin_tiny.png");
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 
 	@Override

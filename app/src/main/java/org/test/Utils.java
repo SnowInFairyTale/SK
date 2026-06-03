@@ -8,13 +8,15 @@ import loon.utils.MathUtils;
 
 public class Utils {
 	public static Vector2f ConvertToGridPoint(Vector2f positionCoordinates) {
-		return new Vector2f(((int) ((positionCoordinates.x - -20f) / 20f)) - 1,
-				((int) ((positionCoordinates.y - 40f) / 20f)) - 1);
+		return new Vector2f(
+				((int) ((positionCoordinates.x - Constants.HorizontalGridOffset) / Constants.GridSize)) - 1,
+				((int) ((positionCoordinates.y - Constants.VerticalGridOffset) / Constants.GridSize)) - 1);
 	}
 
 	public static Vector2f ConvertToPositionCoordinates(Vector2f gridPoint) {
-		return new Vector2f((float) ((gridPoint.x * 20) + -20),
-				(float) ((gridPoint.y * 20) + 40));
+		return new Vector2f(
+				(float) ((gridPoint.x * Constants.GridSize) + Constants.HorizontalGridOffset),
+				(float) ((gridPoint.y * Constants.GridSize) + Constants.VerticalGridOffset));
 	}
 
 	public static void DrawLevelText(SpriteBatch spriteBatch, LFont font,

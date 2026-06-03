@@ -99,7 +99,7 @@ public class ScreenManager extends DrawableGameComponent
 	@Override
 	protected void loadContent()
 	{
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 		this.buttonBackground = LTextures.loadTexture("assets/backgrounds/buttonBackground.png");
 		for (GameScreen screen : this.screens)
 		{

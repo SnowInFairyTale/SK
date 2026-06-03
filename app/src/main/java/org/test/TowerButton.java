@@ -33,15 +33,15 @@ public abstract class TowerButton extends DrawableGameComponent implements
 			break;
 
 		case Spear:
-			this.textureOffsetX = 120;
+			this.textureOffsetX = 480;
 			break;
 
 		case AirDefence:
-			this.textureOffsetX = 60;
+			this.textureOffsetX = 240;
 			break;
 
 		case Lur:
-			this.textureOffsetX = 180;
+			this.textureOffsetX = 720;
 			break;
 		}
 		this.drawPosition.x = this.textureOffsetX;
@@ -51,7 +51,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 	private RectBox rect = new RectBox();
 
 	public final RectBox CentralCollisionArea() {
-		rect.setBounds(this.drawPosition.x, this.drawPosition.y, 60, 60);
+		rect.setBounds(this.drawPosition.x, this.drawPosition.y, 240, 240);
 		return rect;
 	}
 
@@ -61,11 +61,11 @@ public abstract class TowerButton extends DrawableGameComponent implements
 				&& ((this.getTowerType() == TowerType.Spear) || (this
 						.getTowerType() == TowerType.Lur))) {
 			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, 60, 60,
+					this.textureOffsetX, this.textureOffsetY, 240, 240,
 					LColor.darkGray);
 		} else {
 			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, 60, 60, this.game
+					this.textureOffsetX, this.textureOffsetY, 240, 240, this.game
 							.getGameplayScreen().getGameOpacity());
 		}
 		super.draw(batch, gameTime);
@@ -82,7 +82,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 	}
 
 	public final void Show() {
-		this.drawPosition.y = 420f;
+		this.drawPosition.y = 1680f;
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 			this.textureOffsetY = 0;
 		} else {
 			this.setIsActive(false);
-			this.textureOffsetY = 0x41;
+			this.textureOffsetY = 0x104;
 		}
 	}
 

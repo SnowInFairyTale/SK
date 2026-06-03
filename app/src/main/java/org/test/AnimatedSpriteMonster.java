@@ -9,16 +9,16 @@ public class AnimatedSpriteMonster {
 			MainGame game) {
 
 		java.util.ArrayList<AnimatedSprite> list = new java.util.ArrayList<AnimatedSprite>();
-		int num = 8;
-		int num2 = 0xe8;
-		int spriteWidth = 80;
-		int spriteHeight = 80;
+		int num = 32;
+		int num2 = 0x3a0;
+		int spriteWidth = 320;
+		int spriteHeight = 320;
 
 		RefObject<Integer> numValue = new RefObject<Integer>(0);
 
 		AnimatedSprite item = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Peasant, "png/", numValue), new Vector2f(
-				(float) num, 8f), 6, numValue.argvalue, spriteWidth,
+				(float) num, 32f), 6, numValue.argvalue, spriteWidth,
 				spriteHeight, 1f);
 		item.setAnimationSpeedRatio(3);
 		list.add(item);
@@ -26,14 +26,14 @@ public class AnimatedSpriteMonster {
 
 		AnimatedSprite sprite2 = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Peon, "png/", numValue), new Vector2f((float) num2,
-				72f), 6, numValue.argvalue, spriteWidth, spriteHeight, 1f);
+				288f), 6, numValue.argvalue, spriteWidth, spriteHeight, 1f);
 		sprite2.setAnimationSpeedRatio(3);
 		list.add(sprite2);
 		numValue.argvalue = 0;
 
 		AnimatedSprite sprite3 = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Berserker, "png/", numValue), new Vector2f(
-				(float) num, 132f), 6, numValue.argvalue, spriteWidth,
+				(float) num, 528f), 6, numValue.argvalue, spriteWidth,
 				spriteHeight, 1f);
 		sprite3.setAnimationSpeedRatio(3);
 		list.add(sprite3);
@@ -41,7 +41,7 @@ public class AnimatedSpriteMonster {
 
 		AnimatedSprite sprite4 = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Chicken, "png/", numValue), new Vector2f(
-				(float) num2, 200f), 6, numValue.argvalue, spriteWidth,
+				(float) num2, 800f), 6, numValue.argvalue, spriteWidth,
 				spriteHeight, 1f);
 		sprite4.setAnimationSpeedRatio(3);
 		list.add(sprite4);
@@ -49,7 +49,7 @@ public class AnimatedSpriteMonster {
 
 		AnimatedSprite sprite5 = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Doctor, "png/", numValue), new Vector2f(
-				(float) num, 258f), 6, numValue.argvalue, spriteWidth,
+				(float) num, 1032f), 6, numValue.argvalue, spriteWidth,
 				spriteHeight, 1f);
 		sprite5.setAnimationSpeedRatio(3);
 		list.add(sprite5);
@@ -57,7 +57,7 @@ public class AnimatedSpriteMonster {
 
 		AnimatedSprite sprite6 = new AnimatedSprite(game, GetTextureFile(
 				MonsterType.Chieftain, "png/", numValue), new Vector2f(
-				(float) num2, 322f), 6, numValue.argvalue, spriteWidth,
+				(float) num2, 1288f), 6, numValue.argvalue, spriteWidth,
 				spriteHeight, 1f);
 		sprite6.setAnimationSpeedRatio(3);
 		list.add(sprite6);
@@ -72,7 +72,7 @@ public class AnimatedSpriteMonster {
 		RefObject<Integer> tempRef_num = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
 				monsterType, "png/", tempRef_num),
-				monsterToolbarDrawPosition.add(-2f, -34f), 6, tempRef_num.argvalue, 80, 80, 1f);
+				monsterToolbarDrawPosition.add(-8f, -136f), 6, tempRef_num.argvalue, 320, 320, 1f);
 		return tempVar;
 	}
 
@@ -80,8 +80,8 @@ public class AnimatedSpriteMonster {
 			MonsterType monsterType) {
 		RefObject<Integer> tempRef_num = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
-				monsterType, "", tempRef_num), new Vector2f(200f, -4f), 12,
-				tempRef_num.argvalue, 80, 80, 0.5f);
+				monsterType, "", tempRef_num), new Vector2f(800f, -16f), 12,
+				tempRef_num.argvalue, 320, 320, 0.5f);
 		return tempVar;
 	}
 

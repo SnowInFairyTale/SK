@@ -52,7 +52,7 @@ public abstract class MenuScreen extends GameScreen {
 				0xc0 * super.getTransitionAlpha(),
 				0xc0 * super.getTransitionAlpha());
 		float scale = 1.25f;
-		position.y -= num2 * 100f;
+		position.y -= num2 * 400f;
 		batch.drawString(batch.getFont(), this.menuTitle, position, color, 0f,
 				origin, scale);
 	}

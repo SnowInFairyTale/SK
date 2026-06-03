@@ -208,7 +208,7 @@ public class GameplayScreen extends GameScreen {
 				.getBackgroundTextureFile());
 		this.gameBackgroundWithGrid = LTextures.loadTexture(this
 				.getLevelSettings().getBackgroundWithGridTextureFile());
-		this.fontSize26Extra = LFont.getFont(26);
+		this.fontSize26Extra = Constants.uiFont(26);
 		this.currentBackground = this.gameBackground;
 		super.LoadContent();
 	}
@@ -451,7 +451,7 @@ public class GameplayScreen extends GameScreen {
 						SpriteWithText item = new SpriteWithText(this.game,
 								"assets/blocking.png", 0x7d0,
 								new Vector2f(
-										164f - (this.fontSize26Extra
+										656f - (this.fontSize26Extra
 												.stringWidth(LanguageResources
 														.getBlocking()
 														.toUpperCase()) / 2f),

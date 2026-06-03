@@ -19,15 +19,15 @@ public class GamePausedSpriteWithText extends Sprite
 	public void draw(SpriteBatch batch,GameTime gameTime)
 	{
 		super.draw(batch,gameTime);
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getResume().toUpperCase(), 160f, 260f, LColor.white);
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getRestart().toUpperCase(), 160f, 320f, LColor.white);
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getMainMenu().toUpperCase(), 160f, 380f, LColor.white);
+		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getResume().toUpperCase(), Constants.ScreenCenterX, 1040f, LColor.white);
+		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getRestart().toUpperCase(), Constants.ScreenCenterX, 1280f, LColor.white);
+		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getMainMenu().toUpperCase(), Constants.ScreenCenterX, 1520f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent()
 	{
 		super.loadContent();
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 }

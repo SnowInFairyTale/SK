@@ -19,7 +19,7 @@ public class LoseScreenSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		Utils.DrawStringAlignCenter(batch, this.fontHeader, LanguageResources
-				.getLoseHeader().toUpperCase(), 164f, 51f,
+				.getLoseHeader().toUpperCase(), 656f, 51f,
 				LColor.white);
 		int num = 0x23;
 		int num2 = 0x65;
@@ -29,14 +29,14 @@ public class LoseScreenSpriteWithText extends Sprite {
 			num2 += 20;
 		}
 		String text = LanguageResources.getMenu().toUpperCase();
-		Utils.DrawStringAlignCenter(batch, this.font, text,160f,
-				400f, LColor.white);
+		Utils.DrawStringAlignCenter(batch, this.font, text,Constants.ScreenCenterX,
+				1600f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(16);
-		this.fontHeader = LFont.getFont(38);
+		this.font = Constants.uiFont(16);
+		this.fontHeader = Constants.uiFont(38);
 	}
 }

@@ -110,25 +110,25 @@ public class SelectLevelScreen extends MenuScreen {
 		};
 	}
 
-	Vector2f result = new Vector2f(160f, 219f);
+	Vector2f result = new Vector2f(Constants.ScreenCenterX, 876f);
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 
-		result.set(160f, 219f);
+		result.set(Constants.ScreenCenterX, 876f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel1Title(), this.level1Locked, result);
 
-		result.set(160f, 279f);
+		result.set(Constants.ScreenCenterX, 1116f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel2Title(), this.level2Locked, result);
 
-		result.set(160f, 339f);
+		result.set(Constants.ScreenCenterX, 1356f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel3Title(), this.level3Locked, result);
 
-		result.set(160f, 402f);
+		result.set(Constants.ScreenCenterX, 1608f);
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
 				.getMainMenu().toUpperCase(), result, LColor.white);
 
@@ -162,7 +162,7 @@ public class SelectLevelScreen extends MenuScreen {
 		this.textureFlagGreen = LTextures
 				.loadTexture("assets/icon_flag_green.png");
 		this.textureFlagRed = LTextures.loadTexture("assets/icon_flag_red.png");
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 
 	private void StartGame(int level) {

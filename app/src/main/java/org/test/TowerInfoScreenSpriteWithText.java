@@ -47,12 +47,12 @@ public class TowerInfoScreenSpriteWithText extends Sprite {
 			num5 += num2;
 		}
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 435f, LColor.white);
+				.getBack().toUpperCase(), 169f, 1740f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 }

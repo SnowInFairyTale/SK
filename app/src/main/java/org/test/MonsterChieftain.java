@@ -4,9 +4,9 @@ public class MonsterChieftain extends Monster {
 	public MonsterChieftain(MainGame game, Wave wave, float speed,
 			int startHitPoints, int value) {
 		super(game, wave, startHitPoints, speed, value, "assets/chieftain.png",
-				8, 13, 0x27, 0x27);
+				32, 52, 0x9c, 0x9c);
 		super.setMonsterType(MonsterType.Chieftain);
-		super.setRadius(8f);
+		super.setRadius(32f);
 		super.setAnimationSpeedRatio(3);
 	}
 }

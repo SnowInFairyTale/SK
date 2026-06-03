@@ -25,7 +25,7 @@ public class MonsterToolbar extends DrawableGameComponent implements
 		super(game);
 		this.game = game;
 		this.monster = monster;
-		this.drawPosition = new Vector2f(10f, 420f);
+		this.drawPosition = new Vector2f(40f, 1680f);
 		this.drawPositionFont = this.drawPosition.add(78f, 12f);
 		this.animatedSpriteMonster = AnimatedSpriteMonster
 				.GetAnimatedSpriteMonsterForMonsterToolbar(game,
@@ -38,7 +38,7 @@ public class MonsterToolbar extends DrawableGameComponent implements
 		game.Components().add(this.animatedSpriteMonster);
 		this.healthBar = new ProgressBar(game, 200, true);
 		this.healthBar.setPosition(this.drawPosition.add(75f, 30f));
-		this.healthBar.setHeight(8);
+		this.healthBar.setHeight(32);
 		game.Components().add(this.healthBar);
 	}
 
@@ -55,7 +55,7 @@ public class MonsterToolbar extends DrawableGameComponent implements
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture("assets/monster_toolbar.png");
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 
 	public final void Remove() {

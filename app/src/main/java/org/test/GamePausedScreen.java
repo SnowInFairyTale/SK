@@ -14,7 +14,7 @@ public class GamePausedScreen extends MenuScreen {
 		super.setTransitionOffTime(0f);
 		super.setIsPopup(true);
 		super.setScreenType(ScreenType.GamePausedScreen);
-		Vector2f vector = new Vector2f(140f, 42f);
+		Vector2f vector = new Vector2f(560f, 168f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
 		item.setPosition(new Vector2f(95f, 370f));

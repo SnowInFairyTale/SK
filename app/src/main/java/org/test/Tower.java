@@ -288,16 +288,16 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		super.update(gameTime);
 		this.elapsedTime += 0.03333334f;
 		if (!this.getPlaced()) {
-			Vector2f vector = new Vector2f(25f, -40f);
+			Vector2f vector = new Vector2f(100f, -160f);
 			Vector2f point = Utils.ConvertToGridPoint(this.game
 					.getGameplayScreen().getLastTouchPosition().add(vector));
 			this.setGridX(point.x());
 			this.setGridY(point.y());
 			this.setPosition(Utils.ConvertToPositionCoordinates(
-					new Vector2f(this.getGridX(), this.getGridY())).add(20f,
-					20f));
+					new Vector2f(this.getGridX(), this.getGridY())).add(80f,
+					80f));
 			this.occupiedTexturePosition = new Vector2f(
-					this.getPosition().x - 20f, this.getPosition().y - 20f);
+					this.getPosition().x - 80f, this.getPosition().y - 80f);
 			this.occupiedTexture = this.CanPlace() ? this.occupiedTextureGreen
 					: this.occupiedTextureRed;
 			this.SetDrawOrder();

@@ -21,7 +21,7 @@ public class StartGameButton extends DrawableGameComponent implements
 
 	public StartGameButton(MainGame game) {
 		super(game);
-		this.drawPosition = new Vector2f(100f, 2f);
+		this.drawPosition = new Vector2f(1600f, 8f);
 		this.textureFile = "assets/start.png";
 		this.game = game;
 		super.setDrawOrder(40);
@@ -53,7 +53,7 @@ public class StartGameButton extends DrawableGameComponent implements
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture(this.textureFile);
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 	}
 
 	public final void Show() {

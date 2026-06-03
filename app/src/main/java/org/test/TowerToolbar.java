@@ -34,8 +34,8 @@ public class TowerToolbar extends DrawableGameComponent implements
 		super(game);
 		this.game = game;
 		this.tower = tower;
-		this.drawPosition = new Vector2f(10f, 420f);
-		this.drawPositionUpgradeButton = this.drawPosition.add(150f, 0f);
+		this.drawPosition = new Vector2f(40f, 1680f);
+		this.drawPositionUpgradeButton = this.drawPosition.add(600f, 0f);
 		this.animatedSpriteTower = AnimatedSpriteTower
 				.GetAnimatedSpriteTowerForTowerToolbar(game, this.drawPosition,
 						tower.getTowerType(), 1f);
@@ -44,8 +44,8 @@ public class TowerToolbar extends DrawableGameComponent implements
 		this.animatedSpriteTower.setObeyGameOpacity(false);
 		this.animatedSpriteTower.setOnlyAnimateIfGameStateStarted(false);
 		super.setDrawOrder(1);
-		this.sellButtonArea = new RectBox(((int) this.drawPosition.x) + 0x109,
-				((int) this.drawPosition.y) + 5, 0x2d, 0x2d);
+		this.sellButtonArea = new RectBox(((int) this.drawPosition.x) + 0x424,
+				((int) this.drawPosition.y) + 20, 0xb4, 0xb4);
 		game.Components().add(this.animatedSpriteTower);
 	}
 
@@ -72,21 +72,21 @@ public class TowerToolbar extends DrawableGameComponent implements
 				this.drawPosition.x + 64f, this.drawPosition.y + 33f,
 				this.upgradeButtonWhiteColor);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + this.tower.getRange(), this.drawPosition.add(120f, 33f),
+				"" + this.tower.getRange(), this.drawPosition.add(480f, 132f),
 				this.upgradeButtonGreenColor);
 		batch.drawString(this.font, LanguageResources.getPower(),
-				this.drawPosition.add(64f, 15f), this.upgradeButtonWhiteColor);
+				this.drawPosition.add(256f, 60f), this.upgradeButtonWhiteColor);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + this.tower.getDamage(), this.drawPosition.add(120f, 15f),
+				"" + this.tower.getDamage(), this.drawPosition.add(480f, 60f),
 				this.upgradeButtonRedColor);
 		batch.drawString(this.font, LanguageResources.getUpgrade(),
 				this.drawPositionUpgradeButton.add(23f, 15f),
 				this.upgradeButtonWhiteColor);
 		batch.drawString(this.font, LanguageResources.getSell(),
-				this.drawPosition.add(274f, 15f), LColor.white);
+				this.drawPosition.add(1096f, 60f), LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font,
 				"" + this.tower.GetSellValue(),
-				this.drawPosition.add(287f, 33f), LColor.white);
+				this.drawPosition.add(1148f, 132f), LColor.white);
 		if (this.tower.IsMoreUpgradeLevelsAvailable()) {
 			Utils.DrawStringAlignCenter(batch, this.font, this.tower
 					.GetUpgradeCost().toString(),
@@ -112,7 +112,7 @@ public class TowerToolbar extends DrawableGameComponent implements
 				.loadTexture("assets/button_upgrade.png");
 		this.textureUpgradeButtonInactive = LTextures
 				.loadTexture("assets/button_upgrade_greyed.png");
-		this.font = LFont.getFont(9);
+		this.font = Constants.uiFont(9);
 		this.SetUpgradeButtonState();
 	}
 

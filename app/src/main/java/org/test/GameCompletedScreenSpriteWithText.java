@@ -23,9 +23,9 @@ public class GameCompletedScreenSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		Utils.DrawStringAlignCenter(batch, this.fontHeader,
-				LanguageResources.getGameCompletedHeader(), new Vector2f(164f, 20f),
+				LanguageResources.getGameCompletedHeader(), new Vector2f(656f, 20f),
 				LColor.white);
-		int num = 8;
+		int num = 32;
 		int num2 = 0x37;
 		for (String str : LanguageResources.getGameCompletedPar1().split("[$]", -1)) {
 			Utils.DrawStringAlignLeft(batch, this.font, str,
@@ -34,13 +34,13 @@ public class GameCompletedScreenSpriteWithText extends Sprite {
 		}
 		String text = LanguageResources.getMenu().toUpperCase();
 		Utils.DrawStringAlignCenter(batch, this.font, text,
-				160f, 435f, LColor.white);
+				Constants.ScreenCenterX, 1740f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(12);
-		this.fontHeader = LFont.getFont(26);
+		this.font = Constants.uiFont(12);
+		this.fontHeader = Constants.uiFont(26);
 	}
 }

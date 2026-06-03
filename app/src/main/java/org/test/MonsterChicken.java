@@ -8,10 +8,10 @@ public class MonsterChicken extends Monster {
 	public MonsterChicken(MainGame game, Wave wave, float speed,
 			int startHitPoints, int value) {
 		super(game, wave, startHitPoints, speed, value, "assets/chicken.png",
-				8, 8, 0x20, 0x20);
+				32, 32, 0x80, 0x80);
 		this.game = game;
 		super.setMonsterType(MonsterType.Chicken);
-		super.setRadius(6f);
+		super.setRadius(24f);
 		super.setDrawOrder(30);
 		super.getHealthBar().setDrawOrder(30);
 	}

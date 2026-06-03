@@ -49,7 +49,7 @@ public class MainMenuScreen extends MenuScreen {
 		entry3.setnoButtonBackgroundSize(new Vector2f(60f, 60f));
 		MenuEntry entry4 = new MenuEntry("");
 		entry4.setuseButtonBackground(false);
-		entry4.setPosition(new Vector2f(230f, 20f));
+		entry4.setPosition(new Vector2f(920f, 20f));
 		entry4.setnoButtonBackgroundSize(new Vector2f(60f, 60f));
 		this.UpdateLockedDifficulties();
 
@@ -104,26 +104,26 @@ public class MainMenuScreen extends MenuScreen {
 		super.getMenuEntries().add(entry4);
 	}
 
-	Vector2f result = new Vector2f(160f, 219f);
+	Vector2f result = new Vector2f(Constants.ScreenCenterX, 876f);
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
-		batch.draw(this.textureSound, 20f, 444f, LColor.white);
+		batch.draw(this.textureSound, 80f, 1776f, LColor.white);
 
-		result.set(160f, 219f);
+		result.set(Constants.ScreenCenterX, 876f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getEasy()
 				.toUpperCase(), this.easyLocked, result);
 
-		result.set(160f, 279f);
+		result.set(Constants.ScreenCenterX, 1116f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getMedium()
 				.toUpperCase(), this.mediumLocked, result);
 
-		result.set(160f, 339f);
+		result.set(Constants.ScreenCenterX, 1356f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getHard()
 				.toUpperCase(), this.hardLocked, result);
 
 		Utils.DrawStringAlignCenter(batch, this.fontStd, LanguageResources
-				.getInstructions().toUpperCase(), 160f, 405f, LColor.white);
+				.getInstructions().toUpperCase(), Constants.ScreenCenterX, 1620f, LColor.white);
 
 		super.draw(batch, gameTime);
 	}
@@ -136,7 +136,7 @@ public class MainMenuScreen extends MenuScreen {
 				.loadTexture("assets/speaker_icon_on.png");
 		this.textureSoundOff = LTextures
 				.loadTexture("assets/speaker_icon_off.png");
-		this.fontStd = LFont.getFont(12);
+		this.fontStd = Constants.uiFont(12);
 		this.SetSoundTexture();
 	}
 

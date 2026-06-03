@@ -50,7 +50,7 @@ public class Cash extends DrawableGameComponent implements IGameComponent {
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(12);
+		this.font = Constants.uiFont(12);
 		this.texture = LTextures.loadTexture(this.textureFile);
 	}
 

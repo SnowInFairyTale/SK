@@ -1,5 +1,6 @@
 package com.example.towerdefencegles;
 
+import org.test.Constants;
 import org.test.MainGame;
 
 import loon.LGame;
@@ -10,27 +11,23 @@ public class MainActivity extends LGame {
 
 	@Override
 	public void onGamePaused() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onGameResumed() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onMain() {
 		LTexture.ALL_LINEAR = true;
 		LSetting setting = new LSetting();
-		setting.width = 320;
-		setting.height = 480;
+		setting.width = Constants.ScreenWidth;
+		setting.height = Constants.ScreenHeight;
 		setting.showFPS = false;
 		setting.fps = 30;
 		setting.landscape = false;
+		setting.mode = LMode.Fill;
 		register(setting, MainGame.class);
-		
 	}
 
 }

@@ -45,11 +45,11 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		Utils.DrawStringAlignCenter(batch, this.fontHuge,
-				LanguageResources.getBuyGame(), 160f, 3f, LColor.white);
+				LanguageResources.getBuyGame(), Constants.ScreenCenterX, 12f, LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.fontMedium,
-				LanguageResources.getPleaseUnlock(), new Vector2f(160f, 74f),
+				LanguageResources.getPleaseUnlock(), new Vector2f(Constants.ScreenCenterX, 74f),
 				LColor.white);
-		int num = 8;
+		int num = 32;
 		int num2 = 0xae;
 		Utils.DrawStringAlignLeft(batch, this.font,
 				"* " + LanguageResources.getMediumDifficulty(), num, 102f,
@@ -87,9 +87,9 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 
 	@Override
 	protected void loadContent() {
-		this.fontHuge = LFont.getFont(32);
-		this.fontMedium = LFont.getFont(16);
-		this.font = LFont.getFont(12);
+		this.fontHuge = Constants.uiFont(32);
+		this.fontMedium = Constants.uiFont(16);
+		this.font = Constants.uiFont(12);
 		super.loadContent();
 	}
 }

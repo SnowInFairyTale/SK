@@ -7,33 +7,33 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 	
 	public AnimatedSpriteTower(MainGame game, String textureFile,
 			Vector2f position, int spriteCount) {
-		super(game, textureFile, position, 6, spriteCount, 80, 80, 1f);
+		super(game, textureFile, position, 6, spriteCount, 320, 320, 1f);
 		super.setAnimationSpeedRatio(3);
 	}
 
 	public static java.util.ArrayList<AnimatedSpriteTower> GetAllAnimatedSpriteTowers(
 			MainGame game) {
 
-		int num = 10;
+		int num = 40;
 
 		java.util.ArrayList<AnimatedSpriteTower> list = new java.util.ArrayList<AnimatedSpriteTower>();
 
 		RefObject<Integer> num2 = new RefObject<Integer>(0);
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Axe,
-				"png/", num2), new Vector2f((float) num, 18f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num, 72f), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Spear,
-				"png/", num2), new Vector2f((float) num, 118f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num, 472f), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(
 				TowerType.AirDefence, "png/", num2), new Vector2f((float) num,
-				218f), num2.argvalue));
+				872f), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Lur,
-				"png/", num2), new Vector2f((float) num, 318f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num, 1272f), num2.argvalue));
 		num2.argvalue = 0;
 
 		return list;
@@ -46,7 +46,7 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 		RefObject<Integer> num2 = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
 				towerType, "png/", num2), towerToolbarDrawPosition.add(-2f,
-				-34f), 6, num2.argvalue, 80, 80, scale);
+				-34f), 6, num2.argvalue, 320, 320, scale);
 
 		return tempVar;
 	}

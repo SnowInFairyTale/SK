@@ -21,7 +21,7 @@ public class TowerInfoScreen extends MenuScreen {
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
 		item.setPosition(new Vector2f(110f, 422f));
-		item.setnoButtonBackgroundSize(new Vector2f(120f, 38f));
+		item.setnoButtonBackgroundSize(new Vector2f(480f, 152f));
 
 		item.Selected = new GameEvent() {
 

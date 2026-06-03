@@ -64,7 +64,7 @@ public class InstructionsScreenSpriteWithText extends Sprite {
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(16);
-		this.fontBig = LFont.getFont(20);
+		this.font = Constants.uiFont(16);
+		this.fontBig = Constants.uiFont(20);
 	}
 }
