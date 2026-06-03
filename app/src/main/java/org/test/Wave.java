@@ -1,4 +1,4 @@
-﻿package org.test;
+package org.test;
 
 import loon.action.sprite.painting.DrawableGameComponent;
 import loon.action.sprite.painting.IGameComponent;

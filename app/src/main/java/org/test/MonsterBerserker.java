@@ -1,4 +1,4 @@
-﻿package org.test;
+package org.test;
 
 public class MonsterBerserker extends Monster
 {

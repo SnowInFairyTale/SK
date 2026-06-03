@@ -1,4 +1,4 @@
-﻿package org.test;
+package org.test;
 
 public class MonsterPeasant extends Monster {
 	public MonsterPeasant(MainGame game, Wave wave, float speed,

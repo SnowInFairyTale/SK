@@ -1,4 +1,4 @@
-﻿package org.test;
+package org.test;
 
 import loon.core.timer.GameTime;
 
