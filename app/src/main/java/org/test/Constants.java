@@ -8,6 +8,36 @@ public final class Constants {
 	/** Logical scale factor matching 4x upscaled assets (320x480 -> 1280x1920). */
 	public static final int DisplayScale = 4;
 
+	/**
+	 * One cell in png/monsterinfo*, png/towerinfo*, and root monsterinfo* sheets
+	 * (1x design 40px; textures were downscaled 50% from the former 80px cells).
+	 */
+	public static final int InfoSpriteCell = 40;
+
+	public static int infoSpriteCell() {
+		return s(InfoSpriteCell);
+	}
+
+	/** 1x=20px: center a halved info sprite in the old 80px layout slot on full-size backgrounds. */
+	public static float infoSpriteLayoutInset() {
+		return s(20f);
+	}
+
+	/** 1x px: nudge monster/tower info sprites and text down on full-size backgrounds. */
+	public static final float InfoScreenOffsetY = 8f;
+
+	public static float infoScreenLayoutOffsetY() {
+		return s(InfoScreenOffsetY);
+	}
+
+	public static int infoScreenY(int logicalY) {
+		return s(logicalY) + (int) infoScreenLayoutOffsetY();
+	}
+
+	public static float infoScreenY(float logicalY) {
+		return s(logicalY) + infoScreenLayoutOffsetY();
+	}
+
 	public static final int GridHeight = 0x13;
 	public static final int GridSize = 20 * DisplayScale;
 	public static final int GridWidth = 0x12;

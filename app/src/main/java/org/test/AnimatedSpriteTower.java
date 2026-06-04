@@ -7,34 +7,36 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 	
 	public AnimatedSpriteTower(MainGame game, String textureFile,
 			Vector2f position, int spriteCount) {
-		super(game, textureFile, position, 6, spriteCount, Constants.s(80),
-				Constants.s(80), 1f);
+		super(game, textureFile, position, 6, spriteCount, Constants.infoSpriteCell(),
+				Constants.infoSpriteCell(), 1f);
 		super.setAnimationSpeedRatio(3);
 	}
 
 	public static java.util.ArrayList<AnimatedSpriteTower> GetAllAnimatedSpriteTowers(
 			MainGame game) {
 
+		float inset = Constants.infoSpriteLayoutInset();
+		float dy = Constants.infoScreenLayoutOffsetY();
 		int num = 40;
 
 		java.util.ArrayList<AnimatedSpriteTower> list = new java.util.ArrayList<AnimatedSpriteTower>();
 
 		RefObject<Integer> num2 = new RefObject<Integer>(0);
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Axe,
-				"png/", num2), new Vector2f((float) num, 72f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num + inset, 72f + inset + dy), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Spear,
-				"png/", num2), new Vector2f((float) num, 472f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num + inset, 472f + inset + dy), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(
-				TowerType.AirDefence, "png/", num2), new Vector2f((float) num,
-				872f), num2.argvalue));
+				TowerType.AirDefence, "png/", num2), new Vector2f((float) num + inset,
+				872f + inset + dy), num2.argvalue));
 		num2.argvalue = 0;
 
 		list.add(new AnimatedSpriteTower(game, GetTextureFile(TowerType.Lur,
-				"png/", num2), new Vector2f((float) num, 1272f), num2.argvalue));
+				"png/", num2), new Vector2f((float) num + inset, 1272f + inset + dy), num2.argvalue));
 		num2.argvalue = 0;
 
 		return list;
@@ -47,8 +49,8 @@ public class AnimatedSpriteTower extends AnimatedSprite {
 		RefObject<Integer> num2 = new RefObject<Integer>(0);
 		AnimatedSprite tempVar = new AnimatedSprite(game, GetTextureFile(
 				towerType, "png/", num2), towerToolbarDrawPosition.add(
-				Constants.s(-2f), Constants.s(-34f)), 6, num2.argvalue,
-				Constants.s(80), Constants.s(80), scale);
+				Constants.s(-1f), Constants.s(-17f)), 6, num2.argvalue,
+				Constants.infoSpriteCell(), Constants.infoSpriteCell(), scale);
 
 		return tempVar;
 	}

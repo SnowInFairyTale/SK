@@ -8,6 +8,8 @@ import loon.core.timer.GameTime;
 
 public class TowerInfoScreenSpriteWithText extends Sprite {
 
+	private static final float TEXT_X = 99f;
+
 	private LFont font;
 
 	public TowerInfoScreenSpriteWithText(MainGame game) {
@@ -18,36 +20,38 @@ public class TowerInfoScreenSpriteWithText extends Sprite {
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
-		int num = 0x1a;
-		int num2 = 0x10;
+		int num = Constants.infoScreenY(0x1a);
+		int lineStep = Constants.s(0x10);
+		float textX = Constants.s(TEXT_X);
 		for (String str : LanguageResources.getTowerInfoPar1().split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, 99f, num,
+			Utils.DrawStringAlignLeft(batch, this.font, str, textX, num,
 					LColor.white);
-			num += num2;
+			num += lineStep;
 		}
-		int num3 = 0x80;
+		int num3 = Constants.infoScreenY(0x80);
 		for (String str2 : LanguageResources.getTowerInfoPar2()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str2, 99f, num3,
+			Utils.DrawStringAlignLeft(batch, this.font, str2, textX, num3,
 					LColor.white);
-			num3 += num2;
+			num3 += lineStep;
 		}
-		int num4 = 0xe2;
+		int num4 = Constants.infoScreenY(0xe2);
 		for (String str3 : LanguageResources.getTowerInfoPar3()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str3, 99f, num4,
+			Utils.DrawStringAlignLeft(batch, this.font, str3, textX, num4,
 					LColor.white);
-			num4 += num2;
+			num4 += lineStep;
 		}
-		int num5 = 0x146;
+		int num5 = Constants.infoScreenY(0x146);
 		for (String str4 : LanguageResources.getTowerInfoPar4()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str4, 99f, num5,
+			Utils.DrawStringAlignLeft(batch, this.font, str4, textX, num5,
 					LColor.white);
-			num5 += num2;
+			num5 += lineStep;
 		}
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 1740f, LColor.white);
+				.getBack().toUpperCase(), Constants.s(169f),
+				Constants.infoScreenY(435f), LColor.white);
 	}
 
 	@Override

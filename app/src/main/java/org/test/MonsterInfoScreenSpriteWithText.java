@@ -8,6 +8,10 @@ import loon.core.timer.GameTime;
 
 public class MonsterInfoScreenSpriteWithText extends Sprite {
 
+	private static final float TEXT_X_RIGHT = 100f;
+	private static final float TEXT_X_LEFT = 4f;
+	private static final int LINE_STEP = 20;
+
 	private LFont font;
 
 	public MonsterInfoScreenSpriteWithText(MainGame game) {
@@ -18,50 +22,52 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
-		int num = 0x18;
+		int lineStep = Constants.s(LINE_STEP);
+		int num = Constants.infoScreenY(0x18);
 		for (String str : LanguageResources.getMonsterInfoPar1().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, 400f, num,
-					LColor.white);
-			num += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str,
+					Constants.s(TEXT_X_RIGHT), num, LColor.white);
+			num += lineStep;
 		}
-		int num2 = 0x60;
+		int num2 = Constants.infoScreenY(0x60);
 		for (String str2 : LanguageResources.getMonsterInfoPar2().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str2, 4f, num2,
-					LColor.white);
-			num2 += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str2,
+					Constants.s(TEXT_X_LEFT), num2, LColor.white);
+			num2 += lineStep;
 		}
-		int num3 = 0x9a;
+		int num3 = Constants.infoScreenY(0x9a);
 		for (String str3 : LanguageResources.getMonsterInfoPar3().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str3, 400f, num3,
-					LColor.white);
-			num3 += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str3,
+					Constants.s(TEXT_X_RIGHT), num3, LColor.white);
+			num3 += lineStep;
 		}
-		int num4 = 0xe0;
+		int num4 = Constants.infoScreenY(0xe0);
 		for (String str4 : LanguageResources.getMonsterInfoPar4().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str4, 4f, num4,
-					LColor.white);
-			num4 += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str4,
+					Constants.s(TEXT_X_LEFT), num4, LColor.white);
+			num4 += lineStep;
 		}
-		int num5 = 290;
+		int num5 = Constants.infoScreenY(290);
 		for (String str5 : LanguageResources.getMonsterInfoPar5().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str5, 400f, num5,
-					LColor.white);
-			num5 += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str5,
+					Constants.s(TEXT_X_RIGHT), num5, LColor.white);
+			num5 += lineStep;
 		}
-		int num6 = 0x162;
+		int num6 = Constants.infoScreenY(0x162);
 		for (String str6 : LanguageResources.getMonsterInfoPar6().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str6, 4f, num6,
-					LColor.white);
-			num6 += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str6,
+					Constants.s(TEXT_X_LEFT), num6, LColor.white);
+			num6 += lineStep;
 		}
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 1740f, LColor.white);
+				.getBack().toUpperCase(), Constants.s(169f),
+				Constants.infoScreenY(435f), LColor.white);
 	}
 
 	@Override

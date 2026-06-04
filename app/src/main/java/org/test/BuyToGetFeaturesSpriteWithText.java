@@ -24,15 +24,15 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 		super(game, "assets/buytogetfeatures.png", 0, new Vector2f(0f, 0f));
 		this.game = game;
 		this.animatedSpriteTowerSpear = AnimatedSpriteTower
-				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(109f,
-						154f), TowerType.Spear, 0.4f);
+				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(55f,
+						77f), TowerType.Spear, 0.4f);
 		this.animatedSpriteTowerSpear.setDrawOrder(0x149);
 		this.animatedSpriteTowerSpear.setAnimationSpeedRatio(3);
 		this.animatedSpriteTowerSpear.setObeyGameOpacity(false);
 		this.animatedSpriteTowerSpear.setOnlyAnimateIfGameStateStarted(false);
 		this.animatedSpriteTowerLur = AnimatedSpriteTower
-				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(269f,
-						132f), TowerType.Lur, 0.4f);
+				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(135f,
+						66f), TowerType.Lur, 0.4f);
 		this.animatedSpriteTowerLur.setDrawOrder(0x149);
 		this.animatedSpriteTowerLur.setAnimationSpeedRatio(3);
 		this.animatedSpriteTowerLur.setObeyGameOpacity(false);
