@@ -1,23 +1,34 @@
 package com.example.towerdefencegles;
 
+import org.test.Constants;
 import org.test.MainGame;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.widget.FrameLayout;
+
 import loon.LGame;
+import loon.LSetting;
 import loon.core.graphics.opengl.LTexture;
 
 
 public class MainActivity extends LGame {
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		FrameLayout layout = getFrameLayout();
+		if (layout != null) {
+			layout.setBackgroundColor(Color.BLACK);
+		}
+	}
+
+	@Override
 	public void onGamePaused() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onGameResumed() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -29,8 +40,8 @@ public class MainActivity extends LGame {
 		setting.showFPS = false;
 		setting.fps = 30;
 		setting.landscape = false;
+		setting.mode = LMode.Ratio;
 		register(setting, MainGame.class);
-		
 	}
 
 }
