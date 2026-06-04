@@ -65,9 +65,6 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 					Constants.s(TEXT_X_LEFT), num6, LColor.white);
 			num6 += lineStep;
 		}
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), Constants.s(169f),
-				Constants.infoScreenY(435f), LColor.white);
 	}
 
 	@Override

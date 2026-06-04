@@ -10,6 +10,7 @@ public class TowerInfoScreen extends MenuScreen {
 	private MainGame game;
 	private boolean isFirstExit;
 	private TowerInfoScreenSpriteWithText towerInfoScreenSpriteWithText;
+	private InfoScreenBackLabel infoScreenBackLabel;
 
 	public TowerInfoScreen(MainGame game, ScreenType prevScreen) {
 		super("", game, prevScreen);
@@ -39,6 +40,9 @@ public class TowerInfoScreen extends MenuScreen {
 		if (this.towerInfoScreenSpriteWithText != null) {
 			this.game.Components().remove(this.towerInfoScreenSpriteWithText);
 		}
+		if (this.infoScreenBackLabel != null) {
+			this.game.Components().remove(this.infoScreenBackLabel);
+		}
 	}
 
 	@Override
@@ -55,6 +59,8 @@ public class TowerInfoScreen extends MenuScreen {
 			tower.setObeyGameOpacity(false);
 			super.getScreenManager().getGame().Components().add(tower);
 		}
+		this.infoScreenBackLabel = new InfoScreenBackLabel(this.game);
+		this.game.Components().add(this.infoScreenBackLabel);
 	}
 
 	@Override
@@ -77,6 +83,9 @@ public class TowerInfoScreen extends MenuScreen {
 			for (IGameComponent component : this.animatedSprites) {
 				super.getScreenManager().getGame().Components()
 						.remove(component);
+			}
+			if (this.infoScreenBackLabel != null) {
+				this.game.Components().remove(this.infoScreenBackLabel);
 			}
 			this.isFirstExit = false;
 		}

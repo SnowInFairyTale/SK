@@ -49,9 +49,6 @@ public class TowerInfoScreenSpriteWithText extends Sprite {
 					LColor.white);
 			num5 += lineStep;
 		}
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), Constants.s(169f),
-				Constants.infoScreenY(435f), LColor.white);
 	}
 
 	@Override

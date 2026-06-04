@@ -23,11 +23,49 @@ public final class Constants {
 		return s(20f);
 	}
 
-	/** 1x px: nudge monster/tower info sprites and text down on full-size backgrounds. */
-	public static final float InfoScreenOffsetY = 8f;
+	/** 1x px: optional nudge for info-screen body text and sprites (not the back label). */
+	public static final float InfoScreenOffsetY = 0f;
 
 	public static float infoScreenLayoutOffsetY() {
 		return s(InfoScreenOffsetY);
+	}
+
+	/** 1x=435: back button label on screen_monsters / towers_2 (no body offset). */
+	public static float infoScreenBackY() {
+		return s(435f);
+	}
+
+	/**
+	 * Draw scale on monster/tower info screens: half-res cells sampled at
+	 * {@link #infoSpriteCell()}, displayed at the former full 80px (320px) size.
+	 */
+	public static final float InfoScreenSpriteDrawScale = 2f;
+
+	public static float infoScreenSpriteDrawScale() {
+		return InfoScreenSpriteDrawScale;
+	}
+
+	/** Same 2× draw as info screens for toolbar / next-wave preview on half-res sheets. */
+	public static float toolbarInfoSpriteDrawScale() {
+		return InfoScreenSpriteDrawScale;
+	}
+
+	/** 1x=-2,-34: monster/tower toolbar sprite offset from panel origin. */
+	public static float toolbarSpriteOffsetX() {
+		return s(-2f);
+	}
+
+	public static float toolbarSpriteOffsetY() {
+		return s(-34f);
+	}
+
+	/** 1x=200,-4: next-wave preview (root monsterinfo* sheet, 12 columns). */
+	public static float nextWavePreviewX() {
+		return s(200f);
+	}
+
+	public static float nextWavePreviewY() {
+		return s(-4f);
 	}
 
 	public static int infoScreenY(int logicalY) {

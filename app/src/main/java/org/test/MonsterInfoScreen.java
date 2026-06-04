@@ -10,6 +10,7 @@ public class MonsterInfoScreen extends MenuScreen {
 	private MainGame game;
 	private boolean isFirstExit;
 	private MonsterInfoScreenSpriteWithText monsterInfoScreenSpriteWithText;
+	private InfoScreenBackLabel infoScreenBackLabel;
 
 	public MonsterInfoScreen(MainGame game, ScreenType prevScreen) {
 		super("", game, prevScreen);
@@ -40,6 +41,9 @@ public class MonsterInfoScreen extends MenuScreen {
 		if (this.monsterInfoScreenSpriteWithText != null) {
 			this.game.Components().remove(this.monsterInfoScreenSpriteWithText);
 		}
+		if (this.infoScreenBackLabel != null) {
+			this.game.Components().remove(this.infoScreenBackLabel);
+		}
 	}
 
 	@Override
@@ -56,6 +60,8 @@ public class MonsterInfoScreen extends MenuScreen {
 			sprite.setObeyGameOpacity(false);
 			super.getScreenManager().getGame().Components().add(sprite);
 		}
+		this.infoScreenBackLabel = new InfoScreenBackLabel(this.game);
+		this.game.Components().add(this.infoScreenBackLabel);
 	}
 
 	@Override
@@ -79,6 +85,9 @@ public class MonsterInfoScreen extends MenuScreen {
 			for (IGameComponent component : this.animatedSprites) {
 				super.getScreenManager().getGame().Components()
 						.remove(component);
+			}
+			if (this.infoScreenBackLabel != null) {
+				this.game.Components().remove(this.infoScreenBackLabel);
 			}
 			this.isFirstExit = false;
 		}
