@@ -26,7 +26,7 @@ public class MainActivity extends LGame {
 		setting.showFPS = false;
 		setting.fps = 30;
 		setting.landscape = false;
-		setting.mode = LMode.Fill;
+		setting.mode = LMode.Ratio;
 		register(setting, MainGame.class);
 	}
 

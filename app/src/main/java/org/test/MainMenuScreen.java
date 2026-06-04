@@ -182,9 +182,15 @@ public class MainMenuScreen extends MenuScreen {
 	}
 
 	private void StartInstructionsMenuEntrySelected() {
+		android.util.Log.d("InstructionsPerf",
+				"从主菜单打开 Instructions");
 		super.getScreenManager().ExitAllScreens();
+		long t0 = System.nanoTime();
 		super.getScreenManager().AddScreen(
 				new InstructionScreen(this.game, ScreenType.MainMenuScreen));
+		long addMs = (System.nanoTime() - t0) / 1_000_000L;
+		android.util.Log.d("InstructionsPerf",
+				"AddScreen(InstructionScreen) 返回 " + addMs + "ms");
 	}
 
 	private void StartMediumGameMenuEntrySelected() {

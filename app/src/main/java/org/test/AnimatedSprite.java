@@ -1,5 +1,7 @@
 package org.test;
 
+import android.util.Log;
+
 import loon.action.sprite.SpriteBatch;
 import loon.action.sprite.SpriteBatch.SpriteEffects;
 import loon.action.sprite.painting.DrawableGameComponent;
@@ -101,7 +103,23 @@ public class AnimatedSprite extends DrawableGameComponent implements
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.texture = LTextures.loadTexture(this.getTextureFile());
+		String textureFile = this.getTextureFile();
+		boolean infoScreenSprite = textureFile != null
+				&& (textureFile.contains("towerinfo") || textureFile
+						.contains("monsterinfo"));
+		long t0 = infoScreenSprite ? System.nanoTime() : 0L;
+		this.texture = LTextures.loadTexture(textureFile);
+		if (infoScreenSprite) {
+			long loadMs = (System.nanoTime() - t0) / 1_000_000L;
+			int w = this.texture.getWidth();
+			int h = this.texture.getHeight();
+			String label = textureFile.contains("towerinfo") ? "[Towers]"
+					: "[Enemies]";
+			Log.d("InstructionsPerf", label + " 动画纹理 " + textureFile + ": "
+					+ loadMs + "ms, 图素 " + w + "x" + h + " (" + (w * h)
+					+ " px), 单帧 " + this.getSpriteWidth() + "x"
+					+ this.getSpriteHeight());
+		}
 	}
 
 	private int privateAnimationSpeedRatio;
