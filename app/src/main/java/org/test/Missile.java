@@ -1,9 +1,16 @@
 package org.test;
 
+import loon.action.sprite.SpriteBatch;
+import loon.action.sprite.SpriteBatch.SpriteEffects;
 import loon.core.geom.Vector2f;
+import loon.core.graphics.LColor;
 import loon.core.timer.GameTime;
+import loon.utils.MathUtils;
 
 public abstract class Missile extends AnimatedSprite {
+
+	private static final float GLOW_ALPHA = 0.5f;
+	private static final float GLOW_SCALE = 1.65f;
 
 	private float dist;
 	private MainGame game;
@@ -30,6 +37,36 @@ public abstract class Missile extends AnimatedSprite {
 		if (missileType == MissileType.SPEAR) {
 			super.setRotation(Utils.GetAngle(this.getDirection()) + 1.570796f);
 		}
+	}
+
+	@Override
+	protected void drawGlowLayer(SpriteBatch batch, GameTime gameTime) {
+		LColor glowBase = this.getMissileGlowColor();
+		if (glowBase == null) {
+			return;
+		}
+		batch.flush();
+		LColor glow = this.resolveTintColor(glowBase);
+		batch.setColor(glow);
+		this.drawMissileGlow(batch, glow, gameTime);
+		batch.resetColor();
+		batch.flush();
+	}
+
+	protected void drawMissileGlow(SpriteBatch batch, LColor glow,
+			GameTime gameTime) {
+		batch.draw(this.getAnimationTexture(), this.getDrawPosition(),
+				this.getAnimationFrameRect(), glow,
+				MathUtils.toDegrees(this.getRotation()), this.getOrigin(),
+				GLOW_SCALE, SpriteEffects.None);
+	}
+
+	protected LColor getMissileGlowColor() {
+		LColor base = this.getBlackRecolorTarget();
+		if (base == null) {
+			return null;
+		}
+		return new LColor(base.r, base.g, base.b, GLOW_ALPHA);
 	}
 
 	@Override

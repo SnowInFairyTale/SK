@@ -325,6 +325,7 @@ public class WaveManager extends DrawableGameComponent implements
 												.getMonsterType());
 						this.nextWaveMonsterType.setAnimationSpeedRatio(3);
 						this.nextWaveMonsterType.setObeyGameOpacity(false);
+						this.nextWaveMonsterType.setDrawOrder(45);
 						this.game.Components().add(this.nextWaveMonsterType);
 					} else {
 						this.isLastWave = true;

@@ -52,6 +52,37 @@ public class AnimatedSprite extends DrawableGameComponent implements
 
 	private RectBox rect = new RectBox();
 
+	/** Override to replace black / semi-transparent black pixels at load time. */
+	protected LColor getBlackRecolorTarget() {
+		return null;
+	}
+
+	protected final LColor resolveTintColor(LColor base) {
+		LColor color = new LColor(base);
+		if (this.getObeyGameOpacity() && (this.game.getGameplayScreen() != null)) {
+			LColor gameOpacity = this.game.getGameplayScreen().getGameOpacity();
+			if (!gameOpacity.equals(LColor.white)) {
+				color.r *= gameOpacity.r;
+				color.g *= gameOpacity.g;
+				color.b *= gameOpacity.b;
+				color.a *= gameOpacity.a;
+			}
+		}
+		return color;
+	}
+
+	protected final LTexture getAnimationTexture() {
+		return this.texture;
+	}
+
+	protected final RectBox getAnimationFrameRect() {
+		return this.rect;
+	}
+
+	/** Drawn behind the sprite body; used by missiles for a soft glow halo. */
+	protected void drawGlowLayer(SpriteBatch batch, GameTime gameTime) {
+	}
+
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		if (this.getOnlyPlayOnceFeature()) {
@@ -72,10 +103,10 @@ public class AnimatedSprite extends DrawableGameComponent implements
 						+ this.getVerticalTextureOffset(),
 				this.getSpriteWidth(), this.getSpriteHeight());
 
-		LColor color = (this.getObeyGameOpacity() && (this.game
-				.getGameplayScreen() != null)) ? this.game.getGameplayScreen()
-				.getGameOpacity() : LColor.white;
+		this.drawGlowLayer(batch, gameTime);
 
+		LColor color = this.resolveTintColor(LColor.white);
+		batch.setColor(color);
 		batch.draw(this.texture, this.getDrawPosition(), rect, color,
 				MathUtils.toDegrees(this.getRotation()), this.getOrigin(),
 				this.scale, SpriteEffects.None);
@@ -101,7 +132,10 @@ public class AnimatedSprite extends DrawableGameComponent implements
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.texture = LTextures.loadTexture(this.getTextureFile());
+		LColor recolorTarget = this.getBlackRecolorTarget();
+		this.texture = recolorTarget != null ? TextureRecolor.recolorBlackTo(
+				this.getTextureFile(), recolorTarget) : LTextures
+				.loadTexture(this.getTextureFile());
 	}
 
 	private int privateAnimationSpeedRatio;
