@@ -62,7 +62,8 @@ public class GameplayScreen extends GameScreen {
 		for (TowerButton button : this.towerButtons) {
 			game.Components().add(button);
 		}
-		this.setRemainingLives(new RemainingLives(game, 20));
+		this.setRemainingLives(new RemainingLives(game,
+				Constants.InitialRemainingLives));
 		game.Components().add(this.getRemainingLives());
 		this.setCash(new Cash(game, 50));
 		this.setGameOpacity(LColor.white);
@@ -208,7 +209,7 @@ public class GameplayScreen extends GameScreen {
 				.getBackgroundTextureFile());
 		this.gameBackgroundWithGrid = LTextures.loadTexture(this
 				.getLevelSettings().getBackgroundWithGridTextureFile());
-		this.fontSize26Extra = LFont.getFont(26);
+		this.fontSize26Extra = Constants.font(52);
 		this.currentBackground = this.gameBackground;
 		super.LoadContent();
 	}

@@ -18,16 +18,16 @@ public class InstructionScreen extends MenuScreen
 		super.setTransitionOffTime(0.5f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(7f, 425f));
-		item.setnoButtonBackgroundSize(new Vector2f(94f, 38f));
+		item.setPosition(new Vector2f(14f, 850f));
+		item.setnoButtonBackgroundSize(new Vector2f(188f, 76f));
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(128f, 425f));
-		entry2.setnoButtonBackgroundSize(new Vector2f(94f, 38f));
+		entry2.setPosition(new Vector2f(256f, 850f));
+		entry2.setnoButtonBackgroundSize(new Vector2f(188f, 76f));
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(250f, 425f));
-		entry3.setnoButtonBackgroundSize(new Vector2f(58f, 38f));
+		entry3.setPosition(new Vector2f(500f, 850f));
+		entry3.setnoButtonBackgroundSize(new Vector2f(116f, 76f));
 
 		entry2.Selected =new GameEvent() {
 			

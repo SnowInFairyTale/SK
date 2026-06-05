@@ -13,6 +13,8 @@ import loon.core.timer.GameTime;
 public abstract class TowerButton extends DrawableGameComponent implements
 		IGameComponent {
 
+	private static final int BUTTON_SIZE = 120;
+
 	private Vector2f drawPosition = new Vector2f();
 
 	private MainGame game;
@@ -33,15 +35,15 @@ public abstract class TowerButton extends DrawableGameComponent implements
 			break;
 
 		case Spear:
-			this.textureOffsetX = 120;
+			this.textureOffsetX = 240;
 			break;
 
 		case AirDefence:
-			this.textureOffsetX = 60;
+			this.textureOffsetX = 120;
 			break;
 
 		case Lur:
-			this.textureOffsetX = 180;
+			this.textureOffsetX = 360;
 			break;
 		}
 		this.drawPosition.x = this.textureOffsetX;
@@ -51,7 +53,8 @@ public abstract class TowerButton extends DrawableGameComponent implements
 	private RectBox rect = new RectBox();
 
 	public final RectBox CentralCollisionArea() {
-		rect.setBounds(this.drawPosition.x, this.drawPosition.y, 60, 60);
+		rect.setBounds(this.drawPosition.x, this.drawPosition.y, BUTTON_SIZE,
+				BUTTON_SIZE);
 		return rect;
 	}
 
@@ -61,18 +64,18 @@ public abstract class TowerButton extends DrawableGameComponent implements
 				&& ((this.getTowerType() == TowerType.Spear) || (this
 						.getTowerType() == TowerType.Lur))) {
 			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, 60, 60,
-					LColor.darkGray);
+					this.textureOffsetX, this.textureOffsetY, BUTTON_SIZE,
+					BUTTON_SIZE, LColor.darkGray);
 		} else {
 			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, 60, 60, this.game
-							.getGameplayScreen().getGameOpacity());
+					this.textureOffsetX, this.textureOffsetY, BUTTON_SIZE,
+					BUTTON_SIZE, this.game.getGameplayScreen().getGameOpacity());
 		}
 		super.draw(batch, gameTime);
 	}
 
 	public final void Hide() {
-		this.drawPosition.y = -300f;
+		this.drawPosition.y = -600f;
 	}
 
 	@Override
@@ -82,7 +85,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 	}
 
 	public final void Show() {
-		this.drawPosition.y = 420f;
+		this.drawPosition.y = 840f;
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 			this.textureOffsetY = 0;
 		} else {
 			this.setIsActive(false);
-			this.textureOffsetY = 0x41;
+			this.textureOffsetY = 0x82;
 		}
 	}
 

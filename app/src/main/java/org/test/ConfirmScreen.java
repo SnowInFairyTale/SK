@@ -16,14 +16,14 @@ public class ConfirmScreen extends MenuScreen
 		super.setTransitionOnTime(0f);
 		super.setTransitionOffTime(0f);
 		super.setIsPopup(true);
-		Vector2f vector = new Vector2f(60f, 50f);
+		Vector2f vector = new Vector2f(120f, 100f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(48f, 220f));
+		item.setPosition(new Vector2f(96f, 440f));
 		item.setnoButtonBackgroundSize(  vector);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground (false);
-		entry2.setPosition (new Vector2f(206f, 220f));
+		entry2.setPosition (new Vector2f(412f, 440f));
 		entry2.setnoButtonBackgroundSize(  vector);
 
 		item.Selected =new GameEvent() {

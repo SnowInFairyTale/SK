@@ -21,7 +21,7 @@ public class StartGameButton extends DrawableGameComponent implements
 
 	public StartGameButton(MainGame game) {
 		super(game);
-		this.drawPosition = new Vector2f(100f, 2f);
+		this.drawPosition = new Vector2f(200f, 4f);
 		this.textureFile = "assets/start.png";
 		this.game = game;
 		super.setDrawOrder(40);
@@ -40,24 +40,24 @@ public class StartGameButton extends DrawableGameComponent implements
 		batch.draw(this.texture, this.drawPosition, this.game
 				.getGameplayScreen().getGameOpacity());
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + LanguageResources.getStart(), this.drawPosition.x + 50f,
-				this.drawPosition.y + 13f, LColor.white);
+				"" + LanguageResources.getStart(), this.drawPosition.x + 100f,
+				this.drawPosition.y + 26f, LColor.white);
 		super.draw(batch, gameTime);
 	}
 
 	public final void Hide() {
-		this.drawPosition.y = -300f;
+		this.drawPosition.y = -600f;
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture(this.textureFile);
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 	}
 
 	public final void Show() {
-		this.drawPosition.y = 2f;
+		this.drawPosition.y = 4f;
 	}
 
 	@Override

@@ -18,41 +18,39 @@ public class TowerInfoScreenSpriteWithText extends Sprite {
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
-		int num = 0x1a;
-		int num2 = 0x10;
+		int num = 0x34;
+		int num2 = 0x20;
 		for (String str : LanguageResources.getTowerInfoPar1().split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, 99f, num,
+			Utils.DrawStringAlignLeft(batch, this.font, str, 198f, num,
 					LColor.white);
 			num += num2;
 		}
-		int num3 = 0x80;
+		int num3 = 0x100;
 		for (String str2 : LanguageResources.getTowerInfoPar2()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str2, 99f, num3,
+			Utils.DrawStringAlignLeft(batch, this.font, str2, 198f, num3,
 					LColor.white);
 			num3 += num2;
 		}
-		int num4 = 0xe2;
+		int num4 = 0x1c4;
 		for (String str3 : LanguageResources.getTowerInfoPar3()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str3, 99f, num4,
+			Utils.DrawStringAlignLeft(batch, this.font, str3, 198f, num4,
 					LColor.white);
 			num4 += num2;
 		}
-		int num5 = 0x146;
+		int num5 = 0x28c;
 		for (String str4 : LanguageResources.getTowerInfoPar4()
 				.split("[$]", -1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str4, 99f, num5,
+			Utils.DrawStringAlignLeft(batch, this.font, str4, 198f, num5,
 					LColor.white);
 			num5 += num2;
 		}
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 435f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 	}
 }

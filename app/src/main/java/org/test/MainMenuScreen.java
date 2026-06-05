@@ -26,31 +26,31 @@ public class MainMenuScreen extends MenuScreen {
 		super("", game, prevScreen);
 		this.game = game;
 		super.setScreenType(ScreenType.MainMenuScreen);
-		Vector2f vector = new Vector2f(110f, 41f);
+		Vector2f vector = new Vector2f(220f, 82f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(86f, 390f));
+		item.setPosition(new Vector2f(172f, 780f));
 		item.setnoButtonBackgroundSize(vector);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(86f, 210f));
+		entry2.setPosition(new Vector2f(172f, 420f));
 		entry2.setnoButtonBackgroundSize(vector);
 		this.startMediumGameMenuEntry = new MenuEntry("");
 		this.startMediumGameMenuEntry.setuseButtonBackground(false);
-		this.startMediumGameMenuEntry.setPosition(new Vector2f(86f, 270f));
+		this.startMediumGameMenuEntry.setPosition(new Vector2f(172f, 540f));
 		this.startMediumGameMenuEntry.setnoButtonBackgroundSize(vector);
 		this.startHardGameMenuEntry = new MenuEntry("");
 		this.startHardGameMenuEntry.setuseButtonBackground(false);
-		this.startHardGameMenuEntry.setPosition(new Vector2f(86f, 330f));
+		this.startHardGameMenuEntry.setPosition(new Vector2f(172f, 660f));
 		this.startHardGameMenuEntry.setnoButtonBackgroundSize(vector);
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(5f, 410f));
-		entry3.setnoButtonBackgroundSize(new Vector2f(60f, 60f));
+		entry3.setPosition(new Vector2f(10f, 820f));
+		entry3.setnoButtonBackgroundSize(new Vector2f(120f, 120f));
 		MenuEntry entry4 = new MenuEntry("");
 		entry4.setuseButtonBackground(false);
-		entry4.setPosition(new Vector2f(230f, 20f));
-		entry4.setnoButtonBackgroundSize(new Vector2f(60f, 60f));
+		entry4.setPosition(new Vector2f(460f, 40f));
+		entry4.setnoButtonBackgroundSize(new Vector2f(120f, 120f));
 		this.UpdateLockedDifficulties();
 
 		item.Selected = new GameEvent() {
@@ -104,26 +104,26 @@ public class MainMenuScreen extends MenuScreen {
 		super.getMenuEntries().add(entry4);
 	}
 
-	Vector2f result = new Vector2f(160f, 219f);
+	Vector2f result = new Vector2f(320f, 438f);
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
-		batch.draw(this.textureSound, 20f, 444f, LColor.white);
+		batch.draw(this.textureSound, 40f, 888f, LColor.white);
 
-		result.set(160f, 219f);
+		result.set(320f, 438f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getEasy()
 				.toUpperCase(), this.easyLocked, result);
 
-		result.set(160f, 279f);
+		result.set(320f, 558f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getMedium()
 				.toUpperCase(), this.mediumLocked, result);
 
-		result.set(160f, 339f);
+		result.set(320f, 678f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getHard()
 				.toUpperCase(), this.hardLocked, result);
 
-		Utils.DrawStringAlignCenter(batch, this.fontStd, LanguageResources
-				.getInstructions().toUpperCase(), 160f, 405f, LColor.white);
+		Utils.DrawButtonLabel(batch, this.fontStd, LanguageResources
+				.getInstructions().toUpperCase(), 320f, 780f, 82f, LColor.white);
 
 		super.draw(batch, gameTime);
 	}
@@ -136,7 +136,7 @@ public class MainMenuScreen extends MenuScreen {
 				.loadTexture("assets/speaker_icon_on.png");
 		this.textureSoundOff = LTextures
 				.loadTexture("assets/speaker_icon_off.png");
-		this.fontStd = LFont.getFont(12);
+		this.fontStd = Constants.font(24);
 		this.SetSoundTexture();
 	}
 

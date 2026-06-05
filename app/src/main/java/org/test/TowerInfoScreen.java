@@ -9,6 +9,7 @@ public class TowerInfoScreen extends MenuScreen {
 	private java.util.ArrayList<AnimatedSpriteTower> animatedSprites;
 	private MainGame game;
 	private boolean isFirstExit;
+	private ScreenButtonLabel backButtonLabel;
 	private TowerInfoScreenSpriteWithText towerInfoScreenSpriteWithText;
 
 	public TowerInfoScreen(MainGame game, ScreenType prevScreen) {
@@ -20,8 +21,8 @@ public class TowerInfoScreen extends MenuScreen {
 		super.setTransitionOffTime(0.5f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(110f, 422f));
-		item.setnoButtonBackgroundSize(new Vector2f(120f, 38f));
+		item.setPosition(new Vector2f(220f, 844f));
+		item.setnoButtonBackgroundSize(new Vector2f(240f, 76f));
 
 		item.Selected = new GameEvent() {
 
@@ -33,11 +34,17 @@ public class TowerInfoScreen extends MenuScreen {
 		super.getMenuEntries().add(item);
 		this.towerInfoScreenSpriteWithText = new TowerInfoScreenSpriteWithText(
 				game);
+		this.backButtonLabel = new ScreenButtonLabel(game, LanguageResources
+				.getBack().toUpperCase(), 338f, 844f, 76f, 24);
+		game.Components().add(this.backButtonLabel);
 	}
 
 	private void Exit() {
 		if (this.towerInfoScreenSpriteWithText != null) {
 			this.game.Components().remove(this.towerInfoScreenSpriteWithText);
+		}
+		if (this.backButtonLabel != null) {
+			this.game.Components().remove(this.backButtonLabel);
 		}
 	}
 
@@ -53,6 +60,7 @@ public class TowerInfoScreen extends MenuScreen {
 		for (AnimatedSpriteTower tower : this.animatedSprites) {
 			tower.setOnlyAnimateIfGameStateStarted(false);
 			tower.setObeyGameOpacity(false);
+			tower.setDrawOrder(50);
 			super.getScreenManager().getGame().Components().add(tower);
 		}
 	}

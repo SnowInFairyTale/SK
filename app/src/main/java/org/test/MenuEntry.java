@@ -77,10 +77,10 @@ public class MenuEntry {
 		float num = ((float) gameTime.getElapsedGameTime()) * 4f;
 		if (isSelected) {
 			this.selectionFade = Math.min((float) (this.selectionFade + num),
-					(float) 1f);
+					1f);
 		} else {
 			this.selectionFade = Math.max((float) (this.selectionFade - num),
-					(float) 0f);
+					0f);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class MenuEntry {
 	}
 
 	public final void setnoButtonBackgroundSize(Vector2f value) {
-		privatenoButtonBackgroundSize = value;
+		privatenoButtonBackgroundSize = value.cpy();
 	}
 
 	public final Vector2f getPosition() {
@@ -110,7 +110,7 @@ public class MenuEntry {
 	}
 
 	public final void setPosition(Vector2f value) {
-		this.position = value;
+		this.position = value.cpy();
 	}
 
 	private float privateRotation;

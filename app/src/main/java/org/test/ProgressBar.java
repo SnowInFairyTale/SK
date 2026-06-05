@@ -24,7 +24,7 @@ public class ProgressBar extends DrawableGameComponent implements
 		this.game = game;
 		this.setCurrentPercent(100);
 		this.width = width;
-		this.setHeight(4);
+		this.setHeight(8);
 		this.setDrawBorder(false);
 		super.setDrawOrder(30);
 		if (isHealthBarMode) {
@@ -46,7 +46,7 @@ public class ProgressBar extends DrawableGameComponent implements
 		if (this.getCurrentPercent() < 100) {
 			batch.draw(this.texture, this.getPosition().x,
 					(int) this.getPosition().y, this.width, this.getHeight(),
-					0, 5, this.texture.getWidth(), 4, this.backColor);
+					0, 10, this.texture.getWidth(), 8, this.backColor);
 		}
 		float num = ((float) this.getCurrentPercent()) / 100f;
 		LColor color = (num < this.lowColorLimit) ? this.frontColorLow
@@ -61,12 +61,12 @@ public class ProgressBar extends DrawableGameComponent implements
 			color = col;
 		}
 		batch.draw(this.texture, this.getPosition().x, this.getPosition().y,
-				(this.width * num), this.getHeight(), 0, 5,
-				this.texture.getWidth(), 4, color);
+				(this.width * num), this.getHeight(), 0, 10,
+				this.texture.getWidth(), 8, color);
 		if (this.getDrawBorder()) {
 			batch.draw(this.texture, this.getPosition().x,
-					this.getPosition().y, this.texture.getWidth(), 4, 0, 0,
-					this.texture.getWidth(), 4, LColor.white);
+					this.getPosition().y, this.width, 8, 0, 0,
+					this.texture.getWidth(), 8, LColor.white);
 		}
 	}
 
@@ -123,6 +123,6 @@ public class ProgressBar extends DrawableGameComponent implements
 	}
 
 	public final void setPosition(Vector2f value) {
-		privatePosition = value;
+		privatePosition = value.cpy();
 	}
 }

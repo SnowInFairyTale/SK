@@ -35,8 +35,8 @@ public class MainActivity extends LGame {
 	public void onMain() {
 		LTexture.ALL_LINEAR = true;
 		LSetting setting = new LSetting();
-		setting.width = 320;
-		setting.height = 480;
+		setting.width = Constants.SCREEN_WIDTH;
+		setting.height = Constants.SCREEN_HEIGHT;
 		setting.showFPS = false;
 		setting.fps = 30;
 		setting.landscape = false;

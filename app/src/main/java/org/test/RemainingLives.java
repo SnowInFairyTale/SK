@@ -36,7 +36,7 @@ public class RemainingLives extends DrawableGameComponent implements
 		batch.draw(this.texture, this.drawPosition, LColor.white);
 		if (this.getNumRemainingLives() >= 0) {
 			batch.drawString(this.font, "" + this.getNumRemainingLives(),
-					this.drawPosition.x + 15f, this.drawPosition.y + 3f,
+					this.drawPosition.x + 30f, this.drawPosition.y + 6f,
 					LColor.white);
 		}
 		super.draw(batch, gameTime);
@@ -45,7 +45,7 @@ public class RemainingLives extends DrawableGameComponent implements
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 		this.texture = LTextures.loadTexture(this.textureFile);
 	}
 

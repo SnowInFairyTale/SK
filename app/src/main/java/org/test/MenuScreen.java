@@ -52,7 +52,7 @@ public abstract class MenuScreen extends GameScreen {
 				0xc0 * super.getTransitionAlpha(),
 				0xc0 * super.getTransitionAlpha());
 		float scale = 1.25f;
-		position.y -= num2 * 100f;
+		position.y -= num2 * 200f;
 		batch.drawString(batch.getFont(), this.menuTitle, position, color, 0f,
 				origin, scale);
 	}
@@ -123,18 +123,18 @@ public abstract class MenuScreen extends GameScreen {
 				2.0);
 		Vector2f vector = new Vector2f(0f, (float) ((super.getScreenManager()
 				.getGame().getHeight() / 2) - (this.menuEntries.get(0)
-				.GetHeight(this) + (70 * this.menuEntries.size()))));
+				.GetHeight(this) + (140 * this.menuEntries.size()))));
 		for (int i = 0; i < this.menuEntries.size(); i++) {
 			MenuEntry entry = this.menuEntries.get(i);
 			vector.x = (LSystem.screenRect.width / 2)
 					- (entry.GetWidth(this) / 2);
 			if (super.getScreenState() == ScreenState.TransitionOn) {
-				vector.x -= num * 256f;
+				vector.x -= num * 512f;
 			} else {
-				vector.x += num * 512f;
+				vector.x += num * 1024f;
 			}
 			entry.setPosition(vector);
-			vector.y += entry.GetHeight(this) + 70;
+			vector.y += entry.GetHeight(this) + 140;
 		}
 	}
 

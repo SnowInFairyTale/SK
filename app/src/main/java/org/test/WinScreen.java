@@ -48,18 +48,18 @@ public class WinScreen extends MenuScreen
 		}
 		if (((game.getGameplayScreen().getDifficulty() == Difficulty.Hard) && flag) && (flag2 && flag3))
 		{
-			vector = new Vector2f(96f, 431f);
+			vector = new Vector2f(192f, 862f);
 			this.winScreenSpriteWithText = new GameCompletedScreenSpriteWithText(game);
 		}
 		else
 		{
-			vector = new Vector2f(96f, 396f);
+			vector = new Vector2f(192f, 792f);
 			this.winScreenSpriteWithText = new WinScreenSpriteWithText(game);
 		}
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
 		item.setPosition(vector);
-		item.setnoButtonBackgroundSize(new Vector2f(140f, 50f));
+		item.setnoButtonBackgroundSize(new Vector2f(280f, 100f));
 
 		item.Selected =new GameEvent() {
 			

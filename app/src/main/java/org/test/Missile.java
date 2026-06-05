@@ -14,18 +14,18 @@ public abstract class Missile extends AnimatedSprite {
 	public Missile(MainGame game, MissileType missileType, String textureFile,
 			Vector2f towerPosition, Monster targetMonster, int damage,
 			int columnCount, int spriteCount, int spriteWidth, int spriteHeight) {
-		super(game, textureFile, towerPosition.sub(9f, 9f), columnCount,
+		super(game, textureFile, towerPosition.cpy().sub(18f, 18f), columnCount,
 				spriteCount, spriteWidth, spriteHeight, 1f);
-		this.speed = 6f;
+		this.speed = 12f;
 		this.targetMonster = targetMonster;
 		this.setHasHitTarget(false);
 		this.game = game;
 		targetMonster.addReservedHitPoints(this.getDamage());
 		this.setDamage(damage);
-		this.speedPrFrame = 15f;
-		this.setDirection(Utils.GetDirection(towerPosition.sub(9f, 9f),
+		this.speedPrFrame = 30f;
+		this.setDirection(Utils.GetDirection(towerPosition.cpy().sub(18f, 18f),
 				targetMonster.getPosition()));
-		super.setOrigin(new Vector2f((spriteWidth / 2), (spriteHeight / 2)));
+		super.setOrigin(new Vector2f(spriteWidth / 2f, spriteHeight / 2f));
 		super.setDrawOrder(0x1f);
 		if (missileType == MissileType.SPEAR) {
 			super.setRotation(Utils.GetAngle(this.getDirection()) + 1.570796f);

@@ -41,12 +41,12 @@ public class ShowMenuButton extends DrawableGameComponent implements
 				.getGameplayScreen().getGameOpacity());
 		Utils.DrawStringAlignCenter(batch, this.font,
 				"" + LanguageResources.getMenu(),
-				this.drawPosition.add(40f, 20f), LColor.white);
+				this.drawPosition.add(80f, 40f), LColor.white);
 		super.draw(batch, gameTime);
 	}
 
 	public final void Hide() {
-		this.drawPosition = new Vector2f(240f, -300f);
+		this.drawPosition = new Vector2f(480f, -600f);
 		this.setIsVisible(false);
 	}
 
@@ -54,11 +54,11 @@ public class ShowMenuButton extends DrawableGameComponent implements
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture(this.textureFile);
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 	}
 
 	public final void Show() {
-		this.drawPosition = new Vector2f(240f, 425f);
+		this.drawPosition = new Vector2f(480f, 850f);
 		this.setIsVisible(true);
 	}
 

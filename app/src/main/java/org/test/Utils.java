@@ -8,13 +8,15 @@ import loon.utils.MathUtils;
 
 public class Utils {
 	public static Vector2f ConvertToGridPoint(Vector2f positionCoordinates) {
-		return new Vector2f(((int) ((positionCoordinates.x - -20f) / 20f)) - 1,
-				((int) ((positionCoordinates.y - 40f) / 20f)) - 1);
+		return new Vector2f(
+				((int) ((positionCoordinates.x - Constants.HorizontalGridOffset) / Constants.GridSize)) - 1,
+				((int) ((positionCoordinates.y - Constants.VerticalGridOffset) / Constants.GridSize)) - 1);
 	}
 
 	public static Vector2f ConvertToPositionCoordinates(Vector2f gridPoint) {
-		return new Vector2f((float) ((gridPoint.x * 20) + -20),
-				(float) ((gridPoint.y * 20) + 40));
+		return new Vector2f(
+				(float) ((gridPoint.x * Constants.GridSize) + Constants.HorizontalGridOffset),
+				(float) ((gridPoint.y * Constants.GridSize) + Constants.VerticalGridOffset));
 	}
 
 	public static void DrawLevelText(SpriteBatch spriteBatch, LFont font,
@@ -23,11 +25,11 @@ public class Utils {
 		if (locked) {
 			white = LColor.gray;
 			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getLocked(), position.add(0f, 14f),
+					LanguageResources.getLocked(), position.add(0f, 28f),
 					LColor.red);
 		} else {
 			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getUnlocked(), position.add(0f, 14f),
+					LanguageResources.getUnlocked(), position.add(0f, 28f),
 					new LColor(0f, 1f, 0f, 1f));
 		}
 		DrawStringAlignCenter(spriteBatch, font, text.toUpperCase(), position,
@@ -40,6 +42,15 @@ public class Utils {
 			LFont font, String text, float x, float y, LColor color) {
 		pos.set(x - (font.stringWidth(text) / 2f), y);
 		spriteBatch.drawString(font, text, pos, color);
+	}
+
+	/** Horizontally centered label vertically aligned within a button rect (screen pixels). */
+	public static void DrawButtonLabel(SpriteBatch spriteBatch, LFont font,
+			String text, float centerX, float buttonY, float buttonHeight,
+			LColor color) {
+		float centerY = buttonY + buttonHeight / 2f;
+		float textY = centerY - font.getHeight() / 2f;
+		DrawStringAlignCenter(spriteBatch, font, text, centerX, textY, color);
 	}
 
 	public static void DrawStringAlignCenter(SpriteBatch spriteBatch,
@@ -101,7 +112,7 @@ public class Utils {
 
 	public static int GetTextureOffsetY(float angleInRadians, int spriteHeight) {
 		float num = MathUtils.wrapAngle(angleInRadians + 1.570796f);
-		if ((num >= -0.3926991f) && (num <= 0.3926991f)) {
+		if ((num >= -Constants.PiOver8) && (num <= Constants.PiOver8)) {
 			return 0;
 		}
 		if ((num >= -1.963495f) && (num <= -1.178097f)) {
@@ -116,7 +127,7 @@ public class Utils {
 		if ((num >= -2.748894f) && (num <= -1.963495f)) {
 			return (5 * spriteHeight);
 		}
-		if ((num >= 0.3926991f) && (num <= 1.178097f)) {
+		if ((num >= Constants.PiOver8) && (num <= 1.178097f)) {
 			return spriteHeight;
 		}
 		if ((num >= 1.963495f) && (num <= 2.748894f)) {

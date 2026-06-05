@@ -9,6 +9,7 @@ public class MonsterInfoScreen extends MenuScreen {
 	private java.util.ArrayList<AnimatedSprite> animatedSprites;
 	private MainGame game;
 	private boolean isFirstExit;
+	private ScreenButtonLabel backButtonLabel;
 	private MonsterInfoScreenSpriteWithText monsterInfoScreenSpriteWithText;
 
 	public MonsterInfoScreen(MainGame game, ScreenType prevScreen) {
@@ -21,8 +22,8 @@ public class MonsterInfoScreen extends MenuScreen {
 
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(110f, 422f));
-		item.setnoButtonBackgroundSize(new Vector2f(120f, 38f));
+		item.setPosition(new Vector2f(220f, 844f));
+		item.setnoButtonBackgroundSize(new Vector2f(240f, 76f));
 
 		item.Selected = new GameEvent() {
 
@@ -34,11 +35,17 @@ public class MonsterInfoScreen extends MenuScreen {
 		super.getMenuEntries().add(item);
 		this.monsterInfoScreenSpriteWithText = new MonsterInfoScreenSpriteWithText(
 				game);
+		this.backButtonLabel = new ScreenButtonLabel(game, LanguageResources
+				.getBack().toUpperCase(), 338f, 844f, 76f, 32);
+		game.Components().add(this.backButtonLabel);
 	}
 
 	private void Exit() {
 		if (this.monsterInfoScreenSpriteWithText != null) {
 			this.game.Components().remove(this.monsterInfoScreenSpriteWithText);
+		}
+		if (this.backButtonLabel != null) {
+			this.game.Components().remove(this.backButtonLabel);
 		}
 	}
 
@@ -54,6 +61,7 @@ public class MonsterInfoScreen extends MenuScreen {
 		for (AnimatedSprite sprite : this.animatedSprites) {
 			sprite.setOnlyAnimateIfGameStateStarted(false);
 			sprite.setObeyGameOpacity(false);
+			sprite.setDrawOrder(50);
 			super.getScreenManager().getGame().Components().add(sprite);
 		}
 	}

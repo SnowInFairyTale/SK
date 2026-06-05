@@ -20,17 +20,17 @@ public class ConfirmScreenSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		batch.drawString(this.fontStdHuge, LanguageResources.getAreYouSure(),
-				80f, 160f, LColor.white);
+				160f, 320f, LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getYes().toUpperCase(), 80f, 240f, LColor.white);
+				.getYes().toUpperCase(), 160f, 480f, LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources.getNo()
-				.toUpperCase(), 240f, 240f, LColor.white);
+				.toUpperCase(), 480f, 480f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
-		this.fontStdHuge = LFont.getFont(26);
-		this.font = LFont.getFont(12);
+		this.fontStdHuge = Constants.font(52);
+		this.font = Constants.font(24);
 		super.loadContent();
 	}
 }

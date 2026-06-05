@@ -34,22 +34,22 @@ public class SelectLevelScreen extends MenuScreen {
 		this.game = game;
 		super.setScreenType(ScreenType.SelectLevelScreen);
 		this.difficulty = difficulty;
-		Vector2f vector = new Vector2f(110f, 41f);
+		Vector2f vector = new Vector2f(220f, 82f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(86f, 210f));
+		item.setPosition(new Vector2f(172f, 420f));
 		item.setnoButtonBackgroundSize(vector);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(86f, 270f));
+		entry2.setPosition(new Vector2f(172f, 540f));
 		entry2.setnoButtonBackgroundSize(vector);
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(86f, 330f));
+		entry3.setPosition(new Vector2f(172f, 660f));
 		entry3.setnoButtonBackgroundSize(vector);
 		MenuEntry entry4 = new MenuEntry("");
 		entry4.setuseButtonBackground(false);
-		entry4.setPosition(new Vector2f(86f, 390f));
+		entry4.setPosition(new Vector2f(172f, 780f));
 		entry4.setnoButtonBackgroundSize(vector);
 		super.getMenuEntries().add(item);
 		super.getMenuEntries().add(entry2);
@@ -110,34 +110,33 @@ public class SelectLevelScreen extends MenuScreen {
 		};
 	}
 
-	Vector2f result = new Vector2f(160f, 219f);
+	Vector2f result = new Vector2f(320f, 438f);
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 
-		result.set(160f, 219f);
+		result.set(320f, 438f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel1Title(), this.level1Locked, result);
 
-		result.set(160f, 279f);
+		result.set(320f, 558f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel2Title(), this.level2Locked, result);
 
-		result.set(160f, 339f);
+		result.set(320f, 678f);
 		Utils.DrawLevelText(batch, this.font,
 				LanguageResources.getLevel3Title(), this.level3Locked, result);
 
-		result.set(160f, 402f);
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getMainMenu().toUpperCase(), result, LColor.white);
+		Utils.DrawButtonLabel(batch, this.font, LanguageResources.getMainMenu()
+				.toUpperCase(), 320f, 780f, 82f, LColor.white);
 
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel1,
-				244f, 235f, this.font);
+				488f, 470f, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel2,
-				244f, 295f, this.font);
+				488f, 590f, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel3,
-				244f, 355f, this.font);
+				488f, 710f, this.font);
 		super.draw(batch, gameTime);
 	}
 
@@ -145,10 +144,10 @@ public class SelectLevelScreen extends MenuScreen {
 			int remainingLivesRecord, float x, float y, LFont font) {
 		if (remainingLivesRecord >= 0) {
 			batch.draw(this.textureFlagGreen, x, y, LColor.white);
-			Utils.DrawStringAlignRight(batch, font, (new Integer(
-					remainingLivesRecord)).toString() + "/" + 20, new Vector2f(
-					83f, y), LColor.white);
-			batch.draw(this.textureHeart, 84f, y + 3f, LColor.white);
+			Utils.DrawStringAlignRight(batch, font, (remainingLivesRecord) + "/"
+							+ Constants.InitialRemainingLives, new Vector2f(
+					166f, y), LColor.white);
+			batch.draw(this.textureHeart, 168f, y + 6f, LColor.white);
 		} else {
 			batch.draw(this.textureFlagRed, x, y, LColor.white);
 		}
@@ -162,7 +161,7 @@ public class SelectLevelScreen extends MenuScreen {
 		this.textureFlagGreen = LTextures
 				.loadTexture("assets/icon_flag_green.png");
 		this.textureFlagRed = LTextures.loadTexture("assets/icon_flag_red.png");
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 	}
 
 	private void StartGame(int level) {

@@ -40,8 +40,8 @@ public class DieInfo extends DrawableGameComponent implements IGameComponent {
 		if (r < 255 && r > 0) {
 			color.setColor(r, r, r, r);
 			batch.draw(this.texture, position, color);
-			batch.drawString(this.font, "" + this.value, position.x + 8f,
-					position.y + 4f, color);
+			batch.drawString(this.font, "" + this.value, position.x + 16f,
+					position.y + 8f, color);
 		}
 		super.draw(batch, gameTime);
 	}
@@ -50,7 +50,7 @@ public class DieInfo extends DrawableGameComponent implements IGameComponent {
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture("assets/icon_coin_tiny.png");
-		this.font = LFont.getFont(12);
+		this.font = Constants.font(24);
 	}
 
 	@Override

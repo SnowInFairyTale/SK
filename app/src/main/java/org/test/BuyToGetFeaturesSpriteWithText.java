@@ -23,16 +23,14 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 	public BuyToGetFeaturesSpriteWithText(MainGame game) {
 		super(game, "assets/buytogetfeatures.png", 0, new Vector2f(0f, 0f));
 		this.game = game;
-		this.animatedSpriteTowerSpear = AnimatedSpriteTower
-				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(109f,
-						154f), TowerType.Spear, 0.4f);
+		this.animatedSpriteTowerSpear = AnimatedSpriteTower.GetPreviewTower(game,
+				TowerType.Spear, 218f, 308f, 0.4f);
 		this.animatedSpriteTowerSpear.setDrawOrder(0x149);
 		this.animatedSpriteTowerSpear.setAnimationSpeedRatio(3);
 		this.animatedSpriteTowerSpear.setObeyGameOpacity(false);
 		this.animatedSpriteTowerSpear.setOnlyAnimateIfGameStateStarted(false);
-		this.animatedSpriteTowerLur = AnimatedSpriteTower
-				.GetAnimatedSpriteTowerForTowerToolbar(game, new Vector2f(269f,
-						132f), TowerType.Lur, 0.4f);
+		this.animatedSpriteTowerLur = AnimatedSpriteTower.GetPreviewTower(game,
+				TowerType.Lur, 538f, 264f, 0.4f);
 		this.animatedSpriteTowerLur.setDrawOrder(0x149);
 		this.animatedSpriteTowerLur.setAnimationSpeedRatio(3);
 		this.animatedSpriteTowerLur.setObeyGameOpacity(false);
@@ -45,34 +43,34 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		Utils.DrawStringAlignCenter(batch, this.fontHuge,
-				LanguageResources.getBuyGame(), 160f, 3f, LColor.white);
+				LanguageResources.getBuyGame(), 320f, 6f, LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.fontMedium,
-				LanguageResources.getPleaseUnlock(), new Vector2f(160f, 74f),
+				LanguageResources.getPleaseUnlock(), new Vector2f(320f, 148f),
 				LColor.white);
-		int num = 8;
-		int num2 = 0xae;
+		int num = 16;
+		int num2 = 0x15c;
 		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getMediumDifficulty(), num, 102f,
-				LColor.white);
-		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getSpearTower(), num, 132f,
+				"* " + LanguageResources.getMediumDifficulty(), num, 204f,
 				LColor.white);
 		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getHardDifficulty(), num, 162f,
+				"* " + LanguageResources.getSpearTower(), num, 264f,
 				LColor.white);
 		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getLurTower(), num2, 102f,
+				"* " + LanguageResources.getHardDifficulty(), num, 324f,
 				LColor.white);
 		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getTwoExtraLevels(), num2, 132f,
+				"* " + LanguageResources.getLurTower(), num2, 204f,
 				LColor.white);
 		Utils.DrawStringAlignLeft(batch, this.font,
-				"* " + LanguageResources.getSupportTheGame(), num2, 162f,
+				"* " + LanguageResources.getTwoExtraLevels(), num2, 264f,
+				LColor.white);
+		Utils.DrawStringAlignLeft(batch, this.font,
+				"* " + LanguageResources.getSupportTheGame(), num2, 324f,
 				LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getUnlockGame().toUpperCase(), 94f, 433f, LColor.white);
+				.getUnlockGame().toUpperCase(), 188f, 866f, LColor.white);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				LanguageResources.getNotNow(), 242f, 433f, LColor.white);
+				LanguageResources.getNotNow(), 484f, 866f, LColor.white);
 	}
 
 	public final void Exit() {
@@ -87,9 +85,9 @@ public class BuyToGetFeaturesSpriteWithText extends Sprite {
 
 	@Override
 	protected void loadContent() {
-		this.fontHuge = LFont.getFont(32);
-		this.fontMedium = LFont.getFont(16);
-		this.font = LFont.getFont(12);
+		this.fontHuge = Constants.font(64);
+		this.fontMedium = Constants.font(32);
+		this.font = Constants.font(24);
 		super.loadContent();
 	}
 }

@@ -20,22 +20,22 @@ public class WinScreenSpriteWithText extends Sprite {
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
 		Utils.DrawStringAlignCenter(batch, this.fontHeader,
-				LanguageResources.getWinHeader(), 164f, 51f, LColor.white);
-		int num = 0x53;
+				LanguageResources.getWinHeader(), 328f, 102f, LColor.white);
+		int num = 0xa6;
 		for (String str : LanguageResources.getWinPar1().split("[$]")) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, new Vector2f(34f,
-					(float) num), LColor.white);
-			num += 20;
+			Utils.DrawStringAlignLeft(batch, this.font, str, 68f,
+					(float) num, LColor.white);
+			num += 40;
 		}
 		String text = LanguageResources.getMenu().toUpperCase();
-		Utils.DrawStringAlignCenter(batch, this.font, text, 160f, 400f,
+		Utils.DrawStringAlignCenter(batch, this.font, text, 320f, 800f,
 				LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(16);
-		this.fontHeader = LFont.getFont(26);
+		this.font = Constants.font(32);
+		this.fontHeader = Constants.font(52);
 	}
 }

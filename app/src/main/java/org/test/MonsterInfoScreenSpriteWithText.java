@@ -18,55 +18,53 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
-		int num = 0x18;
+		int num = 0x30;
 		for (String str : LanguageResources.getMonsterInfoPar1().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str, 100f, num,
+			Utils.DrawStringAlignLeft(batch, this.font, str, 200f, num,
 					LColor.white);
-			num += 20;
+			num += 40;
 		}
-		int num2 = 0x60;
+		int num2 = 0xc0;
 		for (String str2 : LanguageResources.getMonsterInfoPar2().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str2, 4f, num2,
+			Utils.DrawStringAlignLeft(batch, this.font, str2, 8f, num2,
 					LColor.white);
-			num2 += 20;
+			num2 += 40;
 		}
-		int num3 = 0x9a;
+		int num3 = 0x134;
 		for (String str3 : LanguageResources.getMonsterInfoPar3().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str3, 100f, num3,
+			Utils.DrawStringAlignLeft(batch, this.font, str3, 200f, num3,
 					LColor.white);
-			num3 += 20;
+			num3 += 40;
 		}
-		int num4 = 0xe0;
+		int num4 = 0x1c0;
 		for (String str4 : LanguageResources.getMonsterInfoPar4().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str4, 4f, num4,
+			Utils.DrawStringAlignLeft(batch, this.font, str4, 8f, num4,
 					LColor.white);
-			num4 += 20;
+			num4 += 40;
 		}
-		int num5 = 290;
+		int num5 = 580;
 		for (String str5 : LanguageResources.getMonsterInfoPar5().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str5, 100f, num5,
+			Utils.DrawStringAlignLeft(batch, this.font, str5, 200f, num5,
 					LColor.white);
-			num5 += 20;
+			num5 += 40;
 		}
-		int num6 = 0x162;
+		int num6 = 0x2c4;
 		for (String str6 : LanguageResources.getMonsterInfoPar6().split("[$]",
 				-1)) {
-			Utils.DrawStringAlignLeft(batch, this.font, str6, 4f, num6,
+			Utils.DrawStringAlignLeft(batch, this.font, str6, 8f, num6,
 					LColor.white);
-			num6 += 20;
+			num6 += 40;
 		}
-		Utils.DrawStringAlignCenter(batch, this.font, LanguageResources
-				.getBack().toUpperCase(), 169f, 435f, LColor.white);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = LFont.getFont(16);
+		this.font = Constants.font(32);
 	}
 }

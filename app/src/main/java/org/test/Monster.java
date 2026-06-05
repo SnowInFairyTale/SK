@@ -16,7 +16,7 @@ public abstract class Monster extends AnimatedSprite {
 	public Monster(MainGame game, Wave wave, int startHitPoints, float speed,
 			int value, String textureFile, int columnCount, int spriteCount,
 			int spriteHeight, int spriteWidth) {
-		super(game, textureFile, new Vector2f(1f, 200f), columnCount,
+		super(game, textureFile, new Vector2f(2f, 400f), columnCount,
 				spriteCount, spriteWidth, spriteHeight, 1f);
 		Vector2f startPoint = game.getGameplayScreen().getLevelSettings()
 				.getStartPoint().cpy();
@@ -29,7 +29,7 @@ public abstract class Monster extends AnimatedSprite {
 	public Monster(MainGame game, Wave wave, int startHitPoints, float speed,
 			int value, String textureFile, int columnCount, int spriteCount,
 			int spriteHeight, int spriteWidth, Vector2f gridPosition) {
-		super(game, textureFile, new Vector2f(1f, 200f), columnCount,
+		super(game, textureFile, new Vector2f(2f, 400f), columnCount,
 				spriteCount, spriteWidth, spriteHeight, 1f);
 		if (((gridPosition.x < 2) || (gridPosition.x > 0x10))
 				|| ((gridPosition.y < 0) || (gridPosition.y > 0x12))) {
@@ -132,11 +132,12 @@ public abstract class Monster extends AnimatedSprite {
 		this.setStartHitPoints(startHitPoints);
 		this.setHitPoints(startHitPoints);
 		this.setSpeed(speed);
-		this.setHealthBar(new ProgressBar(game, 20, true));
+		this.setHealthBar(new ProgressBar(game, 40, true));
 		this.getHealthBar().setDrawOrder(1);
 		this.getHealthBar().setDrawBorder(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
-				this.getGridPosition()).add(10f, 10f));
+				this.getGridPosition()).add(Constants.GridSize / 2f,
+				Constants.GridSize / 2f));
 		this.destinationPosition = this.getPosition();
 		this.game = game;
 		this.wave = wave;
@@ -181,7 +182,7 @@ public abstract class Monster extends AnimatedSprite {
 	public void update(GameTime gameTime) {
 		super.update(gameTime);
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			if (Utils.GetDistance(this.getPosition(), this.destinationPosition) < 1f) {
+			if (Utils.GetDistance(this.getPosition(), this.destinationPosition) < 2f) {
 				if (this.game.getGameplayScreen().getLevelSettings()
 						.getTowerBlockingGridCells()
 						.contains(this.getGridPosition())
@@ -193,7 +194,8 @@ public abstract class Monster extends AnimatedSprite {
 				this.setGridPosition(this.GetNextGridPoint(this
 						.getGridPosition()));
 				this.destinationPosition = Utils.ConvertToPositionCoordinates(
-						this.getGridPosition()).add(10f, 10f);
+						this.getGridPosition()).add(Constants.GridSize / 2f,
+						Constants.GridSize / 2f);
 				if (this.getGridPosition().x >= this.game.getGameplayScreen()
 						.getLevelSettings().getEndPoint().x) {
 					this.Survived();
@@ -283,8 +285,8 @@ public abstract class Monster extends AnimatedSprite {
 				- (super.getSpriteWidth() / 2), value.y
 				- (super.getSpriteHeight() / 2)));
 		this.getHealthBar().setPosition(
-				new Vector2f((value.x - (super.getSpriteWidth() / 2)) + 4f,
-						value.y + 6f));
+				new Vector2f((value.x - (super.getSpriteWidth() / 2)) + 8f,
+						value.y + 12f));
 	}
 
 	private float privateRadius;

@@ -14,18 +14,18 @@ public class GamePausedScreen extends MenuScreen {
 		super.setTransitionOffTime(0f);
 		super.setIsPopup(true);
 		super.setScreenType(ScreenType.GamePausedScreen);
-		Vector2f vector = new Vector2f(140f, 42f);
+		Vector2f vector = new Vector2f(280f, 84f);
 		MenuEntry item = new MenuEntry("");
 		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(95f, 370f));
+		item.setPosition(new Vector2f(190f, 740f));
 		item.setnoButtonBackgroundSize(vector);
 		MenuEntry entry2 = new MenuEntry("");
 		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(95f, 250f));
+		entry2.setPosition(new Vector2f(190f, 500f));
 		entry2.setnoButtonBackgroundSize(vector);
 		MenuEntry entry3 = new MenuEntry("");
 		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(95f, 310f));
+		entry3.setPosition(new Vector2f(190f, 620f));
 		entry3.setnoButtonBackgroundSize(vector);
 
 		item.Selected = new GameEvent() {

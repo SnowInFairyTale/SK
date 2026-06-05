@@ -4,7 +4,7 @@ public class MissileAxe extends Missile {
 
 	public MissileAxe(MainGame game, Monster targetMonster, Tower tower) {
 		super(game, MissileType.AXE, "assets/axe.png", tower.getPosition(),
-				targetMonster, tower.getDamage(), 8, 8, 0x10, 0x10);
+				targetMonster, tower.getDamage(), 8, 8, 32, 32);
 
 	}
 
