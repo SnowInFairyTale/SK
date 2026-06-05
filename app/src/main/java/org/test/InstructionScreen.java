@@ -1,12 +1,19 @@
 package org.test;
 
+import loon.action.sprite.SpriteBatch;
 import loon.core.geom.Vector2f;
+import loon.core.graphics.LColor;
+import loon.core.graphics.opengl.LTexture;
+import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LInput;
 import loon.core.timer.GameTime;
 
 public class InstructionScreen extends MenuScreen {
+	private boolean componentsDetached;
 	private MainGame game;
 	private InstructionsScreenSpriteWithText instructionsScreenSpriteWithText;
+	private boolean screenContentLoaded;
+	private LTexture texture;
 
 	public InstructionScreen(MainGame game, ScreenType prevScreen) {
 		super("", game, prevScreen);
@@ -57,15 +64,45 @@ public class InstructionScreen extends MenuScreen {
 				game);
 	}
 
+	@Override
+	public void draw(SpriteBatch batch, GameTime gameTime) {
+		if (this.texture != null) {
+			batch.draw(this.texture, 0f, 0f, LColor.white);
+		}
+		super.draw(batch, gameTime);
+	}
+
 	private void detachScreenComponents() {
+		if (this.componentsDetached) {
+			return;
+		}
+		this.componentsDetached = true;
 		if (this.instructionsScreenSpriteWithText != null) {
 			this.game.Components().remove(this.instructionsScreenSpriteWithText);
 		}
 	}
 
 	@Override
+	public void LoadContent() {
+		if (this.screenContentLoaded) {
+			return;
+		}
+		this.screenContentLoaded = true;
+		this.componentsDetached = false;
+		this.texture = LTextures
+				.loadTexture("assets/screen_introduction.png");
+		if (this.instructionsScreenSpriteWithText != null) {
+			this.instructionsScreenSpriteWithText
+					.setDrawOrder(Constants.INFO_OVERLAY_DRAW_ORDER);
+			this.game.Components().add(this.instructionsScreenSpriteWithText);
+		}
+	}
+
+	@Override
 	public void UnloadContent() {
 		this.detachScreenComponents();
+		this.texture = null;
+		this.screenContentLoaded = false;
 	}
 
 	@Override

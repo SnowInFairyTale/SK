@@ -11,8 +11,8 @@ import loon.core.timer.GameTime;
 
 public class TowerInfoScreen extends MenuScreen {
 	private java.util.ArrayList<AnimatedSpriteTower> animatedSprites;
+	private boolean componentsDetached;
 	private MainGame game;
-	private boolean previewSpritesDetached;
 	private boolean screenContentLoaded;
 	private LTexture texture;
 	private TowerInfoScreenSpriteWithText towerInfoScreenSpriteWithText;
@@ -51,21 +51,19 @@ public class TowerInfoScreen extends MenuScreen {
 	}
 
 	private void detachScreenComponents() {
-		this.removePreviewSprites();
+		if (this.componentsDetached) {
+			return;
+		}
+		this.componentsDetached = true;
+		if (this.animatedSprites != null) {
+			for (IGameComponent component : this.animatedSprites) {
+				this.game.Components().remove(component);
+			}
+			this.animatedSprites = null;
+		}
 		if (this.towerInfoScreenSpriteWithText != null) {
 			this.game.Components().remove(this.towerInfoScreenSpriteWithText);
 		}
-	}
-
-	private void removePreviewSprites() {
-		if (this.animatedSprites == null) {
-			return;
-		}
-		for (IGameComponent component : this.animatedSprites) {
-			this.game.Components().remove(component);
-		}
-		this.animatedSprites = null;
-		this.previewSpritesDetached = true;
 	}
 
 	@Override
@@ -79,13 +77,13 @@ public class TowerInfoScreen extends MenuScreen {
 			return;
 		}
 		this.screenContentLoaded = true;
+		this.componentsDetached = false;
 		this.texture = LTextures.loadTexture("assets/towers_2.png");
 		if (this.towerInfoScreenSpriteWithText != null) {
 			this.towerInfoScreenSpriteWithText
 					.setDrawOrder(Constants.INFO_OVERLAY_DRAW_ORDER);
 			this.game.Components().add(this.towerInfoScreenSpriteWithText);
 		}
-		this.previewSpritesDetached = false;
 		this.animatedSprites = AnimatedSpriteTower
 				.GetAllAnimatedSpriteTowers(this.game);
 		for (AnimatedSpriteTower tower : this.animatedSprites) {
@@ -119,8 +117,8 @@ public class TowerInfoScreen extends MenuScreen {
 	@Override
 	public void Update(GameTime gameTime, boolean otherScreenHasFocus,
 			boolean coveredByOtherScreen) {
-		if (super.getIsExiting() && !this.previewSpritesDetached) {
-			this.removePreviewSprites();
+		if (super.getIsExiting()) {
+			this.detachScreenComponents();
 		}
 		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 	}

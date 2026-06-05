@@ -53,10 +53,13 @@ public class Utils {
 				Constants.INTRO_BTN_TEXT_HEIGHT, LColor.white);
 	}
 
+	private static final String INFO_BACK_LABEL = LanguageResources.getBack()
+			.toUpperCase();
+
 	/** Isolated text draw — avoids SpriteBatch state mixing with preview sprites. */
 	public static void drawInfoBackButtonLabel(SpriteBatch batch, LFont font) {
 		batch.flush();
-		DrawButtonLabel(batch, font, LanguageResources.getBack().toUpperCase(),
+		DrawButtonLabel(batch, font, INFO_BACK_LABEL,
 				Constants.INFO_BACK_BTN_CENTER_X, Constants.INFO_BACK_BTN_TOP_Y,
 				Constants.INFO_BACK_BTN_TEXT_HEIGHT, LColor.white);
 		batch.resetColor();
