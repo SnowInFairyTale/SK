@@ -34,16 +34,6 @@ public class MainGame extends DrawableScreen {
 		privateGameplayScreen = value;
 	}
 
-	private boolean privateIsTrialMode;
-
-	public final boolean getIsTrialMode() {
-		return privateIsTrialMode;
-	}
-
-	public final void setIsTrialMode(boolean value) {
-		privateIsTrialMode = value;
-	}
-
 	private boolean privateSoundEnabled;
 
 	public final boolean getSoundEnabled() {

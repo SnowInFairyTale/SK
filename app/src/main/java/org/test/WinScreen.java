@@ -95,14 +95,8 @@ public class WinScreen extends MenuScreen
 	private void HandleButtonSelected()
 	{
 		super.getScreenManager().ExitAllScreens();
-		if (this.game.getIsTrialMode())
-		{
-			super.getScreenManager().AddScreen(new BuyToGetFeaturesScreen(this.game, ScreenType.MainMenuScreen, null));
-		}
-		else
-		{
-			super.getScreenManager().AddScreen(new MainMenuScreen(this.game, ScreenType.WinScreen));
-		}
+		super.getScreenManager().AddScreen(
+				new MainMenuScreen(this.game, ScreenType.WinScreen));
 		this.Exit();
 	}
 

@@ -12,8 +12,7 @@ public enum ScreenType
 	MonsterInfoScreen,
 	SelectLevelScreen,
 	TowerInfoScreen,
-	WinScreen,
-	BuyToGetFeaturesScreen;
+	WinScreen;
 
 	public int getValue()
 	{

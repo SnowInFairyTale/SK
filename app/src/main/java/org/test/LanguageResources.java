@@ -22,11 +22,6 @@ public class LanguageResources
 		return "Blocking";
 	}
 
-	public static String getBuyGame()
-	{
-		return "BuyGame";
-	}
-
 	public static String getContinue()
 	{
 		return "Continue";
@@ -34,7 +29,7 @@ public class LanguageResources
 
 	public static String getEasy()
 	{
-		return "Easy";
+		return "简单";
 	}
 
 	public static String getEnemies()
@@ -54,12 +49,7 @@ public class LanguageResources
 
 	public static String getHard()
 	{
-		return "Hard";
-	}
-
-	public static String getHardDifficulty()
-	{
-		return "HardDifficulty";
+		return "难";
 	}
 
 	public static String getInstructions()
@@ -142,11 +132,6 @@ public class LanguageResources
 		return "LosePar1";
 	}
 
-	public static String getLurTower()
-	{
-		return "LurTower";
-	}
-
 	public static String getMainMenu()
 	{
 		return "MainMenu";
@@ -154,12 +139,7 @@ public class LanguageResources
 
 	public static String getMedium()
 	{
-		return "Medium";
-	}
-
-	public static String getMediumDifficulty()
-	{
-		return "MediumDifficulty";
+		return "中等";
 	}
 
 	public static String getMenu()
@@ -222,19 +202,9 @@ public class LanguageResources
 		return "No";
 	}
 
-	public static String getNotNow()
-	{
-		return "NotNow";
-	}
-
 	public static String getof()
 	{
 		return "of";
-	}
-
-	public static String getPleaseUnlock()
-	{
-		return "PleaseUnlock";
 	}
 
 	public static String getPower()
@@ -267,19 +237,9 @@ public class LanguageResources
 		return "Sell";
 	}
 
-	public static String getSpearTower()
-	{
-		return "SpearTower";
-	}
-
 	public static String getStart()
 	{
 		return "Start";
-	}
-
-	public static String getSupportTheGame()
-	{
-		return "SupportTheGame";
 	}
 
 	public static String getTapHereTo()
@@ -312,29 +272,9 @@ public class LanguageResources
 		return "Towers";
 	}
 
-	public static String getTrial()
-	{
-		return "Trial";
-	}
-
-	public static String getTwoExtraLevels()
-	{
-		return "TwoExtraLevels";
-	}
-
-	public static String getUnlock()
-	{
-		return "Unlock";
-	}
-
 	public static String getUnlocked()
 	{
 		return "Unlocked";
-	}
-
-	public static String getUnlockGame()
-	{
-		return "UnlockGame";
 	}
 
 	public static String getUpgrade()

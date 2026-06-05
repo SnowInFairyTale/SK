@@ -60,17 +60,9 @@ public abstract class TowerButton extends DrawableGameComponent implements
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
-		if (this.game.getIsTrialMode()
-				&& ((this.getTowerType() == TowerType.Spear) || (this
-						.getTowerType() == TowerType.Lur))) {
-			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, BUTTON_SIZE,
-					BUTTON_SIZE, LColor.darkGray);
-		} else {
-			batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
-					this.textureOffsetX, this.textureOffsetY, BUTTON_SIZE,
-					BUTTON_SIZE, this.game.getGameplayScreen().getGameOpacity());
-		}
+		batch.draw(this.texture, this.drawPosition.x, this.drawPosition.y,
+				this.textureOffsetX, this.textureOffsetY, BUTTON_SIZE,
+				BUTTON_SIZE, this.game.getGameplayScreen().getGameOpacity());
 		super.draw(batch, gameTime);
 	}
 
