@@ -12,6 +12,10 @@ import loon.core.timer.GameTime;
 
 public class Tower extends DrawableGameComponent implements IGameComponent {
 
+	/** Tap target — slightly larger than the 72×76 sprite footprint. */
+	private static final int HIT_BOX_WIDTH = 100;
+	private static final int HIT_BOX_HEIGHT = 104;
+
 	private LTexture bashTexture;
 	private int currentUpgradeLevel;
 	private float elapsedTime;
@@ -84,8 +88,10 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	}
 
 	public final RectBox CentralCollisionArea() {
-		return new RectBox((int) this.getDrawPosition().x,
-				(int) this.getDrawPosition().y, 0x48, 0x4c);
+		return new RectBox(
+				(int) (this.getPosition().x - HIT_BOX_WIDTH / 2f),
+				(int) (this.getPosition().y - HIT_BOX_HEIGHT / 2f),
+				HIT_BOX_WIDTH, HIT_BOX_HEIGHT);
 	}
 
 	@Override
