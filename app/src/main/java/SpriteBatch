@@ -1,0 +1,1697 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+package loon.action.sprite;
+
+import java.util.HashMap;
+import loon.core.LRelease;
+import loon.core.LSystem;
+import loon.core.geom.RectBox;
+import loon.core.geom.Shape;
+import loon.core.geom.Triangle;
+import loon.core.geom.Vector2f;
+import loon.core.graphics.LColor;
+import loon.core.graphics.LFont;
+import loon.core.graphics.opengl.GLAttributes;
+import loon.core.graphics.opengl.GLBatch;
+import loon.core.graphics.opengl.GLEx;
+import loon.core.graphics.opengl.GLMesh;
+import loon.core.graphics.opengl.LSTRDictionary;
+import loon.core.graphics.opengl.LTexture;
+import loon.core.graphics.opengl.LTextureRegion;
+import loon.core.graphics.opengl.TextureUtils;
+import loon.core.graphics.opengl.GLMesh.VertexDataType;
+import loon.utils.MathUtils;
+
+public class SpriteBatch implements LRelease {
+    private HashMap<Integer, TextureLine> lineLazy;
+    private LColor tempColor;
+    public float color;
+    private GLMesh mesh;
+    private GLMesh[] buffers;
+    private LTexture lastTexture;
+    private int idx;
+    private int currBufferIdx;
+    private final float[] vertices;
+    private boolean drawing;
+    public int renderCalls;
+    public int totalRenderCalls;
+    public int maxSpritesInBatch;
+    public static final int VERTEX_SIZE = 5;
+    public static final int SPRITE_SIZE = 20;
+    private static LTexture whitePixel;
+    private float alpha;
+    private float invTexWidth;
+    private float invTexHeight;
+    private BlendState lastBlendState;
+    private int mode;
+    private GLBatch batch;
+    private LFont font;
+    private boolean lockSubmit;
+
+    public SpriteBatch() {
+        this(1000);
+    }
+
+    public SpriteBatch(int size) {
+        this(size, 1);
+    }
+
+    public SpriteBatch(int size, int buffers) {
+        this.lineLazy = new HashMap(1000);
+        this.tempColor = new LColor(1.0F, 1.0F, 1.0F, 1.0F);
+        this.color = LColor.white.toFloatBits();
+        this.lastTexture = null;
+        this.idx = 0;
+        this.currBufferIdx = 0;
+        this.drawing = false;
+        this.renderCalls = 0;
+        this.totalRenderCalls = 0;
+        this.maxSpritesInBatch = 0;
+        this.alpha = 1.0F;
+        this.lastBlendState = SpriteBatch.BlendState.NonPremultiplied;
+        this.batch = new GLBatch(1000);
+        this.font = LFont.getDefaultFont();
+        this.lockSubmit = false;
+        this.buffers = new GLMesh[buffers];
+
+        for(int i = 0; i < buffers; ++i) {
+            this.buffers[i] = new GLMesh(VertexDataType.VertexArray, false, size * 4, size * 6, new GLAttributes.VertexAttribute[]{new GLAttributes.VertexAttribute(0, 2, "POSITION"), new GLAttributes.VertexAttribute(5, 4, "COLOR"), new GLAttributes.VertexAttribute(3, 2, "TEXCOORD")});
+        }
+
+        this.vertices = new float[size * 20];
+        int len = size * 6;
+        short[] indices = new short[len];
+        short j = 0;
+
+        for(int i = 0; i < len; j = (short)(j + 4)) {
+            indices[i + 0] = (short)(j + 0);
+            indices[i + 1] = (short)(j + 1);
+            indices[i + 2] = (short)(j + 2);
+            indices[i + 3] = (short)(j + 2);
+            indices[i + 4] = (short)(j + 3);
+            indices[i + 5] = (short)(j + 0);
+            i += 6;
+        }
+
+        for(int i = 0; i < buffers; ++i) {
+            this.buffers[i].setIndices(indices);
+        }
+
+        this.mesh = this.buffers[0];
+    }
+
+    public void halfAlpha() {
+        this.color = 1.7014117E38F;
+        this.alpha = 0.5F;
+    }
+
+    public void resetColor() {
+        this.color = -1.7014117E38F;
+        this.alpha = 1.0F;
+    }
+
+    public void begin() {
+        if (this.drawing) {
+            throw new IllegalStateException("Not implemented end !");
+        } else {
+            synchronized(SpriteBatch.class) {
+                this.mode = GLEx.self.getBlendMode();
+                GLEx.self.glTex2DEnable();
+                this.renderCalls = 0;
+                this.idx = 0;
+                this.lastTexture = null;
+                this.drawing = true;
+            }
+        }
+    }
+
+    public void end() {
+        this.checkDrawing();
+        if (this.idx > 0) {
+            this.submit();
+        }
+
+        this.lastTexture = null;
+        this.idx = 0;
+        this.drawing = false;
+        GLEx.self.setBlendMode(this.mode);
+        GLEx.self.glTex2DDisable();
+    }
+
+    public void setColor(LColor c) {
+        this.color = c.toFloatBits();
+    }
+
+    public void setColor(int r, int g, int b, int a) {
+        this.color = LColor.toFloatBits(r, g, b, this.alpha == 1.0F ? a : (int)(this.alpha * 255.0F));
+    }
+
+    public void setColor(float r, float g, float b, float a) {
+        this.color = LColor.toFloatBits(r, g, b, this.alpha == 1.0F ? a : this.alpha);
+    }
+
+    public void setColor(int r, int g, int b) {
+        this.color = LColor.toFloatBits(r, g, b, (int)(this.alpha * 255.0F));
+    }
+
+    public void setColor(float r, float g, float b) {
+        this.color = LColor.toFloatBits(r, g, b, this.alpha);
+    }
+
+    public void setColor(int v) {
+        this.color = Float.intBitsToFloat(v & -16777217);
+    }
+
+    public void setColor(float color) {
+        this.color = color;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+        int intBits = Float.floatToRawIntBits(this.color);
+        int r = intBits & 255;
+        int g = intBits >>> 8 & 255;
+        int b = intBits >>> 16 & 255;
+        int a = (int)(alpha * 255.0F);
+        this.color = LColor.toFloatBits(r, g, b, a);
+    }
+
+    public float getAlpha() {
+        return this.alpha;
+    }
+
+    public LColor getColor() {
+        int intBits = Float.floatToRawIntBits(this.color);
+        LColor color = this.tempColor;
+        color.r = (float)(intBits & 255) / 255.0F;
+        color.g = (float)(intBits >>> 8 & 255) / 255.0F;
+        color.b = (float)(intBits >>> 16 & 255) / 255.0F;
+        color.a = (float)(intBits >>> 24 & 255) / 255.0F;
+        return color;
+    }
+
+    public float getFloatColor() {
+        return this.color;
+    }
+
+    public void drawSpriteBounds(SpriteRegion sprite, LColor color) {
+        float[] vertices = sprite.getVertices();
+        float x1 = vertices[0];
+        float y1 = vertices[1];
+        float x2 = vertices[5];
+        float y2 = vertices[6];
+        float x3 = vertices[10];
+        float y3 = vertices[11];
+        float x4 = vertices[15];
+        float y4 = vertices[16];
+        this.setColor(color);
+        this.drawLine(x1, y1, x2, y2);
+        this.drawLine(x2, y2, x3, y3);
+        this.drawLine(x3, y3, x4, y4);
+        this.drawLine(x4, y4, x1, y1);
+        this.resetColor();
+    }
+
+    public final void draw(Shape shape) {
+        float[] points = shape.getPoints();
+        if (points.length != 0) {
+            this.submit();
+            LColor color = this.getColor();
+            this.batch.begin(3);
+
+            for(int i = 0; i < points.length; i += 2) {
+                this.batch.color(color);
+                this.batch.vertex(points[i], points[i + 1]);
+            }
+
+            if (shape.closed()) {
+                this.batch.color(color);
+                this.batch.vertex(points[0], points[1]);
+            }
+
+            this.batch.end();
+        }
+    }
+
+    public final void fill(Shape shape) {
+        if (shape != null) {
+            Triangle tris = shape.getTriangles();
+            if (tris.getTriangleCount() != 0) {
+                this.submit();
+                LColor color = this.getColor();
+                this.batch.begin(4);
+
+                for(int i = 0; i < tris.getTriangleCount(); ++i) {
+                    for(int p = 0; p < 3; ++p) {
+                        float[] pt = tris.getTrianglePoint(i, p);
+                        this.batch.color(color);
+                        this.batch.vertex(pt[0], pt[1]);
+                    }
+                }
+
+                this.batch.end();
+            }
+        }
+    }
+
+    public void fillPolygon(float[] xPoints, float[] yPoints, int nPoints) {
+        this.submit();
+        LColor color = this.getColor();
+        this.batch.begin(6);
+
+        for(int i = 0; i < nPoints; ++i) {
+            this.batch.color(color);
+            this.batch.vertex(xPoints[i], yPoints[i]);
+        }
+
+        this.batch.end();
+    }
+
+    public void drawPolygon(float[] xPoints, float[] yPoints, int nPoints) {
+        this.submit();
+        LColor color = this.getColor();
+        this.batch.begin(2);
+
+        for(int i = 0; i < nPoints; ++i) {
+            this.batch.color(color);
+            this.batch.vertex(xPoints[i], yPoints[i]);
+        }
+
+        this.batch.end();
+    }
+
+    public void drawOval(float x1, float y1, float width, float height) {
+        this.drawArc(x1, y1, width, height, 32, 0.0F, 360.0F);
+    }
+
+    public void fillOval(float x1, float y1, float width, float height) {
+        this.fillArc(x1, y1, width, height, 32, 0.0F, 360.0F);
+    }
+
+    public void drawArc(RectBox rect, int segments, float start, float end) {
+        this.drawArc(rect.x, rect.y, (float)rect.width, (float)rect.height, segments, start, end);
+    }
+
+    public void drawArc(float x1, float y1, float width, float height, int segments, float start, float end) {
+        this.submit();
+
+        LColor color;
+        for(color = this.getColor(); end < start; end += 360.0F) {
+        }
+
+        float cx = x1 + width / 2.0F;
+        float cy = y1 + height / 2.0F;
+        this.batch.begin(3);
+        int step = 360 / segments;
+
+        for(float a = start; a < end + (float)step; a += (float)step) {
+            float ang = a;
+            if (a > end) {
+                ang = end;
+            }
+
+            float x = cx + MathUtils.cos(MathUtils.toRadians(ang)) * width / 2.0F;
+            float y = cy + MathUtils.sin(MathUtils.toRadians(ang)) * height / 2.0F;
+            this.batch.color(color);
+            this.batch.vertex(x, y);
+        }
+
+        this.batch.end();
+    }
+
+    public final void fillArc(float x1, float y1, float width, float height, float start, float end) {
+        this.fillArc(x1, y1, width, height, 40, start, end);
+    }
+
+    public final void fillArc(float x1, float y1, float width, float height, int segments, float start, float end) {
+        this.submit();
+
+        LColor color;
+        for(color = this.getColor(); end < start; end += 360.0F) {
+        }
+
+        float cx = x1 + width / 2.0F;
+        float cy = y1 + height / 2.0F;
+        this.batch.begin(6);
+        int step = 360 / segments;
+        this.batch.vertex(cx, cy);
+
+        for(float a = start; a < end + (float)step; a += (float)step) {
+            float ang = a;
+            if (a > end) {
+                ang = end;
+            }
+
+            float x = cx + MathUtils.cos(MathUtils.toRadians(ang)) * width / 2.0F;
+            float y = cy + MathUtils.sin(MathUtils.toRadians(ang)) * height / 2.0F;
+            this.batch.color(color);
+            this.batch.vertex(x, y);
+        }
+
+        this.batch.end();
+    }
+
+    public final void drawRoundRect(float x, float y, float width, float height, int radius) {
+        this.drawRoundRect(x, y, width, height, radius, 40);
+    }
+
+    public final void drawRoundRect(float x, float y, float width, float height, int radius, int segs) {
+        if (radius < 0) {
+            throw new IllegalArgumentException("radius > 0");
+        } else if (radius == 0) {
+            this.drawRect(x, y, width, height);
+        } else {
+            int mr = (int)MathUtils.min(width, height) / 2;
+            if (radius > mr) {
+                radius = mr;
+            }
+
+            this.drawLine(x + (float)radius, y, x + width - (float)radius, y);
+            this.drawLine(x, y + (float)radius, x, y + height - (float)radius);
+            this.drawLine(x + width, y + (float)radius, x + width, y + height - (float)radius);
+            this.drawLine(x + (float)radius, y + height, x + width - (float)radius, y + height);
+            float d = (float)(radius * 2);
+            this.drawArc(x + width - d, y + height - d, d, d, segs, 0.0F, 90.0F);
+            this.drawArc(x, y + height - d, d, d, segs, 90.0F, 180.0F);
+            this.drawArc(x + width - d, y, d, d, segs, 270.0F, 360.0F);
+            this.drawArc(x, y, d, d, segs, 180.0F, 270.0F);
+        }
+    }
+
+    public final void fillRoundRect(float x, float y, float width, float height, int cornerRadius) {
+        this.fillRoundRect(x, y, width, height, cornerRadius, 40);
+    }
+
+    public final void fillRoundRect(float x, float y, float width, float height, int radius, int segs) {
+        if (radius < 0) {
+            throw new IllegalArgumentException("radius > 0");
+        } else if (radius == 0) {
+            this.fillRect(x, y, width, height);
+        } else {
+            int mr = (int)MathUtils.min(width, height) / 2;
+            if (radius > mr) {
+                radius = mr;
+            }
+
+            float d = (float)(radius * 2);
+            this.fillRect(x + (float)radius, y, width - d, (float)radius);
+            this.fillRect(x, y + (float)radius, (float)radius, height - d);
+            this.fillRect(x + width - (float)radius, y + (float)radius, (float)radius, height - d);
+            this.fillRect(x + (float)radius, y + height - (float)radius, width - d, (float)radius);
+            this.fillRect(x + (float)radius, y + (float)radius, width - d, height - d);
+            this.fillArc(x + width - d, y + height - d, d, d, segs, 0.0F, 90.0F);
+            this.fillArc(x, y + height - d, d, d, segs, 90.0F, 180.0F);
+            this.fillArc(x + width - d, y, d, d, segs, 270.0F, 360.0F);
+            this.fillArc(x, y, d, d, segs, 180.0F, 270.0F);
+        }
+    }
+
+    public void fillRect(float x, float y, float width, float height) {
+        LColor color = this.getColor();
+        this.submit();
+        this.batch.begin(6);
+        this.batch.color(color);
+        this.batch.vertex(x, y);
+        this.batch.color(color);
+        this.batch.vertex(x + width, y);
+        this.batch.color(color);
+        this.batch.vertex(x + width, y + height);
+        this.batch.color(color);
+        this.batch.vertex(x, y + height);
+        this.batch.end();
+    }
+
+    public void drawRect(float x, float y, float width, float height) {
+        this.drawLine(x, y, x + width, y);
+        this.drawLine(x + width, y, x + width, y + height);
+        this.drawLine(x + width, y + height, x, y + height);
+        this.drawLine(x, y + height, x, y);
+    }
+
+    public void drawPoint(int x, int y, LColor c) {
+        float old = this.color;
+        this.setColor(c);
+        this.drawLine((float)x, (float)y, (float)(x + 1), (float)(y + 1));
+        this.setColor(old);
+    }
+
+    public void drawPoints(int[] x, int[] y, LColor c) {
+        int size = y.length;
+
+        for(int i = 0; i < size; ++i) {
+            this.drawPoint(x[i], y[i], c);
+        }
+
+    }
+
+    public void drawPoints(int[] x, int[] y) {
+        int size = y.length;
+
+        for(int i = 0; i < size; ++i) {
+            this.drawPoint(x[i], y[i]);
+        }
+
+    }
+
+    public void drawPoint(int x, int y) {
+        this.drawLine((float)x, (float)y, (float)(x + 1), (float)(y + 1));
+    }
+
+    public void drawLine(float x1, float y1, float x2, float y2) {
+        int hashCode = 1;
+        hashCode = LSystem.unite(hashCode, x1);
+        hashCode = LSystem.unite(hashCode, y1);
+        hashCode = LSystem.unite(hashCode, x2);
+        hashCode = LSystem.unite(hashCode, y2);
+        TextureLine line = (TextureLine)this.lineLazy.get(hashCode);
+        if (line == null) {
+            line = new TextureLine();
+            line.setStart(x1, y1);
+            line.setEnd(x2, y2);
+            line.setStrokeWidth(1.0F);
+            this.lineLazy.put(hashCode, line);
+        }
+
+        line.draw(this);
+    }
+
+    private void checkTexture(LTexture texture) {
+        this.checkDrawing();
+        if (!texture.isLoaded()) {
+            texture.loadTexture();
+        }
+
+        LTexture tex2d = texture.getParent();
+        if (tex2d != null) {
+            if (tex2d != this.lastTexture) {
+                this.submit();
+                this.lastTexture = tex2d;
+            } else if (this.idx == this.vertices.length) {
+                this.submit();
+            }
+
+            this.invTexWidth = 1.0F / (float)texture.getWidth() * texture.widthRatio;
+            this.invTexHeight = 1.0F / (float)texture.getHeight() * texture.heightRatio;
+        } else if (texture != this.lastTexture) {
+            this.submit();
+            this.lastTexture = texture;
+            this.invTexWidth = 1.0F / (float)texture.getWidth() * texture.widthRatio;
+            this.invTexHeight = 1.0F / (float)texture.getHeight() * texture.heightRatio;
+        } else if (this.idx == this.vertices.length) {
+            this.submit();
+        }
+
+    }
+
+    public void draw(LTexture texture, float x, float y, float rotation) {
+        this.draw(texture, x, y, (float)(texture.getWidth() / 2), (float)(texture.getHeight() / 2), (float)texture.getWidth(), (float)texture.getHeight(), 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, false);
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height, float rotation) {
+        if (rotation == 0.0F && (float)texture.getWidth() == width && (float)texture.getHeight() == height) {
+            this.draw(texture, x, y, width, height);
+        } else {
+            this.draw(texture, x, y, width / 2.0F, height / 2.0F, width, height, 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, false);
+        }
+
+    }
+
+    public void draw(LTexture texture, float x, float y, float rotation, float srcX, float srcY, float srcWidth, float srcHeight) {
+        this.draw(texture, x, y, srcWidth / 2.0F, srcHeight / 2.0F, (float)texture.getWidth(), (float)texture.getHeight(), 1.0F, 1.0F, rotation, srcX, srcY, srcWidth, srcHeight, false, false);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, Vector2f origin, float width, float height, float scale, float rotation, RectBox src, boolean flipX, boolean flipY) {
+        this.draw(texture, pos.x, pos.y, origin.x, origin.y, width, height, scale, scale, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, Vector2f origin, float scale, float rotation, RectBox src, boolean flipX, boolean flipY) {
+        this.draw(texture, pos.x, pos.y, origin.x, origin.y, (float)src.width, (float)src.height, scale, scale, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, Vector2f origin, float scale, RectBox src, boolean flipX, boolean flipY) {
+        this.draw(texture, pos.x, pos.y, origin.x, origin.y, (float)src.width, (float)src.height, scale, scale, 0.0F, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, Vector2f origin, RectBox src, boolean flipX, boolean flipY) {
+        this.draw(texture, pos.x, pos.y, origin.x, origin.y, (float)src.width, (float)src.height, 1.0F, 1.0F, 0.0F, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, RectBox src, boolean flipX, boolean flipY) {
+        this.draw(texture, pos.x, pos.y, (float)(src.width / 2), (float)(src.height / 2), (float)src.width, (float)src.height, 1.0F, 1.0F, 0.0F, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, float srcX, float srcY, float srcWidth, float srcHeight, boolean flipX, boolean flipY) {
+        this.draw(texture, x, y, originX, originY, width, height, scaleX, scaleY, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, float x, float y, float originX, float originY, float scaleX, float scaleY, float rotation, float srcX, float srcY, float srcWidth, float srcHeight, boolean flipX, boolean flipY) {
+        this.draw(texture, x, y, originX, originY, srcWidth, srcHeight, scaleX, scaleY, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, false);
+    }
+
+    public void draw(LTexture texture, Vector2f position, RectBox src, LColor c, float rotation, Vector2f origin, Vector2f scale, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        if (src != null) {
+            this.draw(texture, position.x, position.y, origin.x, origin.y, (float)src.width, (float)src.height, scale.x, scale.y, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, true);
+        } else {
+            this.draw(texture, position.x, position.y, origin.x, origin.y, (float)texture.getWidth(), (float)texture.getHeight(), scale.x, scale.y, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        }
+
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, Vector2f position, RectBox src, LColor c, float rotation, float sx, float sy, float scale, SpriteEffects effects) {
+        if (src == null && rotation == 0.0F && scale == 1.0F && sx == 0.0F && sy == 0.0F) {
+            this.draw(texture, position, c);
+        } else {
+            float old = this.color;
+            if (!c.equals(LColor.white)) {
+                this.setColor(c);
+            }
+
+            boolean flipX = false;
+            boolean flipY = false;
+            switch (effects) {
+                case FlipHorizontally:
+                    flipX = true;
+                    break;
+                case FlipVertically:
+                    flipY = true;
+            }
+
+            if (src != null) {
+                this.draw(texture, position.x, position.y, sx, sy, (float)src.width, (float)src.height, scale, scale, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, true);
+            } else {
+                this.draw(texture, position.x, position.y, sx, sy, (float)texture.getWidth(), (float)texture.getHeight(), scale, scale, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+            }
+
+            this.setColor(old);
+        }
+    }
+
+    public void draw(LTexture texture, Vector2f position, RectBox src, LColor c, float rotation, Vector2f origin, float scale, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        if (src != null) {
+            this.draw(texture, position.x, position.y, origin.x, origin.y, (float)src.width, (float)src.height, scale, scale, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, true);
+        } else {
+            this.draw(texture, position.x, position.y, origin.x, origin.y, (float)texture.getWidth(), (float)texture.getHeight(), scale, scale, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        }
+
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float px, float py, float srcX, float srcY, float srcWidth, float srcHeight, LColor c, float rotation, float originX, float originY, float scale, SpriteEffects effects) {
+        if (effects == SpriteBatch.SpriteEffects.None && rotation == 0.0F && originX == 0.0F && originY == 0.0F && scale == 1.0F) {
+            this.draw(texture, px, py, srcX, srcY, srcWidth, srcHeight, c);
+        } else {
+            float old = this.color;
+            if (!c.equals(LColor.white)) {
+                this.setColor(c);
+            }
+
+            boolean flipX = false;
+            boolean flipY = false;
+            switch (effects) {
+                case FlipHorizontally:
+                    flipX = true;
+                    break;
+                case FlipVertically:
+                    flipY = true;
+            }
+
+            this.draw(texture, px, py, originX, originY, srcWidth, srcHeight, scale, scale, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, true);
+            this.setColor(old);
+        }
+    }
+
+    public void draw(LTexture texture, float px, float py, RectBox src, LColor c, float rotation, Vector2f origin, float scale, SpriteEffects effects) {
+        this.draw(texture, px, py, src, c, rotation, origin.x, origin.y, scale, effects);
+    }
+
+    public void draw(LTexture texture, float px, float py, RectBox src, LColor c, float rotation, float ox, float oy, float scale, SpriteEffects effects) {
+        this.draw(texture, px, py, src, c, rotation, ox, oy, scale, scale, effects);
+    }
+
+    public void draw(LTexture texture, float px, float py, RectBox src, LColor c, float rotation, float ox, float oy, float scaleX, float scaleY, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        if (src != null) {
+            this.draw(texture, px, py, ox, oy, (float)src.width, (float)src.height, scaleX, scaleY, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, true);
+        } else {
+            this.draw(texture, px, py, ox, oy, (float)texture.getWidth(), (float)texture.getHeight(), scaleX, scaleY, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        }
+
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, Vector2f position, LColor c, float rotation, Vector2f origin, Vector2f scale, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        this.draw(texture, position.x, position.y, origin.x, origin.y, (float)texture.getWidth(), (float)texture.getHeight(), scale.x, scale.y, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, Vector2f position, LColor c, float rotation, float originX, float originY, float scale, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        this.draw(texture, position.x, position.y, originX, originY, (float)texture.getWidth(), (float)texture.getHeight(), scale, scale, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float posX, float posY, float srcX, float srcY, float srcWidth, float srcHeight, LColor c, float rotation, float originX, float originY, float scaleX, float scaleY, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        this.draw(texture, posX, posY, originX, originY, srcWidth, srcHeight, scaleX, scaleY, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, true);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, Vector2f position, float srcX, float srcY, float srcWidth, float srcHeight, LColor c, float rotation, Vector2f origin, Vector2f scale, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        this.draw(texture, position.x, position.y, origin.x, origin.y, srcWidth, srcHeight, scale.x, scale.y, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, true);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, RectBox dst, RectBox src, LColor c, float rotation, Vector2f origin, SpriteEffects effects) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        boolean flipX = false;
+        boolean flipY = false;
+        switch (effects) {
+            case FlipHorizontally:
+                flipX = true;
+                break;
+            case FlipVertically:
+                flipY = true;
+        }
+
+        if (src != null) {
+            this.draw(texture, dst.x, dst.y, origin.x, origin.y, (float)dst.width, (float)dst.height, 1.0F, 1.0F, rotation, src.x, src.y, (float)src.width, (float)src.height, flipX, flipY, true);
+        } else {
+            this.draw(texture, dst.x, dst.y, origin.x, origin.y, (float)dst.width, (float)dst.height, 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), flipX, flipY, true);
+        }
+
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float dstX, float dstY, float dstWidth, float dstHeight, float srcX, float srcY, float srcWidth, float srcHeight, LColor c, float rotation, float originX, float originY, SpriteEffects effects) {
+        if (effects == SpriteBatch.SpriteEffects.None && rotation == 0.0F && originX == 0.0F && originY == 0.0F) {
+            this.draw(texture, dstX, dstY, dstWidth, dstHeight, srcX, srcY, srcWidth, srcHeight, c);
+        } else {
+            float old = this.color;
+            if (!c.equals(LColor.white)) {
+                this.setColor(c);
+            }
+
+            boolean flipX = false;
+            boolean flipY = false;
+            switch (effects) {
+                case FlipHorizontally:
+                    flipX = true;
+                    break;
+                case FlipVertically:
+                    flipY = true;
+            }
+
+            this.draw(texture, dstX, dstY, originX, originY, dstWidth, dstHeight, 1.0F, 1.0F, rotation, srcX, srcY, srcWidth, srcHeight, flipX, flipY, true);
+            this.setColor(old);
+        }
+    }
+
+    public void draw(LTexture texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, float srcX, float srcY, float srcWidth, float srcHeight, boolean flipX, boolean flipY, boolean off) {
+        this.checkTexture(texture);
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        if (off) {
+            worldOriginX = x;
+            worldOriginY = y;
+        }
+
+        float fx = -originX;
+        float fy = -originY;
+        float fx2 = width - originX;
+        float fy2 = height - originY;
+        if (scaleX != 1.0F || scaleY != 1.0F) {
+            fx *= scaleX;
+            fy *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
+        }
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float x3;
+        float y3;
+        float x4;
+        float y4;
+        if (rotation != 0.0F) {
+            float cos = MathUtils.cosDeg(rotation);
+            float sin = MathUtils.sinDeg(rotation);
+            x1 = cos * fx - sin * fy;
+            y1 = sin * fx + cos * fy;
+            x2 = cos * fx - sin * fy2;
+            y2 = sin * fx + cos * fy2;
+            x3 = cos * fx2 - sin * fy2;
+            y3 = sin * fx2 + cos * fy2;
+            x4 = x1 + (x3 - x2);
+            y4 = y3 - (y2 - y1);
+        } else {
+            x1 = fx;
+            y1 = fy;
+            x2 = fx;
+            y2 = fy2;
+            x3 = fx2;
+            y3 = fy2;
+            x4 = fx2;
+            y4 = fy;
+        }
+
+        x1 += worldOriginX;
+        y1 += worldOriginY;
+        x2 += worldOriginX;
+        y2 += worldOriginY;
+        x3 += worldOriginX;
+        y3 += worldOriginY;
+        x4 += worldOriginX;
+        y4 += worldOriginY;
+        float u = srcX * this.invTexWidth + texture.xOff;
+        float v = srcY * this.invTexHeight + texture.yOff;
+        float u2 = (srcX + srcWidth) * this.invTexWidth;
+        float v2 = (srcY + srcHeight) * this.invTexHeight;
+        if (flipX) {
+            float tmp = u;
+            u = u2;
+            u2 = tmp;
+        }
+
+        if (flipY) {
+            float tmp = v;
+            v = v2;
+            v2 = tmp;
+        }
+
+        this.vertices[this.idx++] = x1;
+        this.vertices[this.idx++] = y1;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v;
+        this.vertices[this.idx++] = x2;
+        this.vertices[this.idx++] = y2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = x3;
+        this.vertices[this.idx++] = y3;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = x4;
+        this.vertices[this.idx++] = y4;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v;
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height, float rotation, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, x, y, width, height, rotation);
+        this.setColor(old);
+    }
+
+    public void drawFlipX(LTexture texture, float x, float y) {
+        this.draw(texture, x, y, (float)texture.getWidth(), (float)texture.getHeight(), 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), true, false);
+    }
+
+    public void drawFlipY(LTexture texture, float x, float y) {
+        this.draw(texture, x, y, (float)texture.getWidth(), (float)texture.getHeight(), 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, true);
+    }
+
+    public void drawFlipX(LTexture texture, float x, float y, float width, float height) {
+        this.draw(texture, x, y, width, height, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), true, false);
+    }
+
+    public void drawFlipY(LTexture texture, float x, float y, float width, float height) {
+        this.draw(texture, x, y, width, height, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, true);
+    }
+
+    public void drawFlipX(LTexture texture, float x, float y, float rotation) {
+        this.draw(texture, x, y, (float)(texture.getWidth() / 2), (float)(texture.getHeight() / 2), (float)texture.getWidth(), (float)texture.getHeight(), 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), true, false);
+    }
+
+    public void drawFlipY(LTexture texture, float x, float y, float rotation) {
+        this.draw(texture, x, y, (float)(texture.getWidth() / 2), (float)(texture.getHeight() / 2), (float)texture.getWidth(), (float)texture.getHeight(), 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, true);
+    }
+
+    public void drawFlipX(LTexture texture, float x, float y, float width, float height, float rotation) {
+        this.draw(texture, x, y, width / 2.0F, height / 2.0F, width, height, 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), true, false);
+    }
+
+    public void drawFlipY(LTexture texture, float x, float y, float width, float height, float rotation) {
+        this.draw(texture, x, y, width / 2.0F, height / 2.0F, width, height, 1.0F, 1.0F, rotation, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight(), false, true);
+    }
+
+    public void draw(LTexture texture, RectBox dstBox, RectBox srcBox, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, dstBox.x, dstBox.y, (float)dstBox.width, (float)dstBox.height, srcBox.x, srcBox.y, (float)srcBox.width, (float)srcBox.height, false, false);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight) {
+        this.draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, false, false);
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, x, y, width, height, srcX, srcY, srcWidth, srcHeight, false, false);
+        this.setColor(old);
+    }
+
+    public void drawEmbedded(LTexture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight, LColor c) {
+        this.draw(texture, x, y, width - x, height - y, srcX, srcY, srcWidth - srcX, srcHeight - srcY, c);
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight, boolean flipX, boolean flipY) {
+        this.checkTexture(texture);
+        float u = srcX * this.invTexWidth + texture.xOff;
+        float v = srcY * this.invTexHeight + texture.yOff;
+        float u2 = (srcX + srcWidth) * this.invTexWidth;
+        float v2 = (srcY + srcHeight) * this.invTexHeight;
+        float fx2 = x + width;
+        float fy2 = y + height;
+        if (flipX) {
+            float tmp = u;
+            u = u2;
+            u2 = tmp;
+        }
+
+        if (flipY) {
+            float tmp = v;
+            v = v2;
+            v2 = tmp;
+        }
+
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v;
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v;
+    }
+
+    public void draw(LTexture texture, Vector2f pos, RectBox srcBox, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        if (srcBox == null) {
+            this.draw(texture, pos.x, pos.y, 0.0F, 0.0F, (float)texture.getWidth(), (float)texture.getHeight());
+        } else {
+            this.draw(texture, pos.x, pos.y, srcBox.x, srcBox.y, (float)srcBox.width, (float)srcBox.height);
+        }
+
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, x, y, srcX, srcY, srcWidth, srcHeight);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float x, float y, float srcX, float srcY, float srcWidth, float srcHeight) {
+        this.checkTexture(texture);
+        float u = srcX * this.invTexWidth + texture.xOff;
+        float v = srcY * this.invTexHeight + texture.yOff;
+        float u2 = (srcX + srcWidth) * this.invTexWidth;
+        float v2 = (srcY + srcHeight) * this.invTexHeight;
+        float fx2 = x + srcWidth;
+        float fy2 = y + srcHeight;
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v;
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v;
+    }
+
+    public void draw(LTexture texture, float x, float y) {
+        if (texture != null) {
+            this.draw(texture, x, y, (float)texture.getWidth(), (float)texture.getHeight());
+        }
+    }
+
+    public void draw(LTexture texture, float x, float y, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, x, y, (float)texture.getWidth(), (float)texture.getHeight());
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, RectBox rect, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, rect.x, rect.y, (float)rect.width, (float)rect.height);
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, Vector2f pos, LColor c) {
+        float old = this.color;
+        if (!c.equals(LColor.white)) {
+            this.setColor(c);
+        }
+
+        this.draw(texture, pos.x, pos.y, (float)texture.getWidth(), (float)texture.getHeight());
+        this.setColor(old);
+    }
+
+    public void draw(LTexture texture, float x, float y, float width, float height) {
+        if (texture != null) {
+            this.checkTexture(texture);
+            float fx2 = x + width;
+            float fy2 = y + height;
+            float u = texture.xOff;
+            float v = texture.yOff;
+            float u2 = texture.widthRatio;
+            float v2 = texture.heightRatio;
+            this.vertices[this.idx++] = x;
+            this.vertices[this.idx++] = y;
+            this.vertices[this.idx++] = this.color;
+            this.vertices[this.idx++] = u;
+            this.vertices[this.idx++] = v;
+            this.vertices[this.idx++] = x;
+            this.vertices[this.idx++] = fy2;
+            this.vertices[this.idx++] = this.color;
+            this.vertices[this.idx++] = u;
+            this.vertices[this.idx++] = v2;
+            this.vertices[this.idx++] = fx2;
+            this.vertices[this.idx++] = fy2;
+            this.vertices[this.idx++] = this.color;
+            this.vertices[this.idx++] = u2;
+            this.vertices[this.idx++] = v2;
+            this.vertices[this.idx++] = fx2;
+            this.vertices[this.idx++] = y;
+            this.vertices[this.idx++] = this.color;
+            this.vertices[this.idx++] = u2;
+            this.vertices[this.idx++] = v;
+        }
+    }
+
+    public void draw(LTexture texture, float[] spriteVertices, int offset, int length) {
+        this.checkTexture(texture);
+        int remainingVertices = this.vertices.length - this.idx;
+        if (remainingVertices == 0) {
+            this.submit();
+            remainingVertices = this.vertices.length;
+        }
+
+        int vertexCount = MathUtils.min(remainingVertices, length - offset);
+        System.arraycopy(spriteVertices, offset, this.vertices, this.idx, vertexCount);
+        offset += vertexCount;
+
+        for(this.idx += vertexCount; offset < length; this.idx += vertexCount) {
+            this.submit();
+            vertexCount = MathUtils.min(this.vertices.length, length - offset);
+            System.arraycopy(spriteVertices, offset, this.vertices, 0, vertexCount);
+            offset += vertexCount;
+        }
+
+    }
+
+    public void draw(LTextureRegion region, float x, float y, float rotation) {
+        this.draw(region, x, y, (float)region.getRegionWidth(), (float)region.getRegionHeight(), rotation);
+    }
+
+    public void draw(LTextureRegion region, float x, float y, float width, float height, float rotation) {
+        this.draw(region, x, y, (float)(region.getRegionWidth() / 2), (float)(region.getRegionHeight() / 2), width, height, 1.0F, 1.0F, rotation);
+    }
+
+    public void draw(LTextureRegion region, float x, float y) {
+        this.draw(region, x, y, (float)region.getRegionWidth(), (float)region.getRegionHeight());
+    }
+
+    public void draw(LTextureRegion region, float x, float y, float width, float height) {
+        this.checkTexture(region.getTexture());
+        float fx2 = x + width;
+        float fy2 = y + height;
+        float u = region.xOff;
+        float v = region.yOff;
+        float u2 = region.widthRatio;
+        float v2 = region.heightRatio;
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v;
+        this.vertices[this.idx++] = x;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = fy2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = fx2;
+        this.vertices[this.idx++] = y;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v;
+    }
+
+    public void draw(LTextureRegion region, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation) {
+        this.checkTexture(region.getTexture());
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float fx = -originX;
+        float fy = -originY;
+        float fx2 = width - originX;
+        float fy2 = height - originY;
+        if (scaleX != 1.0F || scaleY != 1.0F) {
+            fx *= scaleX;
+            fy *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
+        }
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float x3;
+        float y3;
+        float x4;
+        float y4;
+        if (rotation != 0.0F) {
+            float cos = MathUtils.cosDeg(rotation);
+            float sin = MathUtils.sinDeg(rotation);
+            x1 = cos * fx - sin * fy;
+            y1 = sin * fx + cos * fy;
+            x2 = cos * fx - sin * fy2;
+            y2 = sin * fx + cos * fy2;
+            x3 = cos * fx2 - sin * fy2;
+            y3 = sin * fx2 + cos * fy2;
+            x4 = x1 + (x3 - x2);
+            y4 = y3 - (y2 - y1);
+        } else {
+            x1 = fx;
+            y1 = fy;
+            x2 = fx;
+            y2 = fy2;
+            x3 = fx2;
+            y3 = fy2;
+            x4 = fx2;
+            y4 = fy;
+        }
+
+        x1 += worldOriginX;
+        y1 += worldOriginY;
+        x2 += worldOriginX;
+        y2 += worldOriginY;
+        x3 += worldOriginX;
+        y3 += worldOriginY;
+        x4 += worldOriginX;
+        y4 += worldOriginY;
+        float u = region.xOff;
+        float v = region.yOff;
+        float u2 = region.widthRatio;
+        float v2 = region.heightRatio;
+        this.vertices[this.idx++] = x1;
+        this.vertices[this.idx++] = y1;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v;
+        this.vertices[this.idx++] = x2;
+        this.vertices[this.idx++] = y2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = x3;
+        this.vertices[this.idx++] = y3;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = x4;
+        this.vertices[this.idx++] = y4;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v;
+    }
+
+    public void draw(LTextureRegion region, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, boolean clockwise) {
+        this.checkTexture(region.getTexture());
+        float worldOriginX = x + originX;
+        float worldOriginY = y + originY;
+        float fx = -originX;
+        float fy = -originY;
+        float fx2 = width - originX;
+        float fy2 = height - originY;
+        if (scaleX != 1.0F || scaleY != 1.0F) {
+            fx *= scaleX;
+            fy *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
+        }
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float x3;
+        float y3;
+        float x4;
+        float y4;
+        if (rotation != 0.0F) {
+            float cos = MathUtils.cosDeg(rotation);
+            float sin = MathUtils.sinDeg(rotation);
+            x1 = cos * fx - sin * fy;
+            y1 = sin * fx + cos * fy;
+            x2 = cos * fx - sin * fy2;
+            y2 = sin * fx + cos * fy2;
+            x3 = cos * fx2 - sin * fy2;
+            y3 = sin * fx2 + cos * fy2;
+            x4 = x1 + (x3 - x2);
+            y4 = y3 - (y2 - y1);
+        } else {
+            x1 = fx;
+            y1 = fy;
+            x2 = fx;
+            y2 = fy2;
+            x3 = fx2;
+            y3 = fy2;
+            x4 = fx2;
+            y4 = fy;
+        }
+
+        x1 += worldOriginX;
+        y1 += worldOriginY;
+        x2 += worldOriginX;
+        y2 += worldOriginY;
+        x3 += worldOriginX;
+        y3 += worldOriginY;
+        x4 += worldOriginX;
+        y4 += worldOriginY;
+        float u2;
+        float v2;
+        float u3;
+        float v3;
+        float u4;
+        float v4;
+        float u1;
+        float v1;
+        if (clockwise) {
+            u1 = region.widthRatio;
+            v1 = region.heightRatio;
+            u2 = region.xOff;
+            v2 = region.heightRatio;
+            u3 = region.xOff;
+            v3 = region.yOff;
+            u4 = region.widthRatio;
+            v4 = region.yOff;
+        } else {
+            u1 = region.xOff;
+            v1 = region.yOff;
+            u2 = region.widthRatio;
+            v2 = region.yOff;
+            u3 = region.widthRatio;
+            v3 = region.heightRatio;
+            u4 = region.xOff;
+            v4 = region.heightRatio;
+        }
+
+        this.vertices[this.idx++] = x1;
+        this.vertices[this.idx++] = y1;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u1;
+        this.vertices[this.idx++] = v1;
+        this.vertices[this.idx++] = x2;
+        this.vertices[this.idx++] = y2;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u2;
+        this.vertices[this.idx++] = v2;
+        this.vertices[this.idx++] = x3;
+        this.vertices[this.idx++] = y3;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u3;
+        this.vertices[this.idx++] = v3;
+        this.vertices[this.idx++] = x4;
+        this.vertices[this.idx++] = y4;
+        this.vertices[this.idx++] = this.color;
+        this.vertices[this.idx++] = u4;
+        this.vertices[this.idx++] = v4;
+    }
+
+    public LFont getFont() {
+        return this.font;
+    }
+
+    public void setFont(LFont font) {
+        this.font = font;
+    }
+
+    public void drawString(LFont spriteFont, String text, float px, float py, LColor color, float rotation, float originx, float originy, float scale) {
+        LFont old = this.font;
+        if (spriteFont != null) {
+            this.setFont(spriteFont);
+        }
+
+        int heigh = spriteFont.getHeight() - 2;
+        if (rotation == 0.0F) {
+            this.drawString(text, px - originx * scale, py + (float)heigh - originy * scale, scale, scale, originx, originy, rotation, color);
+        } else {
+            this.drawString(text, px, py + (float)heigh, scale, scale, originx, originy, rotation, color);
+        }
+
+        this.setFont(old);
+    }
+
+    public void drawString(LFont spriteFont, String text, Vector2f position, LColor color, float rotation, Vector2f origin, float scale) {
+        LFont old = this.font;
+        if (spriteFont != null) {
+            this.setFont(spriteFont);
+        }
+
+        int heigh = spriteFont.getHeight() - 2;
+        if (rotation == 0.0F) {
+            this.drawString(text, position.x - origin.x * scale, position.y + (float)heigh - origin.y * scale, scale, scale, origin.x, origin.y, rotation, color);
+        } else {
+            this.drawString(text, position.x, position.y + (float)heigh, scale, scale, origin.x, origin.y, rotation, color);
+        }
+
+        this.setFont(old);
+    }
+
+    public void drawString(LFont spriteFont, String text, Vector2f position, LColor color) {
+        LFont old = this.font;
+        if (spriteFont != null) {
+            this.setFont(spriteFont);
+        }
+
+        int heigh = spriteFont.getHeight() - 2;
+        this.drawString(text, position.x, position.y + (float)heigh, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, color);
+        this.setFont(old);
+    }
+
+    public void drawString(LFont spriteFont, String text, float x, float y, LColor color) {
+        LFont old = this.font;
+        if (spriteFont != null) {
+            this.setFont(spriteFont);
+        }
+
+        int heigh = spriteFont.getHeight() - 2;
+        this.drawString(text, x, y + (float)heigh, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, color);
+        this.setFont(old);
+    }
+
+    public void drawString(LFont spriteFont, String text, Vector2f position, LColor color, float rotation, Vector2f origin, Vector2f scale) {
+        LFont old = this.font;
+        if (spriteFont != null) {
+            this.setFont(spriteFont);
+        }
+
+        int heigh = spriteFont.getHeight() - 2;
+        if (rotation == 0.0F) {
+            this.drawString(text, position.x - origin.x * scale.x, position.y + (float)heigh - origin.y * scale.y, scale.x, scale.y, origin.x, origin.y, rotation, color);
+        } else {
+            this.drawString(text, position.x, position.y + (float)heigh, scale.x, scale.y, origin.x, origin.y, rotation, color);
+        }
+
+        this.setFont(old);
+    }
+
+    public void drawString(String mes, float x, float y, float scaleX, float scaleY, float ax, float ay, float rotation, LColor c) {
+        if (!this.drawing) {
+            throw new IllegalStateException("Not implemented begin !");
+        } else if (c != null) {
+            if (mes != null && mes.length() != 0) {
+                if (!this.lockSubmit) {
+                    this.submit();
+                }
+
+                y += this.font.getAscent();
+                LSTRDictionary.drawString(this.font, mes, x, y, scaleX, scaleX, ax, ay, rotation, c);
+            }
+        }
+    }
+
+    public final void drawString(String mes, Vector2f position) {
+        this.drawString(mes, position.x, position.y, this.getColor());
+    }
+
+    public final void drawString(String mes, Vector2f position, LColor color) {
+        this.drawString(mes, position.x, position.y, color);
+    }
+
+    public final void drawString(String mes, float x, float y) {
+        this.drawString(mes, x, y, this.getColor());
+    }
+
+    public final void drawString(String mes, float x, float y, LColor color) {
+        this.drawString(mes, x, y, 0.0F, color);
+    }
+
+    public final void drawString(String mes, float x, float y, float rotation) {
+        this.drawString(mes, x, y, rotation, this.getColor());
+    }
+
+    public void drawString(String mes, float x, float y, float rotation, LColor c) {
+        this.drawString(mes, x, y, 1.0F, 1.0F, 0.0F, 0.0F, rotation, c);
+    }
+
+    public void drawString(String mes, float x, float y, float sx, float sy, Vector2f origin, float rotation, LColor c) {
+        this.drawString(mes, x, y, sx, sy, origin.x, origin.y, rotation, c);
+    }
+
+    public void drawString(String mes, float x, float y, Vector2f origin, float rotation, LColor c) {
+        this.drawString(mes, x, y, 1.0F, 1.0F, origin.x, origin.y, rotation, c);
+    }
+
+    public void drawString(String mes, float x, float y, Vector2f origin, LColor c) {
+        this.drawString(mes, x, y, 1.0F, 1.0F, origin.x, origin.y, 0.0F, c);
+    }
+
+    private void checkDrawing() {
+        if (!this.drawing) {
+            throw new IllegalStateException("Not implemented begin !");
+        }
+    }
+
+    public void flush() {
+        this.submit();
+    }
+
+    public BlendState getBlendState() {
+        return this.lastBlendState;
+    }
+
+    public void setBlendState(BlendState state) {
+        if (state != this.lastBlendState) {
+            this.lastBlendState = state;
+            switch (this.lastBlendState) {
+                case Additive:
+                    GLEx.self.setBlendMode(9);
+                    break;
+                case AlphaBlend:
+                    GLEx.self.setBlendMode(8);
+                    break;
+                case NonPremultiplied:
+                    GLEx.self.setBlendMode(1);
+                    break;
+                case Opaque:
+                    GLEx.self.setBlendMode(10);
+            }
+        } else {
+            GLEx.self.GL_REPLACE();
+        }
+
+        if (this.color == -1.7014117E38F) {
+            GLEx.self.GL_MODULATE();
+        } else {
+            GLEx.self.GL_REPLACE();
+        }
+
+    }
+
+    public void flush(BlendState state) {
+        this.submit(state);
+    }
+
+    private void submit() {
+        this.submit(this.lastBlendState);
+    }
+
+    private void submit(BlendState state) {
+        if (this.idx != 0) {
+            synchronized(SpriteBatch.class) {
+                ++this.renderCalls;
+                ++this.totalRenderCalls;
+                int spritesInBatch = this.idx / 20;
+                if (spritesInBatch > this.maxSpritesInBatch) {
+                    this.maxSpritesInBatch = spritesInBatch;
+                }
+
+                GLEx.self.bind(this.lastTexture);
+                this.mesh.setVertices(this.vertices, 0, this.idx);
+                this.mesh.getIndicesBuffer().position(0);
+                this.mesh.getIndicesBuffer().limit(spritesInBatch * 6);
+                this.setBlendState(state);
+                this.mesh.render(4, 0, spritesInBatch * 6);
+                this.idx = 0;
+                ++this.currBufferIdx;
+                if (this.currBufferIdx == this.buffers.length) {
+                    this.currBufferIdx = 0;
+                }
+
+                this.mesh = this.buffers[this.currBufferIdx];
+            }
+        }
+    }
+
+    public boolean isLockSubmit() {
+        return this.lockSubmit;
+    }
+
+    public void setLockSubmit(boolean lockSubmit) {
+        this.lockSubmit = lockSubmit;
+    }
+
+    public void dispose() {
+        for(int i = 0; i < this.buffers.length; ++i) {
+            this.buffers[i].dispose();
+        }
+
+        if (this.lineLazy != null) {
+            this.lineLazy.clear();
+        }
+
+        if (whitePixel != null) {
+            whitePixel.destroy();
+        }
+
+        if (this.batch != null) {
+            this.batch.dispose();
+        }
+
+    }
+
+    public static enum SpriteEffects {
+        None,
+        FlipHorizontally,
+        FlipVertically;
+    }
+
+    static class TextureLine {
+        private Vector2f pstart = new Vector2f();
+        private Vector2f pend = new Vector2f();
+        private float pstrokeWidth;
+        private float pangle;
+        private Vector2f pdirection;
+        private Vector2f pcentre;
+        private float plength;
+        private boolean pchanged = true;
+
+        public TextureLine() {
+            if (SpriteBatch.whitePixel == null) {
+                SpriteBatch.whitePixel = TextureUtils.createTexture(1, 1, LColor.white);
+            }
+
+        }
+
+        public void setStart(float x, float y) {
+            this.pstart.set(x, y);
+            this.pchanged = true;
+        }
+
+        public void setEnd(float x, float y) {
+            this.pend.set(x, y);
+            this.pchanged = true;
+        }
+
+        public float getStrokeWidth() {
+            return this.pstrokeWidth;
+        }
+
+        public void setStrokeWidth(float value) {
+            this.pstrokeWidth = value;
+            this.pchanged = true;
+        }
+
+        public void update() {
+            this.pdirection = new Vector2f(this.pend.x - this.pstart.x, this.pend.y - this.pstart.y);
+            this.pdirection.nor();
+            this.pangle = MathUtils.toDegrees(MathUtils.atan2(this.pend.y - this.pstart.y, this.pend.x - this.pstart.x));
+            this.plength = (float)MathUtils.ceil(Vector2f.dst(this.pstart, this.pend));
+            this.pcentre = new Vector2f((this.pend.x + this.pstart.x) / 2.0F, (this.pend.y + this.pstart.y) / 2.0F);
+            this.pchanged = false;
+        }
+
+        public void draw(SpriteBatch batch) {
+            if (this.pchanged) {
+                this.update();
+            }
+
+            if (this.pstrokeWidth > 0.0F) {
+                batch.draw(SpriteBatch.whitePixel, this.pcentre.x, this.pcentre.y, this.plength / 2.0F, this.pstrokeWidth / 2.0F, this.plength, this.pstrokeWidth, 1.0F, 1.0F, this.pangle, 0.0F, 0.0F, 1.0F, 1.0F, false, false, true);
+            }
+
+        }
+    }
+
+    public static enum BlendState {
+        Additive,
+        AlphaBlend,
+        NonPremultiplied,
+        Opaque;
+    }
+}

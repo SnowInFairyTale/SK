@@ -12,6 +12,9 @@ import loon.core.timer.GameTime;
 
 public class Tower extends DrawableGameComponent implements IGameComponent {
 
+	/** On-screen size for assets/towers/*.png (source atlas may be larger). */
+	private static final int TOWER_SPRITE_SIZE = 128;
+
 	/** Tap target — slightly larger than the 72×76 sprite footprint. */
 	private static final int HIT_BOX_WIDTH = 100;
 	private static final int HIT_BOX_HEIGHT = 104;
@@ -104,7 +107,10 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		if (!this.obeyGameOpacity) {
 			gameOpacity = LColor.white;
 		}
-		batch.draw(this.texture, this.getDrawPosition(), gameOpacity);
+		batch.draw(this.texture, this.getDrawPosition().x,
+				this.getDrawPosition().y, TOWER_SPRITE_SIZE, TOWER_SPRITE_SIZE,
+				0f, 0f, this.texture.getWidth(), this.texture.getHeight(),
+				gameOpacity);
 		int num = this.isUpgrading ? (this.currentUpgradeLevel - 1)
 				: this.currentUpgradeLevel;
 		for (int i = 0; i < num; i++) {
