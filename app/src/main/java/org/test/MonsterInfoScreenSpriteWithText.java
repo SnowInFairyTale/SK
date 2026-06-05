@@ -1,23 +1,25 @@
 package org.test;
 
 import loon.action.sprite.SpriteBatch;
-import loon.core.geom.Vector2f;
+import loon.action.sprite.painting.DrawableGameComponent;
+import loon.action.sprite.painting.IGameComponent;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
 import loon.core.timer.GameTime;
 
-public class MonsterInfoScreenSpriteWithText extends Sprite {
+/** Monster info overlay text — background is drawn by {@link MonsterInfoScreen}. */
+public class MonsterInfoScreenSpriteWithText extends DrawableGameComponent
+		implements IGameComponent {
 
+	private LFont backFont;
 	private LFont font;
 
 	public MonsterInfoScreenSpriteWithText(MainGame game) {
-		super(game, "assets/screen_monsters.png", 0, new Vector2f(0f, 0f));
-		game.Components().add(this);
+		super(game);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
-		super.draw(batch, gameTime);
 		int num = 0x30;
 		for (String str : LanguageResources.getMonsterInfoPar1().split("[$]",
 				-1)) {
@@ -60,11 +62,13 @@ public class MonsterInfoScreenSpriteWithText extends Sprite {
 					LColor.white);
 			num6 += 40;
 		}
+		Utils.drawInfoBackButtonLabel(batch, this.backFont);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
 		this.font = Constants.font(32);
+		this.backFont = Constants.font(Constants.INFO_BACK_FONT_SIZE);
 	}
 }

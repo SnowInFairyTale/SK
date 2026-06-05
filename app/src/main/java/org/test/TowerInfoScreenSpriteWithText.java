@@ -1,23 +1,25 @@
 package org.test;
 
 import loon.action.sprite.SpriteBatch;
-import loon.core.geom.Vector2f;
+import loon.action.sprite.painting.DrawableGameComponent;
+import loon.action.sprite.painting.IGameComponent;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
 import loon.core.timer.GameTime;
 
-public class TowerInfoScreenSpriteWithText extends Sprite {
+/** Tower info overlay text — background is drawn by {@link TowerInfoScreen}. */
+public class TowerInfoScreenSpriteWithText extends DrawableGameComponent
+		implements IGameComponent {
 
+	private LFont backFont;
 	private LFont font;
 
 	public TowerInfoScreenSpriteWithText(MainGame game) {
-		super(game, "assets/towers_2.png", 0, new Vector2f(0f, 0f));
-		game.Components().add(this);
+		super(game);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
-		super.draw(batch, gameTime);
 		int num = 0x34;
 		int num2 = 0x20;
 		for (String str : LanguageResources.getTowerInfoPar1().split("[$]", -1)) {
@@ -46,11 +48,13 @@ public class TowerInfoScreenSpriteWithText extends Sprite {
 					LColor.white);
 			num5 += num2;
 		}
+		Utils.drawInfoBackButtonLabel(batch, this.backFont);
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
 		this.font = Constants.font(24);
+		this.backFont = Constants.font(Constants.INFO_BACK_FONT_SIZE);
 	}
 }

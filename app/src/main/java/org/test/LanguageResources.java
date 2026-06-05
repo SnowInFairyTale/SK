@@ -29,7 +29,7 @@ public class LanguageResources
 
 	public static String getEasy()
 	{
-		return "简单";
+		return "小试牛刀";
 	}
 
 	public static String getEnemies()
@@ -49,42 +49,12 @@ public class LanguageResources
 
 	public static String getHard()
 	{
-		return "难";
+		return "笑傲江湖";
 	}
 
 	public static String getInstructions()
 	{
 		return "Instructions";
-	}
-
-	public static String getInstructionsHeader1()
-	{
-		return "InstructionsHeader1";
-	}
-
-	public static String getInstructionsHeader2()
-	{
-		return "InstructionsHeader2";
-	}
-
-	public static String getInstructionsHeader3()
-	{
-		return "InstructionsHeader3";
-	}
-
-	public static String getInstructionsPar1()
-	{
-		return "InstructionsPar1";
-	}
-
-	public static String getInstructionsPar2()
-	{
-		return "InstructionsPar2";
-	}
-
-	public static String getInstructionsPar3()
-	{
-		return "InstructionsPar3";
 	}
 
 	public static String getIntro()
@@ -134,7 +104,7 @@ public class LanguageResources
 
 	public static String getMedium()
 	{
-		return "中等";
+		return "英雄初阵";
 	}
 
 	public static String getMenu()

@@ -105,33 +105,26 @@ public class SelectLevelScreen extends MenuScreen {
 		};
 	}
 
-	Vector2f result = new Vector2f(320f, 438f);
-
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 
-		result.set(320f, 438f);
-		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel1Title(), result);
+		Utils.drawMenuButtonLabel(batch, this.font,
+				LanguageResources.getLevel1Title(), Constants.MENU_BTN_ROW_1_Y);
+		Utils.drawMenuButtonLabel(batch, this.font,
+				LanguageResources.getLevel2Title(), Constants.MENU_BTN_ROW_2_Y);
+		Utils.drawMenuButtonLabel(batch, this.font,
+				LanguageResources.getLevel3Title(), Constants.MENU_BTN_ROW_3_Y);
+		Utils.drawMenuButtonLabel(batch, this.font, LanguageResources
+				.getMainMenu().toUpperCase(), Constants.MENU_BTN_ROW_4_Y);
 
-		result.set(320f, 558f);
-		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel2Title(), result);
-
-		result.set(320f, 678f);
-		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel3Title(), result);
-
-		Utils.DrawButtonLabel(batch, this.font, LanguageResources.getMainMenu()
-				.toUpperCase(), 320f, 780f, 82f, LColor.white);
-
+		float flagY = Constants.MENU_BTN_HEIGHT / 2f - 15f;
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel1,
-				488f, 470f, this.font);
+				488f, Constants.MENU_BTN_ROW_1_Y + flagY, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel2,
-				488f, 590f, this.font);
+				488f, Constants.MENU_BTN_ROW_2_Y + flagY, this.font);
 		this.DrawBestRemainingLives(batch, this.remainingLivesRecordLevel3,
-				488f, 710f, this.font);
+				488f, Constants.MENU_BTN_ROW_3_Y + flagY, this.font);
 		super.draw(batch, gameTime);
 	}
 

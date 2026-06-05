@@ -33,9 +33,11 @@ public class MenuEntry {
 		if (this.getuseButtonBackground()) {
 			batch.draw(this.buttonTexture, position, white);
 		}
-		batch.drawString(screenManager.getFont(), this.text,
-				this.getTextPosition(screen), black, this.getRotation(),
-				Vector2f.Zero, this.getScale());
+		if (this.text != null && this.text.length() > 0) {
+			batch.drawString(screenManager.getFont(), this.text,
+					this.getTextPosition(screen), black, this.getRotation(),
+					Vector2f.Zero, this.getScale());
+		}
 	}
 
 	public int GetHeight(MenuScreen screen) {

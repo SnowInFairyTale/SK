@@ -41,6 +41,28 @@ public class Utils {
 		DrawStringAlignCenter(spriteBatch, font, text, centerX, textY, color);
 	}
 
+	public static void drawMenuButtonLabel(SpriteBatch batch, LFont font,
+			String text, float buttonTopY) {
+		DrawButtonLabel(batch, font, text, Constants.MENU_BTN_CENTER_X,
+				buttonTopY, Constants.MENU_BTN_HEIGHT, LColor.white);
+	}
+
+	public static void drawIntroButtonLabel(SpriteBatch batch, LFont font,
+			String text, float centerX) {
+		DrawButtonLabel(batch, font, text, centerX, Constants.INTRO_BTN_TOP_Y,
+				Constants.INTRO_BTN_TEXT_HEIGHT, LColor.white);
+	}
+
+	/** Isolated text draw — avoids SpriteBatch state mixing with preview sprites. */
+	public static void drawInfoBackButtonLabel(SpriteBatch batch, LFont font) {
+		batch.flush();
+		DrawButtonLabel(batch, font, LanguageResources.getBack().toUpperCase(),
+				Constants.INFO_BACK_BTN_CENTER_X, Constants.INFO_BACK_BTN_TOP_Y,
+				Constants.INFO_BACK_BTN_TEXT_HEIGHT, LColor.white);
+		batch.resetColor();
+		batch.flush();
+	}
+
 	public static void DrawStringAlignCenter(SpriteBatch spriteBatch,
 			LFont font, String text, Vector2f position, LColor color) {
 		spriteBatch.drawString(font, text,

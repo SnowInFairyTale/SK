@@ -44,6 +44,37 @@ public final class Constants {
 	/** Info-screen animated sprite frame size (towerinfo / monsterinfo sheets). */
 	public static final int INFO_SPRITE_SIZE = 160;
 
+	// --- Main / select-level menu button labels (screen pixels) ---
+
+	public static final float MENU_BTN_CENTER_X = 320f;
+	public static final float MENU_BTN_HEIGHT = 100f;
+	public static final float MENU_BTN_ROW_1_Y = 415f;
+	public static final float MENU_BTN_ROW_2_Y = 535f;
+	public static final float MENU_BTN_ROW_3_Y = 655f;
+	public static final float MENU_BTN_ROW_4_Y = 775f;
+
+	// Instruction screen bottom buttons (screen pixels)
+
+	public static final float INTRO_BTN_TOP_Y = 850f;
+	/** Slightly taller than hit height (76) — nudges label down a few pixels. */
+	public static final float INTRO_BTN_TEXT_HEIGHT = 86f;
+	public static final float INTRO_BTN_TOWERS_CENTER_X = 124f;
+	public static final float INTRO_BTN_ENEMIES_CENTER_X = 358f;
+	public static final float INTRO_BTN_MENU_CENTER_X = 556f;
+
+	// Tower / monster info screens — shared back button (screen pixels)
+
+	public static final float INFO_BACK_HIT_LEFT = 220f;
+	public static final float INFO_BACK_HIT_WIDTH = 240f;
+	public static final float INFO_BACK_HIT_HEIGHT = 76f;
+	public static final float INFO_BACK_BTN_TOP_Y = 844f;
+	public static final float INFO_BACK_BTN_CENTER_X = INFO_BACK_HIT_LEFT
+			+ INFO_BACK_HIT_WIDTH / 2f;
+	public static final float INFO_BACK_BTN_TEXT_HEIGHT = 90f;
+	public static final int INFO_BACK_FONT_SIZE = 32;
+	/** Overlay layer: above preview animations (50), below nothing else. */
+	public static final int INFO_OVERLAY_DRAW_ORDER = 150;
+
 	public static LFont font(int pixelSize) {
 		return LFont.getFont(pixelSize);
 	}

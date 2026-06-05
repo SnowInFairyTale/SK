@@ -98,26 +98,19 @@ public class MainMenuScreen extends MenuScreen {
 		super.getMenuEntries().add(entry4);
 	}
 
-	Vector2f result = new Vector2f(320f, 438f);
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 		batch.draw(this.textureSound, 40f, 888f, LColor.white);
 
-		result.set(320f, 438f);
-		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getEasy(),
-				result);
-
-		result.set(320f, 558f);
-		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getMedium(),
-				result);
-
-		result.set(320f, 678f);
-		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getHard(),
-				result);
-
-		Utils.DrawButtonLabel(batch, this.fontStd, LanguageResources
-				.getInstructions().toUpperCase(), 320f, 780f, 82f, LColor.white);
+		Utils.drawMenuButtonLabel(batch, this.fontStd,
+				LanguageResources.getEasy(), Constants.MENU_BTN_ROW_1_Y);
+		Utils.drawMenuButtonLabel(batch, this.fontStd,
+				LanguageResources.getMedium(), Constants.MENU_BTN_ROW_2_Y);
+		Utils.drawMenuButtonLabel(batch, this.fontStd,
+				LanguageResources.getHard(), Constants.MENU_BTN_ROW_3_Y);
+		Utils.drawMenuButtonLabel(batch, this.fontStd, LanguageResources
+				.getInstructions().toUpperCase(), Constants.MENU_BTN_ROW_4_Y);
 
 		super.draw(batch, gameTime);
 	}
