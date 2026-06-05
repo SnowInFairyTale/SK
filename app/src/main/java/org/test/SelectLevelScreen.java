@@ -12,9 +12,6 @@ public class SelectLevelScreen extends MenuScreen {
 	private Difficulty difficulty;
 	private LFont font;
 	private MainGame game;
-	private boolean level1Locked;
-	private boolean level2Locked;
-	private boolean level3Locked;
 	private int remainingLivesRecordLevel1;
 	private int remainingLivesRecordLevel2;
 	private int remainingLivesRecordLevel3;
@@ -26,8 +23,6 @@ public class SelectLevelScreen extends MenuScreen {
 	public SelectLevelScreen(MainGame game, ScreenType prevScreen,
 			Difficulty difficulty) {
 		super("", game, prevScreen);
-		this.level2Locked = true;
-		this.level3Locked = true;
 		this.remainingLivesRecordLevel1 = -1;
 		this.remainingLivesRecordLevel2 = -1;
 		this.remainingLivesRecordLevel3 = -1;
@@ -118,15 +113,15 @@ public class SelectLevelScreen extends MenuScreen {
 
 		result.set(320f, 438f);
 		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel1Title(), this.level1Locked, result);
+				LanguageResources.getLevel1Title(), result);
 
 		result.set(320f, 558f);
 		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel2Title(), this.level2Locked, result);
+				LanguageResources.getLevel2Title(), result);
 
 		result.set(320f, 678f);
 		Utils.DrawLevelText(batch, this.font,
-				LanguageResources.getLevel3Title(), this.level3Locked, result);
+				LanguageResources.getLevel3Title(), result);
 
 		Utils.DrawButtonLabel(batch, this.font, LanguageResources.getMainMenu()
 				.toUpperCase(), 320f, 780f, 82f, LColor.white);
@@ -192,13 +187,4 @@ public class SelectLevelScreen extends MenuScreen {
 				new MainMenuScreen(this.game, ScreenType.SelectLevelScreen));
 	}
 
-	@Override
-	public void Update(GameTime gameTime, boolean otherScreenHasFocus,
-			boolean coveredByOtherScreen) {
-		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
-		this.level2Locked = false;
-		this.level3Locked = false;
-
-	}
 }

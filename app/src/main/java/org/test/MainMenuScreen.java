@@ -9,12 +9,8 @@ import loon.core.graphics.opengl.LTextures;
 import loon.core.timer.GameTime;
 
 public class MainMenuScreen extends MenuScreen {
-	private boolean easyLocked;
-
 	private LFont fontStd;
 	private MainGame game;
-	private boolean hardLocked;
-	private boolean mediumLocked;
 	private MenuEntry startHardGameMenuEntry;
 	private MenuEntry startMediumGameMenuEntry;
 	private LTexture texture;
@@ -51,8 +47,6 @@ public class MainMenuScreen extends MenuScreen {
 		entry4.setuseButtonBackground(false);
 		entry4.setPosition(new Vector2f(460f, 40f));
 		entry4.setnoButtonBackgroundSize(new Vector2f(120f, 120f));
-		this.UpdateLockedDifficulties();
-
 		item.Selected = new GameEvent() {
 
 			@Override
@@ -112,15 +106,15 @@ public class MainMenuScreen extends MenuScreen {
 
 		result.set(320f, 438f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getEasy(),
-				this.easyLocked, result);
+				result);
 
 		result.set(320f, 558f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getMedium(),
-				this.mediumLocked, result);
+				result);
 
 		result.set(320f, 678f);
 		Utils.DrawLevelText(batch, this.fontStd, LanguageResources.getHard(),
-				this.hardLocked, result);
+				result);
 
 		Utils.DrawButtonLabel(batch, this.fontStd, LanguageResources
 				.getInstructions().toUpperCase(), 320f, 780f, 82f, LColor.white);
@@ -189,16 +183,4 @@ public class MainMenuScreen extends MenuScreen {
 		this.SetSoundTexture();
 	}
 
-	@Override
-	public void Update(GameTime gameTime, boolean otherScreenHasFocus,
-			boolean coveredByOtherScreen) {
-		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-		this.UpdateLockedDifficulties();
-	}
-
-	private void UpdateLockedDifficulties() {
-		this.easyLocked = false;
-		this.mediumLocked = false;
-		this.hardLocked = false;
-	}
 }

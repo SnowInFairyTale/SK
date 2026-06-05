@@ -20,20 +20,8 @@ public class Utils {
 	}
 
 	public static void DrawLevelText(SpriteBatch spriteBatch, LFont font,
-			String text, boolean locked, Vector2f position) {
-		LColor white = LColor.white;
-		if (locked) {
-			white = LColor.gray;
-			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getLocked(), position.add(0f, 28f),
-					LColor.red);
-		} else {
-			DrawStringAlignCenter(spriteBatch, font,
-					LanguageResources.getUnlocked(), position.add(0f, 28f),
-					new LColor(0f, 1f, 0f, 1f));
-		}
-		DrawStringAlignCenter(spriteBatch, font, text.toUpperCase(), position,
-				white);
+			String text, Vector2f position) {
+		DrawStringAlignCenter(spriteBatch, font, text, position, LColor.white);
 	}
 
 	private static Vector2f pos = new Vector2f();

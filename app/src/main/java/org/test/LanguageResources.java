@@ -117,11 +117,6 @@ public class LanguageResources
 		return "Level3Title";
 	}
 
-	public static String getLocked()
-	{
-		return "Locked";
-	}
-
 	public static String getLoseHeader()
 	{
 		return "LoseHeader";
@@ -270,11 +265,6 @@ public class LanguageResources
 	public static String getTowers()
 	{
 		return "Towers";
-	}
-
-	public static String getUnlocked()
-	{
-		return "Unlocked";
 	}
 
 	public static String getUpgrade()
