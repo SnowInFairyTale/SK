@@ -19,7 +19,7 @@ public final class Constants {
 	public static final int HorizontalGridOffset = -40;
 	public static final int VerticalGridOffset = 80;
 
-	public static final int InitialRemainingLives = 1000;
+	public static final int InitialRemainingLives = 30;
 
 	/** Radians — not pixels. */
 	public static final float PiOver8 = 0.3926991f;

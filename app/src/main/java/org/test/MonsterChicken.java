@@ -13,7 +13,7 @@ public class MonsterChicken extends Monster {
 		super.setMonsterType(MonsterType.Chicken);
 		super.setRadius(12f);
 		super.setDrawOrder(30);
-		super.getHealthBar().setDrawOrder(30);
+		super.layoutHealthBar();
 	}
 
 	private Vector2f result = new Vector2f();

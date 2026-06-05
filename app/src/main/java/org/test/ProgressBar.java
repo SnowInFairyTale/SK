@@ -11,6 +11,11 @@ import loon.core.timer.GameTime;
 
 public class ProgressBar extends DrawableGameComponent implements
 		IGameComponent {
+	/** healthBar.png is 40×12: rows 0–7 border, rows 8–11 fill. */
+	private static final int FILL_SRC_Y = 8;
+	private static final int FILL_SRC_H = 4;
+	private static final int BORDER_SRC_H = 8;
+
 	private LColor backColor;
 	private LColor frontColor;
 	private LColor frontColorLow;
@@ -30,7 +35,7 @@ public class ProgressBar extends DrawableGameComponent implements
 		if (isHealthBarMode) {
 			this.frontColor = new LColor(0f, 1f, 0f, 1f);
 			this.frontColorLow = LColor.red;
-			this.backColor = LColor.gray;
+			this.backColor = LColor.black;
 			this.lowColorLimit = 0.4f;
 		} else {
 			this.frontColor = LColor.white;
@@ -43,30 +48,35 @@ public class ProgressBar extends DrawableGameComponent implements
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
+		batch.resetColor();
+		float barX = this.getPosition().x;
+		int barY = (int) this.getPosition().y;
+		int barH = this.getHeight();
+		int texW = this.texture.getWidth();
 		if (this.getCurrentPercent() < 100) {
-			batch.draw(this.texture, this.getPosition().x,
-					(int) this.getPosition().y, this.width, this.getHeight(),
-					0, 10, this.texture.getWidth(), 8, this.backColor);
+			batch.draw(this.texture, barX, barY, this.width, barH, 0,
+					FILL_SRC_Y, texW, FILL_SRC_H, this.backColor);
 		}
 		float num = ((float) this.getCurrentPercent()) / 100f;
-		LColor color = (num < this.lowColorLimit) ? this.frontColorLow
-				: this.frontColor;
-		if (this.game
-				.getGameplayScreen()
-				.getGameOpacity()
-				.equals(this.game.getGameplayScreen()
-						.getGameOpacityWhenPaused())) {
-			LColor col = new LColor(color);
-			col.mul(0.3f);
-			color = col;
+		if (num > 0f) {
+			LColor color = (num < this.lowColorLimit) ? this.frontColorLow
+					: this.frontColor;
+			if (this.game
+					.getGameplayScreen()
+					.getGameOpacity()
+					.equals(this.game.getGameplayScreen()
+							.getGameOpacityWhenPaused())) {
+				LColor col = new LColor(color);
+				col.mul(0.3f);
+				color = col;
+			}
+			int fillW = (int) Math.ceil(this.width * num);
+			batch.draw(this.texture, barX, barY, fillW, barH, 0, FILL_SRC_Y,
+					texW, FILL_SRC_H, color);
 		}
-		batch.draw(this.texture, this.getPosition().x, this.getPosition().y,
-				(this.width * num), this.getHeight(), 0, 10,
-				this.texture.getWidth(), 8, color);
 		if (this.getDrawBorder()) {
-			batch.draw(this.texture, this.getPosition().x,
-					this.getPosition().y, this.width, 8, 0, 0,
-					this.texture.getWidth(), 8, LColor.white);
+			batch.draw(this.texture, barX, barY, this.width, barH, 0, 0, texW,
+					BORDER_SRC_H, LColor.white);
 		}
 	}
 

@@ -19,6 +19,12 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	private static final int HIT_BOX_WIDTH = 100;
 	private static final int HIT_BOX_HEIGHT = 104;
 
+	/** Above missiles (drawOrder 31) so flying projectiles do not cover the bar. */
+	private static final int UPGRADE_BAR_DRAW_ORDER = 50;
+	private static final int UPGRADE_BAR_WIDTH = 60;
+	private static final int UPGRADE_BAR_HEIGHT = 4;
+	private static final float UPGRADE_BAR_OFFSET_Y = 20f;
+
 	private LTexture bashTexture;
 	private int currentUpgradeLevel;
 	private float elapsedTime;
@@ -273,18 +279,27 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.obeyGameOpacity = false;
 	}
 
+	private void layoutUpgradeProgressBar() {
+		if (this.upgradeProgressBar == null) {
+			return;
+		}
+		this.upgradeProgressBar.setHeight(UPGRADE_BAR_HEIGHT);
+		this.upgradeProgressBar.setPosition(new Vector2f(this.getPosition().x
+				- UPGRADE_BAR_WIDTH / 2f, this.getPosition().y
+				+ UPGRADE_BAR_OFFSET_Y));
+	}
+
 	private void StartUpgrade() {
 		this.currentUpgradeLevel++;
 		this.SetValuesFromTowerLevel(this.currentUpgradeLevel);
 		this.game.getGameplayScreen().getCash().Decrease(this.getUpgradeCost());
 		this.setValue(this.getValue() + this.getUpgradeCost());
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			int upgradeBarW = 20;
-			this.upgradeProgressBar = new ProgressBar(this.game, upgradeBarW,
-					false);
-			this.upgradeProgressBar.setPosition(new Vector2f(
-					this.getPosition().x - upgradeBarW / 2f,
-					this.getPosition().y + 16f));
+			this.upgradeProgressBar = new ProgressBar(this.game,
+					UPGRADE_BAR_WIDTH, false);
+			this.layoutUpgradeProgressBar();
+			this.upgradeProgressBar.setCurrentPercent(0);
+			this.upgradeProgressBar.setDrawOrder(UPGRADE_BAR_DRAW_ORDER);
 			this.game.Components().add(this.upgradeProgressBar);
 			this.isUpgrading = true;
 			this.upgradeTimeLeft = this.getUpgradeTime() * 1000f;
@@ -325,10 +340,13 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 			}
 			if (this.isUpgrading) {
 				this.upgradeTimeLeft -= gameTime.getMilliseconds();
-				this.upgradeProgressBar
-						.setCurrentPercent((int) (((this.getUpgradeTime() - (this.upgradeTimeLeft / 1000.0)) / ((double) this
-								.getUpgradeTime())) * 100.0));
-				if (this.upgradeTimeLeft < 0.0) {
+				float duration = this.getUpgradeTime();
+				if (duration > 0f) {
+					int percent = (int) Math.min(100, Math.max(0, Math.round(
+							(1.0 - this.upgradeTimeLeft / (duration * 1000.0)) * 100.0)));
+					this.upgradeProgressBar.setCurrentPercent(percent);
+				}
+				if (this.upgradeTimeLeft <= 0.0) {
 					this.UpgradeCompleted();
 				}
 			}

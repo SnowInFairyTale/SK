@@ -6,6 +6,10 @@ import loon.utils.MathUtils;
 
 public abstract class Monster extends AnimatedSprite {
 
+	private static final int HEALTH_BAR_WIDTH = 40;
+	private static final int HEALTH_BAR_HEIGHT = 6;
+	private static final int HEALTH_BAR_GAP = 3;
+
 	private Vector2f destinationPosition;
 	private Vector2f direction;
 	private MainGame game;
@@ -132,8 +136,7 @@ public abstract class Monster extends AnimatedSprite {
 		this.setStartHitPoints(startHitPoints);
 		this.setHitPoints(startHitPoints);
 		this.setSpeed(speed);
-		this.setHealthBar(new ProgressBar(game, 40, true));
-		this.getHealthBar().setDrawOrder(1);
+		this.setHealthBar(new ProgressBar(game, HEALTH_BAR_WIDTH, true));
 		this.getHealthBar().setDrawBorder(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
 				this.getGridPosition()).add(Constants.GridSize / 2f,
@@ -279,14 +282,23 @@ public abstract class Monster extends AnimatedSprite {
 		return this.position;
 	}
 
+	protected void layoutHealthBar() {
+		if (this.getHealthBar() == null) {
+			return;
+		}
+		this.getHealthBar().setHeight(HEALTH_BAR_HEIGHT);
+		this.getHealthBar().setDrawOrder(super.getDrawOrder() + 1);
+		this.getHealthBar().setPosition(new Vector2f(this.getPosition().x
+				- HEALTH_BAR_WIDTH / 2f, super.getDrawPosition().y
+				- HEALTH_BAR_HEIGHT - HEALTH_BAR_GAP));
+	}
+
 	public final void setPosition(Vector2f value) {
 		this.position = value;
 		super.setDrawPosition(new Vector2f(value.x
 				- (super.getSpriteWidth() / 2), value.y
 				- (super.getSpriteHeight() / 2)));
-		this.getHealthBar().setPosition(
-				new Vector2f((value.x - (super.getSpriteWidth() / 2)) + 8f,
-						value.y + 12f));
+		this.layoutHealthBar();
 	}
 
 	private float privateRadius;
