@@ -9,18 +9,13 @@ import loon.utils.MathUtils;
 
 public class MissileSpear extends Missile {
 
-	private static final LColor SPEAR_BLACK_RECOLOR = new LColor(1f, 0f, 0f, 1f);
 	private static final float SPEAR_GLOW_SCALE_X = 1.65f;
 	private static final float SPEAR_GLOW_SCALE_Y = 1.15f;
 
 	public MissileSpear(MainGame game, Monster targetMonster, Tower tower) {
 		super(game, MissileType.SPEAR, "assets/spear.png", tower.getPosition(),
-				targetMonster, tower.getDamage(), 2, 2, 48, 48);
-	}
-
-	@Override
-	protected LColor getBlackRecolorTarget() {
-		return SPEAR_BLACK_RECOLOR;
+				targetMonster, tower.getDamage(), 2, 2, 48, 48,
+				tower.getWeaponGemType());
 	}
 
 	@Override

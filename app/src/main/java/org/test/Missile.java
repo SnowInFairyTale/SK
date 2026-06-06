@@ -17,13 +17,16 @@ public abstract class Missile extends AnimatedSprite {
 	private float speed;
 	private float speedPrFrame;
 	private Monster targetMonster;
+	private final GemType weaponGem;
 
 	public Missile(MainGame game, MissileType missileType, String textureFile,
 			Vector2f towerPosition, Monster targetMonster, int damage,
-			int columnCount, int spriteCount, int spriteWidth, int spriteHeight) {
+			int columnCount, int spriteCount, int spriteWidth, int spriteHeight,
+			GemType weaponGem) {
 		super(game, textureFile, towerPosition.cpy().sub(18f, 18f), columnCount,
 				spriteCount, spriteWidth, spriteHeight, 1f);
 		this.speed = 12f;
+		this.weaponGem = weaponGem;
 		this.targetMonster = targetMonster;
 		this.setHasHitTarget(false);
 		this.game = game;
@@ -59,6 +62,11 @@ public abstract class Missile extends AnimatedSprite {
 				this.getAnimationFrameRect(), glow,
 				MathUtils.toDegrees(this.getRotation()), this.getOrigin(),
 				GLOW_SCALE, SpriteEffects.None);
+	}
+
+	@Override
+	protected LColor getBlackRecolorTarget() {
+		return GemWeaponColors.getRecolor(this.weaponGem);
 	}
 
 	protected LColor getMissileGlowColor() {

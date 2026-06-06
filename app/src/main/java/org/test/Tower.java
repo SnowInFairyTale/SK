@@ -124,6 +124,11 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		return this.gemType;
 	}
 
+	/** Gem type for weapon tinting; {@link GemType#None} when no gem equipped. */
+	public final GemType getWeaponGemType() {
+		return this.gemType;
+	}
+
 	public final boolean TryApplyGem(GemType type) {
 		if (type == GemType.None || this.hasGem() || !this.isAtMaxLevel()
 				|| this.isUpgrading) {
