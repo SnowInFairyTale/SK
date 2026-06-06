@@ -23,7 +23,14 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	private static final int UPGRADE_BAR_DRAW_ORDER = 50;
 	private static final int UPGRADE_BAR_WIDTH = 60;
 	private static final int UPGRADE_BAR_HEIGHT = 4;
-	private static final float UPGRADE_BAR_OFFSET_Y = 20f;
+	/** Below the top of the 128px tower sprite. */
+	private static final float UPGRADE_BAR_OFFSET_BELOW_TOP = 26f;
+
+	/** Smaller stars; 5 fit in the same row width as the old 4×20px layout. */
+	private static final float LEVEL_STAR_START_X = 10f;
+	private static final float LEVEL_STAR_Y = 70f;
+	private static final int LEVEL_STAR_SIZE = 12;
+	private static final float LEVEL_STAR_ROW_WIDTH = 76f;
 
 	private LTexture bashTexture;
 	private int currentUpgradeLevel;
@@ -119,11 +126,8 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 				gameOpacity);
 		int num = this.isUpgrading ? (this.currentUpgradeLevel - 1)
 				: this.currentUpgradeLevel;
-		for (int i = 0; i < num; i++) {
-			batch.draw(this.levelTexture,
-					this.getDrawPosition().add((10 + (i * 20)), 70f), this.game
-							.getGameplayScreen().getGameOpacity());
-		}
+		this.drawLevelStars(batch, num, this.game.getGameplayScreen()
+				.getGameOpacity());
 		if (this.isSelected) {
 			int range = (int) this.getRange();
 			batch.draw(this.bashTexture, position.x - range,
@@ -211,7 +215,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	protected void loadContent() {
 		super.loadContent();
 		this.texture = LTextures.loadTexture(this.textureFile);
-		this.bashTexture = LTextures.loadTexture("assets/bash.png");
+		this.bashTexture = LTextures.loadTexture("assets/range.png");
 		this.occupiedTextureGreen = LTextures
 				.loadTexture("assets/green_square.png");
 		this.occupiedTextureRed = LTextures
@@ -276,6 +280,23 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.setUpgradeTime(this.getTowerLevels()[level].getUpgradeTime());
 	}
 
+	private void drawLevelStars(SpriteBatch batch, int count, LColor opacity) {
+		if (count <= 0) {
+			return;
+		}
+		float x0 = this.getDrawPosition().x + LEVEL_STAR_START_X;
+		float y = this.getDrawPosition().y + LEVEL_STAR_Y;
+		float spacing = count <= 1 ? 0f
+				: (LEVEL_STAR_ROW_WIDTH - LEVEL_STAR_SIZE) / (count - 1);
+		float starSize = LEVEL_STAR_SIZE;
+		float texW = this.levelTexture.getWidth();
+		float texH = this.levelTexture.getHeight();
+		for (int i = 0; i < count; i++) {
+			batch.draw(this.levelTexture, x0 + (i * spacing), y, starSize,
+					starSize, 0f, 0f, texW, texH, opacity);
+		}
+	}
+
 	public final void StartedSelection() {
 		this.isSelected = true;
 		this.obeyGameOpacity = false;
@@ -287,9 +308,9 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 			return;
 		}
 		this.upgradeProgressBar.setHeight(UPGRADE_BAR_HEIGHT);
-		this.upgradeProgressBar.setPosition(new Vector2f(this.getPosition().x
-				- UPGRADE_BAR_WIDTH / 2f, this.getPosition().y
-				+ UPGRADE_BAR_OFFSET_Y));
+		float barX = this.getPosition().x - UPGRADE_BAR_WIDTH / 2f;
+		float barY = this.getDrawPosition().y + UPGRADE_BAR_OFFSET_BELOW_TOP;
+		this.upgradeProgressBar.setPosition(new Vector2f(barX, barY));
 	}
 
 	private void StartUpgrade() {

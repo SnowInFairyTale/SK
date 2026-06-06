@@ -7,7 +7,7 @@ import loon.utils.MathUtils;
 public abstract class Monster extends AnimatedSprite {
 
 	private static final int HEALTH_BAR_WIDTH = 40;
-	private static final int HEALTH_BAR_HEIGHT = 6;
+	private static final int HEALTH_BAR_HEIGHT = 4;
 	private static final int HEALTH_BAR_GAP = 3;
 	/** Above tower upgrade bars (drawOrder 50) so they are not covered. */
 	private static final int HEALTH_BAR_DRAW_ORDER = 55;
