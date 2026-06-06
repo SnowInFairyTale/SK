@@ -10,6 +10,8 @@ import loon.core.input.LInput;
 import loon.core.timer.GameTime;
 
 public class MonsterInfoScreen extends MenuScreen {
+	private static final java.util.ArrayList<AnimatedSprite> registeredPreviews = new java.util.ArrayList<AnimatedSprite>();
+
 	private java.util.ArrayList<AnimatedSprite> animatedSprites;
 	private boolean componentsDetached;
 	private MainGame game;
@@ -51,6 +53,14 @@ public class MonsterInfoScreen extends MenuScreen {
 		super.draw(batch, gameTime);
 	}
 
+	public static void purgeLeakedPreviews(MainGame game) {
+		for (AnimatedSprite sprite : new java.util.ArrayList<AnimatedSprite>(
+				registeredPreviews)) {
+			game.Components().remove(sprite);
+		}
+		registeredPreviews.clear();
+	}
+
 	private void detachScreenComponents() {
 		if (this.componentsDetached) {
 			return;
@@ -60,6 +70,7 @@ public class MonsterInfoScreen extends MenuScreen {
 			for (IGameComponent component : this.animatedSprites) {
 				this.game.Components().remove(component);
 			}
+			registeredPreviews.removeAll(this.animatedSprites);
 			this.animatedSprites = null;
 		}
 		if (this.monsterInfoScreenSpriteWithText != null) {
@@ -92,6 +103,7 @@ public class MonsterInfoScreen extends MenuScreen {
 			sprite.setObeyGameOpacity(false);
 			sprite.setDrawOrder(50);
 			this.game.Components().add(sprite);
+			registeredPreviews.add(sprite);
 		}
 	}
 
@@ -118,7 +130,7 @@ public class MonsterInfoScreen extends MenuScreen {
 	@Override
 	public void Update(GameTime gameTime, boolean otherScreenHasFocus,
 			boolean coveredByOtherScreen) {
-		if (super.getIsExiting()) {
+		if (super.getIsExiting() || coveredByOtherScreen) {
 			this.detachScreenComponents();
 		}
 		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);

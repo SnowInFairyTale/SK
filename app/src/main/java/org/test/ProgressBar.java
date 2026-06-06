@@ -5,28 +5,23 @@ import loon.action.sprite.painting.DrawableGameComponent;
 import loon.action.sprite.painting.IGameComponent;
 import loon.core.geom.Vector2f;
 import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
 import loon.core.timer.GameTime;
 
 public class ProgressBar extends DrawableGameComponent implements
 		IGameComponent {
-	/** healthBar.png is 40×12: rows 0–7 border, rows 8–11 fill. */
-	private static final int FILL_SRC_Y = 8;
-	private static final int FILL_SRC_H = 4;
-	private static final int BORDER_SRC_H = 8;
 
 	private LColor backColor;
 	private LColor frontColor;
 	private LColor frontColorLow;
 	private MainGame game;
 	private float lowColorLimit;
-	private LTexture texture;
+	private boolean obeyGameOpacity = true;
 	private int width;
 
 	public ProgressBar(MainGame game, int width, boolean isHealthBarMode) {
 		super(game);
 		this.game = game;
+		this.setIsHealthBarMode(isHealthBarMode);
 		this.setCurrentPercent(100);
 		this.width = width;
 		this.setHeight(8);
@@ -38,52 +33,68 @@ public class ProgressBar extends DrawableGameComponent implements
 			this.backColor = LColor.black;
 			this.lowColorLimit = 0.4f;
 		} else {
-			this.frontColor = LColor.white;
-			this.frontColorLow = LColor.white;
+			this.frontColor = new LColor(1f, 0.82f, 0.15f, 1f);
+			this.frontColorLow = this.frontColor;
 			this.backColor = LColor.black;
 			this.lowColorLimit = 0f;
 		}
 	}
 
+	private LColor resolveTintColor(LColor base) {
+		LColor color = new LColor(base);
+		if (!this.obeyGameOpacity || this.game.getGameplayScreen() == null) {
+			return color;
+		}
+		LColor gameOpacity = this.game.getGameplayScreen().getGameOpacity();
+		if (!gameOpacity.equals(LColor.white)) {
+			float dim = (gameOpacity.r + gameOpacity.g + gameOpacity.b) / 3f;
+			color.r *= dim;
+			color.g *= dim;
+			color.b *= dim;
+		}
+		if (gameOpacity.equals(this.game.getGameplayScreen()
+				.getGameOpacityWhenPaused())) {
+			color.mul(0.3f);
+		}
+		return color;
+	}
+
+	/** Slight rounding (1–2px), not a full pill. */
+	private int cornerRadius(float h) {
+		return Math.max(1, Math.min(2, Math.round(h / 4f)));
+	}
+
+	private void fillBar(SpriteBatch batch, float x, float y, float w,
+			float h, LColor baseColor) {
+		if (w <= 0f || h <= 0f) {
+			return;
+		}
+		batch.setColor(this.resolveTintColor(baseColor));
+		batch.fillRoundRect(x, y, w, h, this.cornerRadius(h));
+	}
+
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		super.draw(batch, gameTime);
-		batch.resetColor();
 		float barX = this.getPosition().x;
-		int barY = (int) this.getPosition().y;
-		int barH = this.getHeight();
-		int texW = this.texture.getWidth();
-		if (this.getCurrentPercent() < 100) {
-			batch.draw(this.texture, barX, barY, this.width, barH, 0,
-					FILL_SRC_Y, texW, FILL_SRC_H, this.backColor);
+		float barY = this.getPosition().y;
+		float barH = this.getHeight();
+		if (this.getDrawBorder()) {
+			this.fillBar(batch, barX - 1f, barY - 1f, this.width + 2f,
+					barH + 2f, new LColor(0.2f, 0.2f, 0.2f, 1f));
 		}
+		this.fillBar(batch, barX, barY, this.width, barH, this.backColor);
 		float num = ((float) this.getCurrentPercent()) / 100f;
 		if (num > 0f) {
 			LColor color = (num < this.lowColorLimit) ? this.frontColorLow
 					: this.frontColor;
-			if (this.game
-					.getGameplayScreen()
-					.getGameOpacity()
-					.equals(this.game.getGameplayScreen()
-							.getGameOpacityWhenPaused())) {
-				LColor col = new LColor(color);
-				col.mul(0.3f);
-				color = col;
-			}
-			int fillW = (int) Math.ceil(this.width * num);
-			batch.draw(this.texture, barX, barY, fillW, barH, 0, FILL_SRC_Y,
-					texW, FILL_SRC_H, color);
+			float fillW = (float) Math.ceil(this.width * num);
+			float minFillW = this.cornerRadius(barH) * 2f;
+			fillW = Math.max(minFillW, fillW);
+			fillW = Math.min(this.width, fillW);
+			this.fillBar(batch, barX, barY, fillW, barH, color);
 		}
-		if (this.getDrawBorder()) {
-			batch.draw(this.texture, barX, barY, this.width, barH, 0, 0, texW,
-					BORDER_SRC_H, LColor.white);
-		}
-	}
-
-	@Override
-	protected void loadContent() {
-		super.loadContent();
-		this.texture = LTextures.loadTexture("assets/healthBar.png");
+		batch.resetColor();
 	}
 
 	private int privateCurrentPercent;
@@ -124,6 +135,14 @@ public class ProgressBar extends DrawableGameComponent implements
 
 	public final void setIsHealthBarMode(boolean value) {
 		privateIsHealthBarMode = value;
+	}
+
+	public final boolean getObeyGameOpacity() {
+		return this.obeyGameOpacity;
+	}
+
+	public final void setObeyGameOpacity(boolean value) {
+		this.obeyGameOpacity = value;
 	}
 
 	private Vector2f privatePosition;

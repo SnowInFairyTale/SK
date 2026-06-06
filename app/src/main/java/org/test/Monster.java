@@ -9,6 +9,16 @@ public abstract class Monster extends AnimatedSprite {
 	private static final int HEALTH_BAR_WIDTH = 40;
 	private static final int HEALTH_BAR_HEIGHT = 6;
 	private static final int HEALTH_BAR_GAP = 3;
+	/** Above tower upgrade bars (drawOrder 50) so they are not covered. */
+	private static final int HEALTH_BAR_DRAW_ORDER = 55;
+
+	static int HealthPercent(int hitPoints, int startHitPoints) {
+		if (hitPoints <= 0 || startHitPoints <= 0) {
+			return 0;
+		}
+		int percent = (100 * hitPoints) / startHitPoints;
+		return Math.max(1, Math.min(100, percent));
+	}
 
 	private Vector2f destinationPosition;
 	private Vector2f direction;
@@ -73,7 +83,7 @@ public abstract class Monster extends AnimatedSprite {
 		if (!this.getDead()) {
 			this.setHitPoints(this.getHitPoints() - damage);
 			this.getHealthBar().setCurrentPercent(
-					(100 * this.getHitPoints()) / this.getStartHitPoints());
+					HealthPercent(this.getHitPoints(), this.getStartHitPoints()));
 			if (this.getHitPoints() <= 0) {
 				this.setDead(true);
 				this.game.getGameplayScreen().getCash()
@@ -137,7 +147,8 @@ public abstract class Monster extends AnimatedSprite {
 		this.setHitPoints(startHitPoints);
 		this.setSpeed(speed);
 		this.setHealthBar(new ProgressBar(game, HEALTH_BAR_WIDTH, true));
-		this.getHealthBar().setDrawBorder(true);
+		this.getHealthBar().setDrawBorder(false);
+		this.getHealthBar().setObeyGameOpacity(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
 				this.getGridPosition()).add(Constants.GridSize / 2f,
 				Constants.GridSize / 2f));
@@ -162,10 +173,12 @@ public abstract class Monster extends AnimatedSprite {
 
 	public final void StartedSelection() {
 		super.setObeyGameOpacity(false);
+		this.getHealthBar().setObeyGameOpacity(false);
 	}
 
 	public final void StoppedSelection() {
 		super.setObeyGameOpacity(true);
+		this.getHealthBar().setObeyGameOpacity(true);
 	}
 
 	public final void Survived() {
@@ -287,7 +300,8 @@ public abstract class Monster extends AnimatedSprite {
 			return;
 		}
 		this.getHealthBar().setHeight(HEALTH_BAR_HEIGHT);
-		this.getHealthBar().setDrawOrder(super.getDrawOrder() + 1);
+		this.getHealthBar().setDrawOrder(
+				Math.max(HEALTH_BAR_DRAW_ORDER, super.getDrawOrder() + 1));
 		this.getHealthBar().setPosition(new Vector2f(this.getPosition().x
 				- HEALTH_BAR_WIDTH / 2f, super.getDrawPosition().y
 				- HEALTH_BAR_HEIGHT - HEALTH_BAR_GAP));

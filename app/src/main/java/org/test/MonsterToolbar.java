@@ -38,6 +38,7 @@ public class MonsterToolbar extends DrawableGameComponent implements
 		super.setDrawOrder(1);
 		game.Components().add(this.animatedSpriteMonster);
 		this.healthBar = new ProgressBar(game, 400, true);
+		this.healthBar.setObeyGameOpacity(false);
 		this.healthBar.setPosition(this.drawPosition.add(150f, 60f));
 		this.healthBar.setHeight(16);
 		game.Components().add(this.healthBar);
@@ -60,15 +61,21 @@ public class MonsterToolbar extends DrawableGameComponent implements
 	}
 
 	public final void Remove() {
-		this.game.Components().remove(this.animatedSpriteMonster);
-		this.game.Components().remove(this.healthBar);
+		if (this.animatedSpriteMonster != null) {
+			this.game.Components().remove(this.animatedSpriteMonster);
+			this.animatedSpriteMonster = null;
+		}
+		if (this.healthBar != null) {
+			this.game.Components().remove(this.healthBar);
+			this.healthBar = null;
+		}
 		this.game.Components().remove(this);
 	}
 
 	@Override
 	public void update(GameTime gameTime) {
 		super.update(gameTime);
-		this.healthBar.setCurrentPercent((100 * this.monster.getHitPoints())
-				/ this.monster.getStartHitPoints());
+		this.healthBar.setCurrentPercent(Monster.HealthPercent(
+				this.monster.getHitPoints(), this.monster.getStartHitPoints()));
 	}
 }

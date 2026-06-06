@@ -65,7 +65,7 @@ public class GameplayScreen extends GameScreen {
 		this.setRemainingLives(new RemainingLives(game,
 				Constants.InitialRemainingLives));
 		game.Components().add(this.getRemainingLives());
-		this.setCash(new Cash(game, 50));
+		this.setCash(new Cash(game, Constants.InitialCash));
 		this.setGameOpacity(LColor.white);
 		this.ClearGrid();
 		game.Components().add(this.getCash());
@@ -182,6 +182,7 @@ public class GameplayScreen extends GameScreen {
 	}
 
 	private void HideButtons() {
+		MonsterInfoScreen.purgeLeakedPreviews(this.game);
 		this.showMenuButton.Hide();
 		for (TowerButton button : this.towerButtons) {
 			button.Hide();
@@ -354,8 +355,13 @@ public class GameplayScreen extends GameScreen {
 	}
 
 	private void ResetSelectedMonsterOrTower() {
+		this.ResetSelectedMonsterOrTower(true);
+	}
+
+	private void ResetSelectedMonsterOrTower(boolean restoreTowerBar) {
 		this.setGameOpacity(LColor.white);
-		if ((this.selectedMonster != null) || (this.selectedTower != null)) {
+		if (restoreTowerBar
+				&& ((this.selectedMonster != null) || (this.selectedTower != null))) {
 			this.ShowButtons();
 		}
 		if (this.selectedMonster != null) {
@@ -390,6 +396,7 @@ public class GameplayScreen extends GameScreen {
 	}
 
 	private void ShowButtons() {
+		MonsterInfoScreen.purgeLeakedPreviews(this.game);
 		this.showMenuButton.Show();
 		for (TowerButton button : this.towerButtons) {
 			button.Show();
@@ -563,13 +570,11 @@ public class GameplayScreen extends GameScreen {
 							Monster selectedMonster = this.getWaveManager()
 									.GetSelectedMonster(rectangle);
 							if (selectedMonster != null) {
-								this.ResetSelectedMonsterOrTower();
+								this.ResetSelectedMonsterOrTower(false);
+								MonsterInfoScreen.purgeLeakedPreviews(this.game);
 								this.setGameOpacity(LColor.gray);
 								this.selectedMonster = selectedMonster;
 								this.selectedMonster.StartedSelection();
-								if (this.monsterToolbar != null) {
-									this.monsterToolbar.Remove();
-								}
 								this.RemoveTowerToolbarIfNotNull();
 								this.monsterToolbar = new MonsterToolbar(
 										this.game, this.selectedMonster);
@@ -583,15 +588,11 @@ public class GameplayScreen extends GameScreen {
 							if (this.selectedTower != null) {
 								this.selectedTower.StoppedSelection();
 							}
-							this.ResetSelectedMonsterOrTower();
+							this.ResetSelectedMonsterOrTower(false);
 							this.setGameOpacity(LColor.gray);
 							this.selectedTower = selectedTower;
 							this.selectedTower.StartedSelection();
 							this.RemoveTowerToolbarIfNotNull();
-							if (this.monsterToolbar != null) {
-								this.monsterToolbar.Remove();
-								this.monsterToolbar = null;
-							}
 							this.HideButtons();
 							this.towerToolbar = new TowerToolbar(this.game,
 									this.selectedTower);

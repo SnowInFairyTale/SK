@@ -127,7 +127,9 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		if (this.isSelected) {
 			int range = (int) this.getRange();
 			batch.draw(this.bashTexture, position.x - range,
-					position.y - range, range * 2, range * 2);
+					position.y - range, range * 2, range * 2, 0f, 0f,
+					this.bashTexture.getWidth(), this.bashTexture.getHeight(),
+					gameOpacity);
 		}
 		super.draw(batch, gameTime);
 	}
@@ -277,6 +279,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	public final void StartedSelection() {
 		this.isSelected = true;
 		this.obeyGameOpacity = false;
+		this.syncUpgradeProgressBarOpacity();
 	}
 
 	private void layoutUpgradeProgressBar() {
@@ -299,6 +302,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 					UPGRADE_BAR_WIDTH, false);
 			this.layoutUpgradeProgressBar();
 			this.upgradeProgressBar.setCurrentPercent(0);
+			this.syncUpgradeProgressBarOpacity();
 			this.upgradeProgressBar.setDrawOrder(UPGRADE_BAR_DRAW_ORDER);
 			this.game.Components().add(this.upgradeProgressBar);
 			this.isUpgrading = true;
@@ -311,6 +315,13 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	public final void StoppedSelection() {
 		this.isSelected = false;
 		this.obeyGameOpacity = true;
+		this.syncUpgradeProgressBarOpacity();
+	}
+
+	private void syncUpgradeProgressBarOpacity() {
+		if (this.upgradeProgressBar != null) {
+			this.upgradeProgressBar.setObeyGameOpacity(!this.isSelected);
+		}
 	}
 
 	@Override
