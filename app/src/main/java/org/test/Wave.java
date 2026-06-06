@@ -3,21 +3,40 @@ package org.test;
 import loon.action.sprite.painting.DrawableGameComponent;
 import loon.action.sprite.painting.IGameComponent;
 import loon.core.geom.RectBox;
+import loon.core.geom.Vector2f;
 import loon.core.timer.GameTime;
 
 public class Wave extends DrawableGameComponent implements IGameComponent {
 
+	private static final double BOSS_SPAWN_DELAY_MS = 5000.0;
+	private static final double FINALE_BOSS_SPAWN_DELAY_MS = 30000.0;
+	private static final int CHIEFTAIN_SPRITE_SIZE = 78;
+
 	private MainGame game;
+	private int bossHitPoints;
+	private boolean bossSpawned;
+	private MonsterType bossType;
+	private float bossSpeed;
+	private int bossValue;
+	private boolean finaleBossesSpawned;
+	private int finaleBossHitPoints;
+	private boolean isBossWave;
+	private boolean isFinaleWave;
 	private int numberOfMonstersAdded;
 	private int numMonsters;
 	private float speed;
 	private double spread;
 	private int startHitPoints;
+	private double timeUntilBossSpawn;
+	private double timeUntilFinaleSpawn;
 	private double timeUntilNextMonsterAdd;
 	private int value;
 
 	public Wave(MainGame game, int num_monsters, int startHitPoints,
-			float speed, double spread, int value, MonsterType monsterType) {
+			float speed, double spread, int value, MonsterType monsterType,
+			boolean isBossWave, MonsterType bossType, float bossSpeed,
+			int bossValue, boolean isFinaleWave, int bossHitPoints,
+			int finaleBossHitPoints) {
 		super(game);
 		this.game = game;
 		this.privateMonsters = new java.util.ArrayList<Monster>(10);
@@ -26,9 +45,18 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 		this.speed = speed;
 		this.spread = spread;
 		this.value = value;
+		this.isBossWave = isBossWave;
+		this.bossType = bossType;
+		this.bossSpeed = bossSpeed;
+		this.bossValue = bossValue;
+		this.isFinaleWave = isFinaleWave;
+		this.bossHitPoints = bossHitPoints;
+		this.finaleBossHitPoints = finaleBossHitPoints;
 		this.setMonsterType(monsterType);
 		this.setWaveState(WaveState.NotStarted);
 		this.timeUntilNextMonsterAdd = 0.0;
+		this.timeUntilBossSpawn = BOSS_SPAWN_DELAY_MS;
+		this.timeUntilFinaleSpawn = FINALE_BOSS_SPAWN_DELAY_MS;
 		game.Components().add(this);
 	}
 
@@ -57,11 +85,58 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 
 	public final void RemoveMonster(Monster monster) {
 		this.getMonsters().remove(monster);
-		if ((this.getMonsters().size() == 0)
-				&& (this.numberOfMonstersAdded == this.numMonsters)) {
+		if (this.CanRemoveActiveWave()) {
 			this.game.getGameplayScreen().getWaveManager()
 					.RemoveActiveWave(this);
 		}
+	}
+
+	private boolean CanRemoveActiveWave() {
+		if (this.getMonsters().size() != 0) {
+			return false;
+		}
+		if (this.numberOfMonstersAdded != this.numMonsters) {
+			return false;
+		}
+		if (this.isBossWave && !this.bossSpawned) {
+			return false;
+		}
+		return !this.isFinaleWave || this.finaleBossesSpawned;
+	}
+
+	private void SpawnBoss() {
+		int reward = Math.max(this.bossValue, this.value * 2);
+		Monster boss = MonsterBoss.Create(this.game, this, this.bossType,
+				this.bossSpeed, this.bossHitPoints, reward);
+		this.AddMonster(boss);
+		this.bossSpawned = true;
+		this.game.getGameplayScreen().getWaveManager().OnBossSpawned();
+	}
+
+	private void SpawnFinaleBosses() {
+		Vector2f startGrid = this.game.getGameplayScreen().getLevelSettings()
+				.getStartPoint().cpy();
+		int reward = Math.max(this.bossValue, this.value * 2);
+		MonsterBoss front = MonsterBoss.CreateWithShield(this.game, this,
+				MonsterType.Chieftain, this.speed, this.finaleBossHitPoints,
+				reward, BossShieldColors.ELECTRIC_PURPLE, startGrid);
+		Vector2f nextGrid = front.GetNextGridPoint(startGrid);
+		Vector2f nextCenter = Utils.ConvertToPositionCoordinates(nextGrid).add(
+				Constants.GridSize / 2f, Constants.GridSize / 2f);
+		Vector2f marchDirection = Utils.GetDirection(front.getPosition(),
+				nextCenter);
+		MonsterBoss back = MonsterBoss.CreateWithShield(this.game, this,
+				MonsterType.Chieftain, this.speed, this.finaleBossHitPoints,
+				reward, BossShieldColors.GOLD, startGrid);
+		back.setPosition(front.getPosition().sub(
+				marchDirection.mul(CHIEFTAIN_SPRITE_SIZE)));
+		this.AddMonster(front);
+		this.AddMonster(back);
+		this.finaleBossesSpawned = true;
+	}
+
+	private boolean MinionsFinishedSpawning() {
+		return this.numberOfMonstersAdded == this.numMonsters;
 	}
 
 	@Override
@@ -110,6 +185,20 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 				this.AddMonster(monster);
 				this.timeUntilNextMonsterAdd = this.spread;
 				this.numberOfMonstersAdded++;
+			}
+			if (this.MinionsFinishedSpawning()) {
+				if (this.isBossWave && !this.bossSpawned) {
+					this.timeUntilBossSpawn -= gameTime.getMilliseconds();
+					if (this.timeUntilBossSpawn < 0.0) {
+						this.SpawnBoss();
+					}
+				}
+				if (this.isFinaleWave && !this.finaleBossesSpawned) {
+					this.timeUntilFinaleSpawn -= gameTime.getMilliseconds();
+					if (this.timeUntilFinaleSpawn < 0.0) {
+						this.SpawnFinaleBosses();
+					}
+				}
 			}
 		}
 		super.update(gameTime);

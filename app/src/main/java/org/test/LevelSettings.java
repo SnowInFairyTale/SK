@@ -1,19 +1,15 @@
 package org.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import loon.core.geom.Vector2f;
-import loon.core.graphics.LFont;
 
 public class LevelSettings {
 
-	public LevelSettings(MainGame game, int level) {
+	public LevelSettings(int level) {
 
 		this.setTowerBlockingGridCells(new java.util.ArrayList<Vector2f>());
 		this.setLevelSpecificOccupiedGridCells(new java.util.ArrayList<Vector2f>());
-		HashMap<Vector2f, String> textAndRelativePosition = new HashMap<Vector2f, String>();
-		LFont font = Constants.font(20);
 		switch (level) {
 		case 1:
 			this.setStartPoint(new Vector2f(0, 9));
@@ -29,17 +25,6 @@ public class LevelSettings {
 			this.setBackgroundWithGridTextureFile("assets/background2_grid.png");
 			this.getLevelSpecificOccupiedGridCells().add(new Vector2f(9, 4));
 			this.getLevelSpecificOccupiedGridCells().add(new Vector2f(6, 11));
-			textAndRelativePosition.put(new Vector2f(142f, 66f),
-					LanguageResources.getLakeHeader().toUpperCase());
-			int num = 184;
-			for (String str : LanguageResources.getLakeInfo().split("[$]", -1)) {
-				textAndRelativePosition
-						.put(new Vector2f(56f, (float) num), str);
-				num += 56;
-			}
-			this.setInfoSpriteWithText(new SpriteWithText(game,
-					"assets/speechbubble.png", 0x2ee0, new Vector2f(192f, 276f),
-					textAndRelativePosition, font));
 			return;
 		}
 		case 3: {
@@ -55,19 +40,6 @@ public class LevelSettings {
 			this.getTowerBlockingGridCells().add(new Vector2f(3, 14));
 			this.getTowerBlockingGridCells().add(new Vector2f(4, 13));
 			this.getTowerBlockingGridCells().add(new Vector2f(4, 14));
-			textAndRelativePosition.put(
-					new Vector2f(206f - (font.stringWidth(LanguageResources
-							.getBlocking().toUpperCase()) / 2f), 32f),
-					LanguageResources.getMudHeader().toUpperCase());
-			int num2 = 120;
-			for (String str2 : LanguageResources.getMudInfo().split("[$]", -1)) {
-				textAndRelativePosition.put(new Vector2f(68f, (float) num2),
-						str2);
-				num2 += 56;
-			}
-			this.setInfoSpriteWithText(new SpriteWithText(game,
-					"assets/speechbubble2.png", 0x2ee0, new Vector2f(118f, 108f),
-					textAndRelativePosition, font));
 			return;
 		}
 		}
@@ -101,16 +73,6 @@ public class LevelSettings {
 
 	public final void setEndPoint(Vector2f value) {
 		privateEndPoint = value;
-	}
-
-	private SpriteWithText privateInfoSpriteWithText;
-
-	public final SpriteWithText getInfoSpriteWithText() {
-		return privateInfoSpriteWithText;
-	}
-
-	public final void setInfoSpriteWithText(SpriteWithText value) {
-		privateInfoSpriteWithText = value;
 	}
 
 	private java.util.ArrayList<Vector2f> privateLevelSpecificOccupiedGridCells = new ArrayList<Vector2f>();;

@@ -19,12 +19,12 @@ public final class Constants {
 	public static final int HorizontalGridOffset = -40;
 	public static final int VerticalGridOffset = 80;
 
-	public static final int InitialRemainingLives = 1000;
+	public static final int InitialRemainingLives = 20;
 	public static final int InitialCash = 5000;
 
-	public static final int InitialPurpleGems = 1;
-	public static final int InitialRedGems = 1;
-	public static final int InitialGoldGems = 1;
+	public static final int InitialPurpleGems = 0;
+	public static final int InitialRedGems = 0;
+	public static final int InitialGoldGems = 0;
 
 	/** Radians — not pixels. */
 	public static final float PiOver8 = 0.3926991f;
@@ -58,6 +58,13 @@ public final class Constants {
 	public static final float MENU_BTN_ROW_3_Y = 655f;
 	public static final float MENU_BTN_ROW_4_Y = 775f;
 
+	/** Win / lose menu button hit rect: x=192, width=280. */
+	public static final float RESULT_MENU_BTN_CENTER_X = 332f;
+	public static final float RESULT_MENU_BTN_TOP_Y = 792f;
+	public static final float RESULT_MENU_BTN_HEIGHT = 100f;
+	/** Win / lose menu label only — negative moves text up (screen pixels). */
+	public static final float RESULT_MENU_BTN_LABEL_OFFSET_Y = -20f;
+
 	// Instruction screen bottom buttons (screen pixels)
 
 	public static final float INTRO_BTN_TOP_Y = 850f;
@@ -66,6 +73,21 @@ public final class Constants {
 	public static final float INTRO_BTN_TOWERS_CENTER_X = 124f;
 	public static final float INTRO_BTN_ENEMIES_CENTER_X = 358f;
 	public static final float INTRO_BTN_MENU_CENTER_X = 556f;
+
+	// TextSprite button label vertical align (screen pixels)
+
+	/** Matches jar {@code drawString} using {@code getHeight() - 2}. */
+	public static final float TEXT_LABEL_DRAWSTRING_HEIGHT_ADJUST = 2f;
+
+	/**
+	 * Top offset added in {@code TextSprite.drawCenteredInButton} so rasterized
+	 * labels line up with {@link Utils#DrawButtonLabel} / {@code drawString}.
+	 */
+	public static float textLabelButtonTopOffset(LFont font, float imageHeight) {
+		float fontHeight = font.getHeight();
+		return (fontHeight / 2f) - TEXT_LABEL_DRAWSTRING_HEIGHT_ADJUST
+				+ font.getAscent() + (imageHeight / 2f);
+	}
 
 	// Tower / monster info screens — shared back button (screen pixels)
 

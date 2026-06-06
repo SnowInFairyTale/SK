@@ -13,6 +13,7 @@ public abstract class Missile extends AnimatedSprite {
 	private static final float GLOW_SCALE = 1.65f;
 
 	private float dist;
+	private boolean finished;
 	private MainGame game;
 	private float speed;
 	private float speedPrFrame;
@@ -78,13 +79,37 @@ public abstract class Missile extends AnimatedSprite {
 	}
 
 	@Override
+	protected void unloadContent() {
+		if (!this.finished) {
+			this.finished = true;
+			this.setHasHitTarget(true);
+			this.targetMonster.removeReservedHitPoints(this.getDamage());
+		}
+		super.unloadContent();
+	}
+
+	public final void cancel() {
+		if (this.finished) {
+			return;
+		}
+		this.finished = true;
+		this.setHasHitTarget(true);
+		this.targetMonster.removeReservedHitPoints(this.getDamage());
+		this.game.Components().remove(this);
+	}
+
+	@Override
 	public void update(GameTime gameTime) {
+		if (this.finished) {
+			return;
+		}
 		super.update(gameTime);
 		float distance = Utils.GetDistance(this.targetMonster.getPosition(),
 				super.getDrawPosition());
 		super.addDrawPosition(this.getDirection().mul(this.speed));
 		if ((this.speedPrFrame >= distance)
 				|| ((this.dist > 0f) && (distance > this.dist))) {
+			this.finished = true;
 			this.setHasHitTarget(true);
 			this.targetMonster.removeReservedHitPoints(this.getDamage());
 			this.targetMonster.Hit(this.getDamage());

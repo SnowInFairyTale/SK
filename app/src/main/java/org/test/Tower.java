@@ -302,6 +302,17 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.game.Components().add(this.towerMan);
 	}
 
+	private void cancelActiveAttack() {
+		if (this.lurWeapon != null) {
+			this.lurWeapon.cancel();
+			this.lurWeapon = null;
+		}
+		if (this.missile != null) {
+			this.missile.cancel();
+			this.missile = null;
+		}
+	}
+
 	public final void remove() {
 		if (this.towerMan != null) {
 			this.game.Components().remove(this.towerMan);
@@ -309,6 +320,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		if (this.upgradeProgressBar != null) {
 			this.game.Components().remove(this.upgradeProgressBar);
 		}
+		this.cancelActiveAttack();
 		this.game.Components().remove(this);
 	}
 

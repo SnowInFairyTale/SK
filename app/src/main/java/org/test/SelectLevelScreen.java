@@ -110,11 +110,14 @@ public class SelectLevelScreen extends MenuScreen {
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 
 		Utils.drawMenuButtonLabel(batch, this.font,
-				LanguageResources.getLevel1Title(), Constants.MENU_BTN_ROW_1_Y);
+				LanguageResources.getLevelTitle(this.difficulty, 1),
+				Constants.MENU_BTN_ROW_1_Y);
 		Utils.drawMenuButtonLabel(batch, this.font,
-				LanguageResources.getLevel2Title(), Constants.MENU_BTN_ROW_2_Y);
+				LanguageResources.getLevelTitle(this.difficulty, 2),
+				Constants.MENU_BTN_ROW_2_Y);
 		Utils.drawMenuButtonLabel(batch, this.font,
-				LanguageResources.getLevel3Title(), Constants.MENU_BTN_ROW_3_Y);
+				LanguageResources.getLevelTitle(this.difficulty, 3),
+				Constants.MENU_BTN_ROW_3_Y);
 		Utils.drawMenuButtonLabel(batch, this.font, LanguageResources
 				.getMainMenu().toUpperCase(), Constants.MENU_BTN_ROW_4_Y);
 

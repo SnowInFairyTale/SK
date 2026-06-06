@@ -34,7 +34,7 @@ public class MainGame extends DrawableScreen {
 		privateGameplayScreen = value;
 	}
 
-	private boolean privateSoundEnabled;
+	private boolean privateSoundEnabled = true;
 
 	public final boolean getSoundEnabled() {
 		return privateSoundEnabled;

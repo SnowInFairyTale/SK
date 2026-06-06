@@ -66,7 +66,7 @@ public abstract class MenuScreen extends GameScreen {
 		if (Key.isKeyPressed(Key.BACK)) {
 			this.OnCancel();
 		}
-		LTouchCollection collection = LInputFactory.getTouchState();
+		LTouchCollection collection = TouchInput.getState();
 		if (collection.size() > 0) {
 			for (LTouchLocation touch : collection) {
 				if (touch.getPrevState() == LTouchLocationState.Pressed) {

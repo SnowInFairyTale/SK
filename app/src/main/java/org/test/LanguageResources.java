@@ -25,28 +25,12 @@ public class LanguageResources {
         return "偷袭者";
     }
 
-    public static String getGameCompletedHeader() {
-        return "GameCompletedHeader";
-    }
-
-    public static String getGameCompletedPar1() {
-        return "GameCompletedPar1";
-    }
-
     public static String getHard() {
         return "困难模式";
     }
 
     public static String getInstructions() {
         return "游戏说明";
-    }
-
-    public static String getLakeHeader() {
-        return "LakeHeader";
-    }
-
-    public static String getLakeInfo() {
-        return "LakeInfo";
     }
 
     public static String getLevel1Title() {
@@ -85,12 +69,37 @@ public class LanguageResources {
         return "纵横天下";
     }
 
+    public static String getLevelTitle(Difficulty difficulty, int level) {
+        switch (difficulty.getValue() * 3 + level) {
+        case 1:
+            return getLevel1Title();
+        case 2:
+            return getLevel2Title();
+        case 3:
+            return getLevel3Title();
+        case 4:
+            return getLevel4Title();
+        case 5:
+            return getLevel5Title();
+        case 6:
+            return getLevel6Title();
+        case 7:
+            return getLevel7Title();
+        case 8:
+            return getLevel8Title();
+        case 9:
+            return getLevel9Title();
+        default:
+            return getLevel1Title();
+        }
+    }
+
     public static String getLoseHeader() {
-        return "LoseHeader";
+        return "遗憾";
     }
 
     public static String getLosePar1() {
-        return "LosePar1";
+        return "再接再厉";
     }
 
     public static String getMainMenu() {
@@ -129,14 +138,6 @@ public class LanguageResources {
         return "碎石怪";
     }
 
-    public static String getMudHeader() {
-        return "MudHeader";
-    }
-
-    public static String getMudInfo() {
-        return "MudInfo";
-    }
-
     public static String getNext() {
         return "预告";
     }
@@ -157,12 +158,12 @@ public class LanguageResources {
         return "攻击";
     }
 
-    public static String getRange() {
-        return "Range";
+    public static String getAttackInterval() {
+        return "攻速";
     }
 
-    public static String getRemainingHealth() {
-        return "RemainingHealth";
+    public static String getMaxHealth() {
+        return "生命上限";
     }
 
     public static String getRestart() {
@@ -214,11 +215,11 @@ public class LanguageResources {
     }
 
     public static String getWinHeader() {
-        return "WinHeader";
+        return "恭喜";
     }
 
     public static String getWinPar1() {
-        return "WinPar1";
+        return "通过了";
     }
 
     public static String getYes() {

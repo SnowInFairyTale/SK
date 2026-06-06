@@ -26,6 +26,26 @@ public final class Gems {
 		}
 	}
 
+	public final void add(GemType type) {
+		if (type == GemType.None) {
+			return;
+		}
+		switch (type) {
+		case Purple:
+			this.purpleCount++;
+			break;
+		case Red:
+			this.redCount++;
+			break;
+		case Gold:
+			this.goldCount++;
+			break;
+		default:
+			return;
+		}
+		this.game.getGameplayScreen().GemsChanged();
+	}
+
 	public final boolean tryConsume(GemType type) {
 		if (this.getCount(type) <= 0) {
 			return false;

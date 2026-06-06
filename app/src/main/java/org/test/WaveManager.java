@@ -88,6 +88,51 @@ public class WaveManager extends DrawableGameComponent implements
 
 	private static final int TOTAL_WAVES = WAVE_SPECS.length;
 
+	private static final MonsterType[] BOSS_SEQUENCE = { MonsterType.Peasant,
+			MonsterType.Peon, MonsterType.Berserker, MonsterType.Chicken,
+			MonsterType.Doctor, MonsterType.Chieftain };
+
+	/**
+	 * All 8 bosses — Easy HP of the boss model (same-type max before that wave),
+	 * then × {@link #BOSS_HP_MULTIPLIER} and difficulty scaling at spawn.
+	 * <pre>
+	 *  #  Wave  Model      Easy ref  Easy boss HP
+	 *  1     8  Peasant         30            60
+	 *  2    16  Peon           360           720
+	 *  3    24  Berserker      500          1000
+	 *  4    32  Chicken        500          1000
+	 *  5    40  Doctor        1400          2800
+	 *  6    48  Chieftain     4500          9000
+	 *  7    50  Chieftain     5000         10000  (finale front, purple)
+	 *  8    50  Chieftain     5000         10000  (finale back, gold)
+	 * </pre>
+	 */
+	private static final int[] BOSS_EASY_MODEL_HP = { 100, 360, 500, 500, 1400,
+			4500, 5000, 5000 };
+
+	private static final float BOSS_HP_MULTIPLIER = 2f;
+
+	private static final float BOSS_SPEED = 2f;
+
+	private static final double NEXT_WAVE_AFTER_BOSS_DELAY_MS = 5000.0;
+
+	static boolean IsBossWave(int waveNumber) {
+		return waveNumber % 8 == 0;
+	}
+
+	private static MonsterType GetBossType(int waveNumber) {
+		return BOSS_SEQUENCE[(waveNumber / 8) - 1];
+	}
+
+	static int ComputeBossHitPoints(int easyModelHitPoints, Difficulty difficulty) {
+		return Math.max(1, (int) (ScaleHitPoints(easyModelHitPoints, difficulty)
+				* BOSS_HP_MULTIPLIER));
+	}
+
+	private static int GetBossEasyModelHp(int bossIndex) {
+		return BOSS_EASY_MODEL_HP[bossIndex];
+	}
+
 	static int ScaleHitPoints(int baseHitPoints, Difficulty difficulty) {
 		switch (difficulty) {
 		case Easy:
@@ -101,6 +146,7 @@ public class WaveManager extends DrawableGameComponent implements
 		}
 	}
 
+	private boolean holdNextWaveForBoss;
 	private java.util.ArrayList<Wave> activeWaves;
 	private Vector2f drawPosition;
 	private LFont font;
@@ -118,10 +164,21 @@ public class WaveManager extends DrawableGameComponent implements
 		this.activeWaves = new java.util.ArrayList<Wave>();
 		this.drawPosition = new Vector2f(140f, -8f);
 		this.game = game;
-		for (WaveSpec spec : WAVE_SPECS) {
+		for (int i = 0; i < WAVE_SPECS.length; i++) {
+			WaveSpec spec = WAVE_SPECS[i];
+			int waveNumber = i + 1;
+			boolean isBossWave = IsBossWave(waveNumber);
+			boolean isFinaleWave = waveNumber == TOTAL_WAVES;
+			MonsterType bossType = isBossWave ? GetBossType(waveNumber) : null;
+			int bossHitPoints = isBossWave ? ComputeBossHitPoints(
+					GetBossEasyModelHp((waveNumber / 8) - 1), difficulty) : 0;
+			int finaleBossHitPoints = isFinaleWave ? ComputeBossHitPoints(
+					GetBossEasyModelHp(6), difficulty) : 0;
 			this.waves.add(new Wave(game, spec.count,
 					ScaleHitPoints(spec.baseHitPoints, difficulty), spec.speed,
-					spec.spread, spec.value, spec.monsterType));
+					spec.spread, spec.value, spec.monsterType, isBossWave,
+					bossType, BOSS_SPEED, spec.value, isFinaleWave,
+					bossHitPoints, finaleBossHitPoints));
 		}
 		game.Components().add(this);
 		this.timeUntilNextWave = -1.0;
@@ -142,10 +199,12 @@ public class WaveManager extends DrawableGameComponent implements
 			Utils.DrawStringAlignRight(batch, this.font,
 					LanguageResources.getNext(), this.drawPosition.x + 260f,
 					this.drawPosition.y + 24f, LColor.white);
-			int num2 = ((int) Math.ceil(this.timeUntilNextWave)) / 0x3e8;
-			batch.drawString(this.font, LanguageResources.getNextWave() + " "
-					+ num2, this.drawPosition.x + 44f,
-					this.drawPosition.y + 36f, LColor.white);
+			if (!this.holdNextWaveForBoss) {
+				int num2 = ((int) Math.ceil(this.timeUntilNextWave)) / 0x3e8;
+				batch.drawString(this.font, LanguageResources.getNextWave() + " "
+						+ num2, this.drawPosition.x + 44f,
+						this.drawPosition.y + 36f, LColor.white);
+			}
 		}
 	}
 
@@ -184,6 +243,13 @@ public class WaveManager extends DrawableGameComponent implements
 		super.getGame().Components().remove(this);
 	}
 
+	public final void OnBossSpawned() {
+		if (this.holdNextWaveForBoss) {
+			this.holdNextWaveForBoss = false;
+			this.timeUntilNextWave = NEXT_WAVE_AFTER_BOSS_DELAY_MS;
+		}
+	}
+
 	public final void RemoveActiveWave(Wave wave) {
 		this.activeWaves.remove(wave);
 	}
@@ -191,7 +257,9 @@ public class WaveManager extends DrawableGameComponent implements
 	@Override
 	public void update(GameTime gameTime) {
 		if (GameplayScreen.getGameState() == GameState.Started) {
-			this.timeUntilNextWave -= gameTime.getMilliseconds();
+			if (!this.holdNextWaveForBoss) {
+				this.timeUntilNextWave -= gameTime.getMilliseconds();
+			}
 			if (this.timeUntilNextWave < 0.0) {
 				if (this.waveNumber < this.waves.size()) {
 					this.activeWaves.add(this.waves.get(this.waveNumber));
@@ -200,11 +268,18 @@ public class WaveManager extends DrawableGameComponent implements
 					if (this.nextWaveMonsterType != null) {
 						this.game.Components().remove(this.nextWaveMonsterType);
 					}
-					this.timeUntilNextWave = 20000.0;
-					if ((this.waveNumber + 1) < this.waves.size()) {
+					this.waveNumber++;
+					if (IsBossWave(this.waveNumber)) {
+						this.holdNextWaveForBoss = true;
+						this.timeUntilNextWave = Double.MAX_VALUE;
+					} else {
+						this.holdNextWaveForBoss = false;
+						this.timeUntilNextWave = 20000.0;
+					}
+					if (this.waveNumber < this.waves.size()) {
 						this.nextWaveMonsterType = AnimatedSpriteMonster
 								.GetSmallAnimatedSpriteMonster(this.game,
-										this.waves.get(this.waveNumber + 1)
+										this.waves.get(this.waveNumber)
 												.getMonsterType());
 						this.nextWaveMonsterType.setAnimationSpeedRatio(3);
 						this.nextWaveMonsterType.setObeyGameOpacity(false);
@@ -213,7 +288,6 @@ public class WaveManager extends DrawableGameComponent implements
 					} else {
 						this.isLastWave = true;
 					}
-					this.waveNumber++;
 				} else {
 					boolean flag = true;
 					for (Wave wave : this.activeWaves) {

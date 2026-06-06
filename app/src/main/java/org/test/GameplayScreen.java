@@ -27,6 +27,7 @@ public class GameplayScreen extends GameScreen {
 	private LTexture gameBackgroundWithGrid;
 	private GameEndedState gameEndedState;
 	private GamePausedScreen gamePausedScreen;
+	private boolean endScreenShown;
 	private boolean isPlacing;
 	private float loseOrWinScreenDelay = 2000f;
 	private MonsterToolbar monsterToolbar;
@@ -43,7 +44,7 @@ public class GameplayScreen extends GameScreen {
 
 	public GameplayScreen(MainGame game, Difficulty difficulty, int level) {
 		this.setLevel(level);
-		this.setLevelSettings(new LevelSettings(game, this.getLevel()));
+		this.setLevelSettings(new LevelSettings(this.getLevel()));
 		super.setIsSerializable(true);
 		this.game = game;
 		this.game.setGameplayScreen(this);
@@ -73,11 +74,6 @@ public class GameplayScreen extends GameScreen {
 		game.Components().add(this.getCash());
 		this.setDirs(new PathNode[0x12][0x13]);
 		this.MikkelsPathFinding(false);
-		if (this.getLevelSettings().getInfoSpriteWithText() != null) {
-			this.getLevelSettings().getInfoSpriteWithText().setDrawOrder(60);
-			game.Components().add(
-					this.getLevelSettings().getInfoSpriteWithText());
-		}
 	}
 
 	public final void AvailableCashChanged() {
@@ -461,10 +457,13 @@ public class GameplayScreen extends GameScreen {
 						SpriteWithText item = new SpriteWithText(this.game,
 								"assets/blocking.png", 0x7d0,
 								new Vector2f(
-										164f - (this.fontSize26Extra
-												.stringWidth(LanguageResources
-														.getBlocking()
-														.toUpperCase()) / 2f),
+										Constants.MENU_BTN_CENTER_X
+												- (this.fontSize26Extra
+														.stringWidth(
+																LanguageResources
+																		.getBlocking()
+																		.toUpperCase())
+														/ 2f),
 										80f), textAndRelativePosition,
 								this.fontSize26Extra);
 						item.setDrawOrder(100);
@@ -485,13 +484,15 @@ public class GameplayScreen extends GameScreen {
 
 	@Override
 	public void UnloadContent() {
-		GameComponentCollection components = super.getScreenManager().getGame()
-				.Components();
-		for (int i = 0; i < components.size(); i++) {
-			if ((components.get(i) != this)
-					&& (components.get(i) != super.getScreenManager())) {
-				components.removeAt(i);
-				i--;
+		if (getGameState() != GameState.Ended) {
+			GameComponentCollection components = super.getScreenManager()
+					.getGame().Components();
+			for (int i = 0; i < components.size(); i++) {
+				if ((components.get(i) != this)
+						&& (components.get(i) != super.getScreenManager())) {
+					components.removeAt(i);
+					i--;
+				}
 			}
 		}
 		super.UnloadContent();
@@ -500,7 +501,28 @@ public class GameplayScreen extends GameScreen {
 	@Override
 	public void Update(GameTime gameTime, boolean otherScreenHasFocus,
 			boolean coveredByOtherScreen) {
-		LTouchCollection state = LInputFactory.getTouchState();
+		if (getGameState() == GameState.Ended) {
+			if (this.loseOrWinScreenDelay > 0.0) {
+				this.loseOrWinScreenDelay -= gameTime.getMilliseconds();
+			} else if (!this.endScreenShown) {
+				this.endScreenShown = true;
+				this.RemoveAllGameComponents();
+				super.setTransitionOffTime(0f);
+				super.getScreenManager().ExitAllScreens();
+				if (this.gameEndedState == GameEndedState.Lose) {
+					super.getScreenManager().AddScreen(
+							new LoseScreen(this.game,
+									ScreenType.GameplayScreen));
+				} else if (this.gameEndedState == GameEndedState.Win) {
+					super.getScreenManager().AddScreen(
+							new WinScreen(this.game,
+									ScreenType.GameplayScreen));
+				}
+			}
+			super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+			return;
+		}
+		LTouchCollection state = TouchInput.getState();
 		if (state.size() > 0) {
 			for (LTouchLocation location : state) {
 				LTouchLocation location3 = state.get(0);
@@ -620,25 +642,6 @@ public class GameplayScreen extends GameScreen {
 		} else if (this.isPlacing
 				&& ((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))) {
 			this.StoppedPlacing();
-		}
-		if (getGameState() == GameState.Ended) {
-			if (this.loseOrWinScreenDelay > 0.0) {
-				this.loseOrWinScreenDelay -= gameTime.getMilliseconds();
-			} else {
-				this.RemoveAllGameComponents();
-				super.getScreenManager().ExitAllScreens();
-				if (this.gameEndedState == GameEndedState.Lose) {
-					super.getScreenManager()
-							.AddScreen(
-									new LoseScreen(this.game,
-											ScreenType.GameplayScreen));
-				} else if (this.gameEndedState == GameEndedState.Win) {
-					super.getScreenManager()
-							.AddScreen(
-									new WinScreen(this.game,
-											ScreenType.GameplayScreen));
-				}
-			}
 		}
 		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 	}

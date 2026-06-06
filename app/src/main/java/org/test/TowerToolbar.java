@@ -123,11 +123,12 @@ public class TowerToolbar extends DrawableGameComponent implements
 		// textures first and then reuses that state for the tower sprite.
 		this.animatedSpriteTower.initialize();
 		this.animatedSpriteTower.draw(batch, gameTime);
-		batch.drawString(this.font, LanguageResources.getRange(),
+		batch.drawString(this.font, LanguageResources.getAttackInterval(),
 				this.drawPosition.x + 128f, this.drawPosition.y + 66f,
 				this.upgradeButtonWhiteColor);
 		Utils.DrawStringAlignCenter(batch, this.font,
-				"" + this.tower.getRange(), this.drawPosition.add(240f, 66f),
+				formatAttackInterval(this.tower.getReloadTime()),
+				this.drawPosition.add(240f, 66f),
 				this.upgradeButtonGreenColor);
 		batch.drawString(this.font, LanguageResources.getPower(),
 				this.drawPosition.add(128f, 30f), this.upgradeButtonWhiteColor);
@@ -144,6 +145,10 @@ public class TowerToolbar extends DrawableGameComponent implements
 		}
 		batch.resetColor();
 		super.draw(batch, gameTime);
+	}
+
+	private static String formatAttackInterval(float seconds) {
+		return String.format("%.1f", seconds);
 	}
 
 	private void drawPowerPanel(SpriteBatch batch, float x, float y,

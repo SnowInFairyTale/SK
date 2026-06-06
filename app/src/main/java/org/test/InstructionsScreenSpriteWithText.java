@@ -17,7 +17,9 @@ public class InstructionsScreenSpriteWithText extends DrawableGameComponent
 	private static final String LABEL_TOWERS = LanguageResources.getTowers()
 			.toUpperCase();
 
-	private LFont font;
+	private TextSprite enemiesLabel;
+	private TextSprite menuLabel;
+	private TextSprite towersLabel;
 
 	public InstructionsScreenSpriteWithText(MainGame game) {
 		super(game);
@@ -25,20 +27,58 @@ public class InstructionsScreenSpriteWithText extends DrawableGameComponent
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
-		batch.flush();
-		Utils.drawIntroButtonLabel(batch, this.font, LABEL_TOWERS,
-				Constants.INTRO_BTN_TOWERS_CENTER_X);
-		Utils.drawIntroButtonLabel(batch, this.font, LABEL_ENEMIES,
-				Constants.INTRO_BTN_ENEMIES_CENTER_X);
-		Utils.drawIntroButtonLabel(batch, this.font, LABEL_MENU,
-				Constants.INTRO_BTN_MENU_CENTER_X);
-		batch.resetColor();
-		batch.flush();
+		if (this.towersLabel != null) {
+			this.towersLabel.drawCenteredInButton(batch,
+					Constants.INTRO_BTN_TOWERS_CENTER_X,
+					Constants.INTRO_BTN_TOP_Y,
+					Constants.INTRO_BTN_TEXT_HEIGHT);
+		}
+		if (this.enemiesLabel != null) {
+			this.enemiesLabel.drawCenteredInButton(batch,
+					Constants.INTRO_BTN_ENEMIES_CENTER_X,
+					Constants.INTRO_BTN_TOP_Y,
+					Constants.INTRO_BTN_TEXT_HEIGHT);
+		}
+		if (this.menuLabel != null) {
+			this.menuLabel.drawCenteredInButton(batch,
+					Constants.INTRO_BTN_MENU_CENTER_X,
+					Constants.INTRO_BTN_TOP_Y,
+					Constants.INTRO_BTN_TEXT_HEIGHT);
+		}
 	}
 
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		this.font = Constants.font(32);
+		this.buildLabels();
+	}
+
+	@Override
+	protected void unloadContent() {
+		this.disposeLabels();
+		super.unloadContent();
+	}
+
+	private void buildLabels() {
+		this.disposeLabels();
+		LFont font = Constants.font(32);
+		this.towersLabel = TextSprite.create(font, LABEL_TOWERS);
+		this.enemiesLabel = TextSprite.create(font, LABEL_ENEMIES);
+		this.menuLabel = TextSprite.create(font, LABEL_MENU);
+	}
+
+	private void disposeLabels() {
+		if (this.towersLabel != null) {
+			this.towersLabel.dispose();
+			this.towersLabel = null;
+		}
+		if (this.enemiesLabel != null) {
+			this.enemiesLabel.dispose();
+			this.enemiesLabel = null;
+		}
+		if (this.menuLabel != null) {
+			this.menuLabel.dispose();
+			this.menuLabel = null;
+		}
 	}
 }

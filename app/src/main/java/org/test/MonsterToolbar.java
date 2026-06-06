@@ -47,8 +47,8 @@ public class MonsterToolbar extends DrawableGameComponent implements
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.texture, this.drawPosition, LColor.white);
-		batch.drawString(this.font, LanguageResources.getRemainingHealth()
-				+ " " + this.monster.getHitPoints(), this.drawPositionFont,
+		batch.drawString(this.font, LanguageResources.getMaxHealth()
+				+ " " + this.monster.getStartHitPoints(), this.drawPositionFont,
 				LColor.white);
 		super.draw(batch, gameTime);
 	}
