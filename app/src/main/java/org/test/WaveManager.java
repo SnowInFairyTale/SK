@@ -257,11 +257,11 @@ public class WaveManager extends DrawableGameComponent implements
 				this.drawPosition.y + 4f, LColor.white);
 		if (!this.isLastWave) {
 			Utils.DrawStringAlignRight(batch, this.font,
-					LanguageResources.getNext(), this.drawPosition.x + 272f,
-					this.drawPosition.y + 14f, LColor.white);
+					LanguageResources.getNext(), this.drawPosition.x + 260f,
+					this.drawPosition.y + 24f, LColor.white);
 			int num2 = ((int) Math.ceil(this.timeUntilNextWave)) / 0x3e8;
 			batch.drawString(this.font, LanguageResources.getNextWave() + " "
-					+ num2, this.drawPosition.x + 34f,
+					+ num2, this.drawPosition.x + 44f,
 					this.drawPosition.y + 36f, LColor.white);
 		}
 	}
