@@ -20,7 +20,7 @@ public final class Constants {
 	public static final int VerticalGridOffset = 80;
 
 	public static final int InitialRemainingLives = 20;
-	public static final int InitialCash = 5000;
+	public static final int InitialCash = 50;
 
 	public static final int InitialPurpleGems = 0;
 	public static final int InitialRedGems = 0;
