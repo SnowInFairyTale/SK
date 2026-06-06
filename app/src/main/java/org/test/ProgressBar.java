@@ -25,7 +25,7 @@ public class ProgressBar extends DrawableGameComponent implements
 		this.setCurrentPercent(100);
 		this.width = width;
 		this.setHeight(8);
-		this.setDrawBorder(false);
+		this.setDrawBorder(isHealthBarMode);
 		super.setDrawOrder(30);
 		if (isHealthBarMode) {
 			this.frontColor = new LColor(0f, 1f, 0f, 1f);
@@ -80,8 +80,11 @@ public class ProgressBar extends DrawableGameComponent implements
 		float barY = this.getPosition().y;
 		float barH = this.getHeight();
 		if (this.getDrawBorder()) {
-			this.fillBar(batch, barX - 1f, barY - 1f, this.width + 2f,
-					barH + 2f, new LColor(0.2f, 0.2f, 0.2f, 1f));
+			float border = this.getIsHealthBarMode() ? 2f : 1f;
+			LColor borderColor = this.getIsHealthBarMode() ? LColor.black
+					: new LColor(0.2f, 0.2f, 0.2f, 1f);
+			this.fillBar(batch, barX - border, barY - border, this.width
+					+ border * 2f, barH + border * 2f, borderColor);
 		}
 		this.fillBar(batch, barX, barY, this.width, barH, this.backColor);
 		float num = ((float) this.getCurrentPercent()) / 100f;

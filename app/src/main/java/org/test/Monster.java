@@ -57,17 +57,104 @@ public abstract class Monster extends AnimatedSprite {
 		this.Init(game, wave, value, startHitPoints, speed);
 	}
 
-	private java.util.ArrayList<Vector2f> GetMonsterSpawnOffsetPositions() {
-		java.util.ArrayList<Vector2f> list = new java.util.ArrayList<Vector2f>();
-		list.add(new Vector2f(1, 1));
-		list.add(new Vector2f(1, -1));
-		list.add(new Vector2f(-1, 1));
-		list.add(new Vector2f(-1, -1));
-		list.add(new Vector2f(0, 0));
-		list.add(new Vector2f(0, 0));
-		list.add(new Vector2f(0, 0));
-		list.add(new Vector2f(0, 0));
-		return list;
+	private static final float[][] DOCTOR_PEON_SAME_CELL_OFFSETS = { { -10f, -10f },
+			{ 10f, -10f }, { -10f, 10f }, { 10f, 10f } };
+
+	private boolean IsValidSpawnGrid(Vector2f gridPosition) {
+		if (((gridPosition.x < 2) || (gridPosition.x > 0x10))
+				|| ((gridPosition.y < 0) || (gridPosition.y > 0x12))) {
+			return false;
+		}
+		return this.game.getGameplayScreen().getDirs()[gridPosition.x()][gridPosition
+				.y()] != null;
+	}
+
+	private Vector2f GetPreviousGridPoint(Vector2f gridPosition) {
+		PathNode node = this.game.getGameplayScreen().getDirs()[gridPosition
+				.x()][gridPosition.y()];
+		if (node == null) {
+			return null;
+		}
+		return new Vector2f(gridPosition.x - node.x(), gridPosition.y
+				- node.y());
+	}
+
+	private void AddDoctorPeonSpawnCandidate(
+			java.util.ArrayList<Vector2f> candidates,
+			java.util.HashSet<String> seen, Vector2f gridPosition) {
+		if (!this.IsValidSpawnGrid(gridPosition)) {
+			return;
+		}
+		String key = ((int) gridPosition.x) + "," + ((int) gridPosition.y);
+		if (seen.add(key)) {
+			candidates.add(gridPosition.cpy());
+		}
+	}
+
+	private void AddDoctorPeonSpawnCandidatesAlongPath(
+			java.util.ArrayList<Vector2f> candidates,
+			java.util.HashSet<String> seen, Vector2f start,
+			java.util.function.Function<Vector2f, Vector2f> step, int maxSteps) {
+		Vector2f current = start.cpy();
+		for (int i = 0; i < maxSteps; i++) {
+			current = step.apply(current);
+			if (current == null || !this.IsValidSpawnGrid(current)) {
+				break;
+			}
+			this.AddDoctorPeonSpawnCandidate(candidates, seen, current);
+		}
+	}
+
+	private boolean TrySpawnDoctorPeon(Vector2f gridPosition,
+			Vector2f pixelOffset) {
+		try {
+			MonsterPeon monster = new MonsterPeon(this.game, this.wave,
+					this.getSpeed(), this.getStartHitPoints() / 4,
+					this.getValue() / 2, gridPosition.cpy());
+			if (pixelOffset != null) {
+				monster.setPosition(monster.getPosition().add(pixelOffset));
+			}
+			this.wave.AddMonster(monster);
+			return true;
+		} catch (RuntimeException e) {
+			return false;
+		}
+	}
+
+	private void SpawnDoctorPeons() {
+		Vector2f doctorGrid = this.getGridPosition();
+		java.util.ArrayList<Vector2f> candidates = new java.util.ArrayList<Vector2f>();
+		java.util.HashSet<String> seen = new java.util.HashSet<String>();
+
+		this.AddDoctorPeonSpawnCandidatesAlongPath(candidates, seen,
+				doctorGrid, this::GetNextGridPoint, 2);
+		this.AddDoctorPeonSpawnCandidatesAlongPath(candidates, seen,
+				doctorGrid, this::GetPreviousGridPoint, 2);
+
+		int[][] neighborOffsets = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
+				{ 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
+		for (int[] offset : neighborOffsets) {
+			this.AddDoctorPeonSpawnCandidate(candidates, seen, new Vector2f(
+					doctorGrid.x + offset[0], doctorGrid.y + offset[1]));
+		}
+		this.AddDoctorPeonSpawnCandidate(candidates, seen, doctorGrid);
+
+		int spawned = 0;
+		int sameCellOffsetIndex = 0;
+		for (Vector2f candidate : candidates) {
+			if (spawned >= 4) {
+				break;
+			}
+			Vector2f pixelOffset = null;
+			if (candidate.x == doctorGrid.x && candidate.y == doctorGrid.y
+					&& sameCellOffsetIndex < DOCTOR_PEON_SAME_CELL_OFFSETS.length) {
+				float[] offset = DOCTOR_PEON_SAME_CELL_OFFSETS[sameCellOffsetIndex++];
+				pixelOffset = new Vector2f(offset[0], offset[1]);
+			}
+			if (this.TrySpawnDoctorPeon(candidate, pixelOffset)) {
+				spawned++;
+			}
+		}
 	}
 
 	public Vector2f GetNextGridPoint(Vector2f gridPosition) {
@@ -105,29 +192,9 @@ public abstract class Monster extends AnimatedSprite {
 
 					break;
 
-				case Doctor: {
-
-					int num = 0;
-					for (Vector2f point : this.GetMonsterSpawnOffsetPositions()) {
-						try {
-							MonsterPeon monster = new MonsterPeon(this.game,
-									this.wave, this.getSpeed(),
-									this.getStartHitPoints() / 4,
-									this.getValue() / 2, new Vector2f(
-											this.getGridPosition().x + point.x,
-											this.getGridPosition().y + point.y));
-							this.wave.AddMonster(monster);
-							num++;
-							if (num == 4) {
-								break;
-							}
-							continue;
-						} catch (RuntimeException e) {
-							continue;
-						}
-					}
+				case Doctor:
+					this.SpawnDoctorPeons();
 					break;
-				}
 				case Chieftain:
 
 					break;
@@ -147,7 +214,6 @@ public abstract class Monster extends AnimatedSprite {
 		this.setHitPoints(startHitPoints);
 		this.setSpeed(speed);
 		this.setHealthBar(new ProgressBar(game, HEALTH_BAR_WIDTH, true));
-		this.getHealthBar().setDrawBorder(false);
 		this.getHealthBar().setObeyGameOpacity(true);
 		this.setPosition(Utils.ConvertToPositionCoordinates(
 				this.getGridPosition()).add(Constants.GridSize / 2f,

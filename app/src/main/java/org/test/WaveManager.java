@@ -14,6 +14,93 @@ import loon.core.timer.GameTime;
 public class WaveManager extends DrawableGameComponent implements
 		IGameComponent {
 
+	private static final class WaveSpec {
+		private final int count;
+		private final int baseHitPoints;
+		private final float speed;
+		private final double spread;
+		private final int value;
+		private final MonsterType monsterType;
+
+		private WaveSpec(int count, int baseHitPoints, float speed,
+				double spread, int value, MonsterType monsterType) {
+			this.count = count;
+			this.baseHitPoints = baseHitPoints;
+			this.speed = speed;
+			this.spread = spread;
+			this.value = value;
+			this.monsterType = monsterType;
+		}
+	}
+
+	private static final WaveSpec[] WAVE_SPECS = {
+			new WaveSpec(8, 20, 2f, 1500.0, 1, MonsterType.Peasant),
+			new WaveSpec(8, 20, 2f, 1000.0, 1, MonsterType.Peasant),
+			new WaveSpec(10, 30, 3.2f, 1000.0, 2, MonsterType.Peon),
+			new WaveSpec(10, 30, 2f, 200.0, 2, MonsterType.Peasant),
+			new WaveSpec(10, 30, 2f, 1000.0, 2, MonsterType.Chicken),
+			new WaveSpec(10, 50, 2f, 1000.0, 2, MonsterType.Berserker),
+			new WaveSpec(10, 70, 2f, 1000.0, 2, MonsterType.Chicken),
+			new WaveSpec(10, 80, 2f, 200.0, 2, MonsterType.Berserker),
+			new WaveSpec(1, 600, 2f, 1000.0, 25, MonsterType.Chieftain),
+			new WaveSpec(10, 100, 3.2f, 300.0, 3, MonsterType.Peon),
+			new WaveSpec(10, 130, 2f, 1000.0, 3, MonsterType.Berserker),
+			new WaveSpec(13, 110, 2.4f, 800.0, 3, MonsterType.Chicken),
+			new WaveSpec(2, 1000, 2f, 1000.0, 25, MonsterType.Doctor),
+			new WaveSpec(10, 150, 2f, 200.0, 3, MonsterType.Berserker),
+			new WaveSpec(10, 100, 3.2f, 1000.0, 3, MonsterType.Peon),
+			new WaveSpec(18, 200, 2f, 1000.0, 2, MonsterType.Peasant),
+			new WaveSpec(12, 260, 1.8f, 600.0, 2, MonsterType.Peasant),
+			new WaveSpec(3, 500, 2f, 2000.0, 4, MonsterType.Doctor),
+			new WaveSpec(8, 155, 2f, 1000.0, 3, MonsterType.Chicken),
+			new WaveSpec(12, 220, 2f, 300.0, 2, MonsterType.Peasant),
+			new WaveSpec(12, 260, 2f, 1000.0, 3, MonsterType.Berserker),
+			new WaveSpec(10, 280, 2f, 1000.0, 3, MonsterType.Peon),
+			new WaveSpec(10, 170, 2f, 600.0, 3, MonsterType.Chicken),
+			new WaveSpec(10, 360, 1.8f, 200.0, 3, MonsterType.Peon),
+			new WaveSpec(10, 500, 2f, 1000.0, 3, MonsterType.Berserker),
+			new WaveSpec(1, 3500, 2f, 1000.0, 30, MonsterType.Chieftain),
+			new WaveSpec(10, 310, 2f, 1000.0, 3, MonsterType.Chicken),
+			new WaveSpec(10, 500, 2f, 1000.0, 3, MonsterType.Peasant),
+			new WaveSpec(5, 900, 2f, 2000.0, 6, MonsterType.Doctor),
+			new WaveSpec(20, 550, 2f, 1000.0, 2, MonsterType.Berserker),
+			new WaveSpec(10, 500, 2f, 1000.0, 3, MonsterType.Chicken),
+			new WaveSpec(10, 700, 1.8f, 400.0, 3, MonsterType.Peon),
+			new WaveSpec(12, 800, 2f, 5000.0, 3, MonsterType.Peasant),
+			new WaveSpec(10, 900, 2f, 1000.0, 3, MonsterType.Berserker),
+			new WaveSpec(2, 4000, 2f, 1000.0, 30, MonsterType.Chieftain),
+			new WaveSpec(10, 450, 2f, 1000.0, 3, MonsterType.Chicken),
+			new WaveSpec(10, 1000, 2f, 1000.0, 3, MonsterType.Peasant),
+			new WaveSpec(10, 1050, 2f, 1000.0, 3, MonsterType.Peon),
+			new WaveSpec(10, 1200, 2f, 500.0, 3, MonsterType.Berserker),
+			new WaveSpec(5, 4000, 2f, 4000.0, 30, MonsterType.Chieftain),
+			new WaveSpec(12, 1300, 2f, 800.0, 4, MonsterType.Berserker),
+			new WaveSpec(5, 1200, 2f, 2500.0, 22, MonsterType.Doctor),
+			new WaveSpec(14, 1150, 3.2f, 350.0, 4, MonsterType.Peon),
+			new WaveSpec(15, 1250, 2f, 500.0, 4, MonsterType.Chicken),
+			new WaveSpec(2, 4500, 2f, 2000.0, 35, MonsterType.Chieftain),
+			new WaveSpec(12, 1500, 2f, 700.0, 5, MonsterType.Peasant),
+			new WaveSpec(6, 1400, 2f, 3500.0, 25, MonsterType.Doctor),
+			new WaveSpec(18, 1450, 2f, 250.0, 5, MonsterType.Berserker),
+			new WaveSpec(12, 1700, 1.8f, 600.0, 5, MonsterType.Peon),
+			new WaveSpec(3, 5000, 2f, 3500.0, 50, MonsterType.Chieftain),
+	};
+
+	private static final int TOTAL_WAVES = WAVE_SPECS.length;
+
+	static int ScaleHitPoints(int baseHitPoints, Difficulty difficulty) {
+		switch (difficulty) {
+		case Easy:
+			return baseHitPoints;
+		case Medium:
+			return baseHitPoints * 2;
+		case Hard:
+			return baseHitPoints * 3;
+		default:
+			throw new RuntimeException("Unknown difficulty in wavemanager!");
+		}
+	}
+
 	private java.util.ArrayList<Wave> activeWaves;
 	private Vector2f drawPosition;
 	private LFont font;
@@ -27,221 +114,17 @@ public class WaveManager extends DrawableGameComponent implements
 
 	public WaveManager(MainGame game, Difficulty difficulty) {
 		super(game);
-		this.waves = new java.util.ArrayList<Wave>();
+		this.waves = new java.util.ArrayList<Wave>(TOTAL_WAVES);
 		this.activeWaves = new java.util.ArrayList<Wave>();
 		this.drawPosition = new Vector2f(140f, -8f);
 		this.game = game;
-		switch (difficulty) {
-		case Easy:
-			this.waves.add(new Wave(game, 8, 20, 2f, 1500.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 8, 20, 2f, 1000.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 30, 3.2f, 1000.0, 2,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 30, 2f, 200.0, 2,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 30, 2f, 1000.0, 2,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 50, 2f, 1000.0, 2,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 10, 70, 2f, 1000.0, 2,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 80, 2f, 200.0, 2,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 1, 600, 2f, 1000.0, 0x19,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 100, 3.2f, 300.0, 3,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 130, 2f, 1000.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 13, 110, 2.4f, 800.0, 3,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 2, 0x3e8, 2f, 1000.0, 0x19,
-					MonsterType.Doctor));
-			this.waves.add(new Wave(game, 10, 150, 2f, 200.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 10, 100, 3.2f, 1000.0, 3,
-					MonsterType.Peon));
-			game.Components().add(this);
-			this.timeUntilNextWave = -1.0;
-			break;
-
-		case Medium:
-			this.waves.add(new Wave(game, 10, 40, 2f, 1500.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 0x2d, 3.2f, 1000.0, 2,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 50, 2f, 1000.0, 1,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 5, 100, 2f, 400.0, 4,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 10, 60, 2f, 1000.0, 2,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 5, 0x4b, 2f, 200.0, 8,
-					MonsterType.Doctor));
-			this.waves.add(new Wave(game, 10, 80, 3.2f, 1000.0, 2,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 100, 2f, 1000.0, 2,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 120, 2f, 1000.0, 2,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 130, 2f, 200.0, 2,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 10, 150, 2f, 1000.0, 2,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 1, 0x7d0, 2f, 1000.0, 0x19,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 0xaf, 3.2f, 300.0, 3,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 200, 2f, 1000.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 13, 200, 2.4f, 800.0, 3,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 3, 0x3e8, 2f, 1000.0, 20,
-					MonsterType.Doctor));
-			this.waves.add(new Wave(game, 10, 200, 2f, 200.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 10, 220, 3.2f, 1000.0, 3,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 1, 0xbb8, 2f, 1000.0, 30,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 250, 2f, 1000.0, 4,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 5, 800, 2f, 3000.0, 20,
-					MonsterType.Doctor));
-			this.waves.add(new Wave(game, 10, 300, 2f, 1000.0, 4,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 300, 2f, 1000.0, 4,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 350, 2f, 1000.0, 4,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 1, 0xdac, 2f, 1000.0, 4,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 400, 2f, 200.0, 5,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 450, 2f, 1000.0, 5,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 500, 2f, 500.0, 5,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 1, 0x157c, 2f, 1000.0, 40,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 4, 0x4b0, 2f, 1000.0, 40,
-					MonsterType.Doctor));
-			game.Components().add(this);
-			this.timeUntilNextWave = -1.0;
-			break;
-		case Hard:
-			this.waves.add(new Wave(game, 12, 60, 2f, 1000.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 12, 0x41, 1.8f, 1000.0, 1,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 60, 2f, 1000.0, 1,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 12, 80, 2f, 1000.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 12, 130, 2f, 1000.0, 1,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 6, 100, 2f, 2000.0, 2,
-					MonsterType.Doctor));
-			this.waves.add(new Wave(game, 12, 120, 2f, 1000.0, 1,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 90, 2f, 1000.0, 1,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 12, 150, 2f, 1000.0, 2,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 12, 150, 1.8f, 1000.0, 2,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 190, 2f, 300.0, 2,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 8, 100, 2f, 1000.0, 2,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 110, 2f, 200.0, 2,
-					MonsterType.Chicken));
-			if (game.getGameplayScreen().getLevel() != 2) {
-				this.waves.add(new Wave(game, 12, 240, 1.8f, 1000.0, 2,
-						MonsterType.Peon));
-				this.waves.add(new Wave(game, 1, 0x4b0, 2f, 1000.0, 0x19,
-						MonsterType.Chieftain));
-				break;
-			}
-			this.waves.add(new Wave(game, 12, 200, 1.8f, 1000.0, 2,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 1, 0x3e8, 2f, 1000.0, 0x19,
-					MonsterType.Chieftain));
-			break;
-
-		default:
-			throw new RuntimeException("Unknown difficulty in wavemanager!");
+		for (WaveSpec spec : WAVE_SPECS) {
+			this.waves.add(new Wave(game, spec.count,
+					ScaleHitPoints(spec.baseHitPoints, difficulty), spec.speed,
+					spec.spread, spec.value, spec.monsterType));
 		}
-		this.waves.add(new Wave(game, 0x12, 200, 2f, 1000.0, 2,
-				MonsterType.Peasant));
-		this.waves.add(new Wave(game, 12, 260, 1.8f, 600.0, 2,
-				MonsterType.Peasant));
-		this.waves
-				.add(new Wave(game, 3, 500, 2f, 2000.0, 4, MonsterType.Doctor));
-		this.waves.add(new Wave(game, 8, 0x9b, 2f, 1000.0, 3,
-				MonsterType.Chicken));
-		this.waves.add(new Wave(game, 12, 220, 2f, 300.0, 2,
-				MonsterType.Peasant));
-		this.waves.add(new Wave(game, 12, 260, 2f, 1000.0, 3,
-				MonsterType.Berserker));
-		this.waves
-				.add(new Wave(game, 10, 280, 2f, 1000.0, 3, MonsterType.Peon));
-		this.waves.add(new Wave(game, 10, 170, 2f, 600.0, 3,
-				MonsterType.Chicken));
-		this.waves
-				.add(new Wave(game, 10, 360, 1.8f, 200.0, 3, MonsterType.Peon));
-		this.waves.add(new Wave(game, 10, 500, 2f, 1000.0, 3,
-				MonsterType.Berserker));
-		this.waves.add(new Wave(game, 1, 0xdac, 2f, 1000.0, 30,
-				MonsterType.Chieftain));
-		this.waves.add(new Wave(game, 10, 310, 2f, 1000.0, 3,
-				MonsterType.Chicken));
-		this.waves.add(new Wave(game, 10, 500, 2f, 1000.0, 3,
-				MonsterType.Peasant));
-		this.waves
-				.add(new Wave(game, 5, 900, 2f, 2000.0, 6, MonsterType.Doctor));
-		this.waves.add(new Wave(game, 20, 550, 2f, 1000.0, 2,
-				MonsterType.Berserker));
-		this.waves.add(new Wave(game, 10, 500, 2f, 1000.0, 3,
-				MonsterType.Chicken));
-		this.waves
-				.add(new Wave(game, 10, 700, 1.8f, 400.0, 3, MonsterType.Peon));
-		this.waves.add(new Wave(game, 12, 800, 2f, 5000.0, 3,
-				MonsterType.Peasant));
-		if (game.getGameplayScreen().getLevel() == 2) {
-			this.waves.add(new Wave(game, 10, 700, 2f, 1000.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 2, 0xc80, 2f, 1000.0, 30,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 420, 2f, 1000.0, 3,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 800, 2f, 1000.0, 3,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 950, 2f, 1000.0, 3,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 0x44c, 2f, 500.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 5, 0xce4, 2f, 4000.0, 30,
-					MonsterType.Chieftain));
-		} else {
-			this.waves.add(new Wave(game, 10, 900, 2f, 1000.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 2, 0xfa0, 2f, 1000.0, 30,
-					MonsterType.Chieftain));
-			this.waves.add(new Wave(game, 10, 450, 2f, 1000.0, 3,
-					MonsterType.Chicken));
-			this.waves.add(new Wave(game, 10, 0x3e8, 2f, 1000.0, 3,
-					MonsterType.Peasant));
-			this.waves.add(new Wave(game, 10, 0x41a, 2f, 1000.0, 3,
-					MonsterType.Peon));
-			this.waves.add(new Wave(game, 10, 0x4b0, 2f, 500.0, 3,
-					MonsterType.Berserker));
-			this.waves.add(new Wave(game, 5, 0xfa0, 2f, 4000.0, 30,
-					MonsterType.Chieftain));
-		}
-
+		game.Components().add(this);
+		this.timeUntilNextWave = -1.0;
 	}
 
 	public final void AddMonsterToCurrentWave(Monster monster) {
@@ -334,7 +217,6 @@ public class WaveManager extends DrawableGameComponent implements
 				} else {
 					boolean flag = true;
 					for (Wave wave : this.activeWaves) {
-						//?testing
 						if (wave.getMonsters().size() > 0) {
 							flag = false;
 							break;
