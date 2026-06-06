@@ -16,8 +16,8 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	private static final int TOWER_SPRITE_SIZE = 128;
 
 	/** Tap target — slightly larger than the 72×76 sprite footprint. */
-	private static final int HIT_BOX_WIDTH = 100;
-	private static final int HIT_BOX_HEIGHT = 104;
+	private static final int HIT_BOX_WIDTH = 80;
+	private static final int HIT_BOX_HEIGHT = 84;
 
 	/** Above missiles (drawOrder 31) so flying projectiles do not cover the bar. */
 	private static final int UPGRADE_BAR_DRAW_ORDER = 50;
@@ -26,14 +26,20 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	/** Below the top of the 128px tower sprite. */
 	private static final float UPGRADE_BAR_OFFSET_BELOW_TOP = 26f;
 
-	/** Smaller stars; 5 fit in the same row width as the old 4×20px layout. */
+	/** Left-aligned stars; 5 fit where the old 4×24px row used to sit. */
 	private static final float LEVEL_STAR_START_X = 10f;
 	private static final float LEVEL_STAR_Y = 70f;
-	private static final int LEVEL_STAR_SIZE = 12;
-	private static final float LEVEL_STAR_ROW_WIDTH = 76f;
+	private static final int LEVEL_STAR_SIZE = 18;
+	private static final float LEVEL_STAR_STEP = 15f;
+	/** Full 5-star row width — equipped gem centers in this band. */
+	private static final float LEVEL_STAR_ROW_WIDTH = 4f * LEVEL_STAR_STEP
+			+ LEVEL_STAR_SIZE;
+	/** Fine-tune equipped gem X; negative = left, positive = right. */
+	private static final float EQUIPPED_GEM_OFFSET_X = 4f;
 
 	private LTexture bashTexture;
 	private int currentUpgradeLevel;
+	private GemType gemType = GemType.None;
 	private float elapsedTime;
 	private MainGame game;
 	private boolean isSelected;
@@ -94,13 +100,50 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	}
 
 	public final boolean CanUpgrade() {
-		if (!this.isUpgrading && this.IsMoreUpgradeLevelsAvailable()) {
-			if (this.game.getGameplayScreen().getCash().getCurrentCash() >= this
-					.GetUpgradeCost()) {
-				return true;
-			}
+		if (this.hasGem() || this.isAtMaxLevel() || this.isUpgrading
+				|| !this.IsMoreUpgradeLevelsAvailable()) {
+			return false;
 		}
-		return false;
+		return this.game.getGameplayScreen().getCash().getCurrentCash() >= this
+				.GetUpgradeCost();
+	}
+
+	public final boolean CanSell() {
+		return !this.isAtMaxLevel() && !this.hasGem();
+	}
+
+	public final boolean isAtMaxLevel() {
+		return this.currentUpgradeLevel >= this.getTowerLevels().length - 1;
+	}
+
+	public final boolean hasGem() {
+		return this.gemType != GemType.None;
+	}
+
+	public final GemType getGemType() {
+		return this.gemType;
+	}
+
+	public final boolean TryApplyGem(GemType type) {
+		if (type == GemType.None || this.hasGem() || !this.isAtMaxLevel()
+				|| this.isUpgrading) {
+			return false;
+		}
+		if (!this.game.getGameplayScreen().getGems().tryConsume(type)) {
+			return false;
+		}
+		this.gemType = type;
+		this.applyGemBonuses();
+		this.game.getGameplayScreen().RefreshTowerToolbar();
+		return true;
+	}
+
+	private void applyGemBonuses() {
+		this.SetValuesFromTowerLevel(this.currentUpgradeLevel);
+		this.setDamage(this.getDamage() + this.gemType.getAttackBonus());
+		if (this.gemType.appliesSpeedBonus()) {
+			this.setReloadTime(this.getReloadTime() * 0.7f);
+		}
 	}
 
 	public final RectBox CentralCollisionArea() {
@@ -112,6 +155,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
+		batch.resetColor();
 		if (this.occupiedTexture != null) {
 			batch.draw(this.occupiedTexture, this.occupiedTexturePosition,
 					this.game.getGameplayScreen().getGameOpacity());
@@ -124,10 +168,15 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 				this.getDrawPosition().y, TOWER_SPRITE_SIZE, TOWER_SPRITE_SIZE,
 				0f, 0f, this.texture.getWidth(), this.texture.getHeight(),
 				gameOpacity);
-		int num = this.isUpgrading ? (this.currentUpgradeLevel - 1)
-				: this.currentUpgradeLevel;
-		this.drawLevelStars(batch, num, this.game.getGameplayScreen()
-				.getGameOpacity());
+		if (this.hasGem()) {
+			this.drawEquippedGem(batch, this.game.getGameplayScreen()
+					.getGameOpacity());
+		} else {
+			int num = this.isUpgrading ? (this.currentUpgradeLevel - 1)
+					: this.currentUpgradeLevel;
+			this.drawLevelStars(batch, num, this.game.getGameplayScreen()
+					.getGameOpacity());
+		}
 		if (this.isSelected) {
 			int range = (int) this.getRange();
 			batch.draw(this.bashTexture, position.x - range,
@@ -280,20 +329,34 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.setUpgradeTime(this.getTowerLevels()[level].getUpgradeTime());
 	}
 
+	private void drawEquippedGem(SpriteBatch batch, LColor opacity) {
+		LTexture gemTexture = GemTextures.get(this.gemType);
+		if (gemTexture == null) {
+			return;
+		}
+		float size = LEVEL_STAR_SIZE;
+		float x = this.getDrawPosition().x + LEVEL_STAR_START_X
+				+ (LEVEL_STAR_ROW_WIDTH - size) / 2f + EQUIPPED_GEM_OFFSET_X;
+		float y = this.getDrawPosition().y + LEVEL_STAR_Y;
+		float texW = gemTexture.getWidth();
+		float texH = gemTexture.getHeight();
+		batch.setColor(opacity);
+		batch.draw(gemTexture, x, y, size, size, 0f, 0f, texW, texH);
+		batch.resetColor();
+	}
+
 	private void drawLevelStars(SpriteBatch batch, int count, LColor opacity) {
 		if (count <= 0) {
 			return;
 		}
 		float x0 = this.getDrawPosition().x + LEVEL_STAR_START_X;
 		float y = this.getDrawPosition().y + LEVEL_STAR_Y;
-		float spacing = count <= 1 ? 0f
-				: (LEVEL_STAR_ROW_WIDTH - LEVEL_STAR_SIZE) / (count - 1);
-		float starSize = LEVEL_STAR_SIZE;
 		float texW = this.levelTexture.getWidth();
 		float texH = this.levelTexture.getHeight();
 		for (int i = 0; i < count; i++) {
-			batch.draw(this.levelTexture, x0 + (i * spacing), y, starSize,
-					starSize, 0f, 0f, texW, texH, opacity);
+			batch.draw(this.levelTexture, x0 + (i * LEVEL_STAR_STEP), y,
+					LEVEL_STAR_SIZE, LEVEL_STAR_SIZE, 0f, 0f, texW, texH,
+					opacity);
 		}
 	}
 

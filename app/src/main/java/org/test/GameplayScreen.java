@@ -66,6 +66,8 @@ public class GameplayScreen extends GameScreen {
 				Constants.InitialRemainingLives));
 		game.Components().add(this.getRemainingLives());
 		this.setCash(new Cash(game, Constants.InitialCash));
+		this.setGems(new Gems(game, Constants.InitialPurpleGems,
+				Constants.InitialRedGems, Constants.InitialGoldGems));
 		this.setGameOpacity(LColor.white);
 		this.ClearGrid();
 		game.Components().add(this.getCash());
@@ -538,21 +540,33 @@ public class GameplayScreen extends GameScreen {
 							|| (getGameState() == GameState.PlacingInitialTowers)) {
 						if ((this.towerToolbar != null)
 								&& (this.selectedTower != null)) {
-							if (this.towerToolbar
-									.CentralCollisionAreaSellButton()
-									.intersects(rectangle)
-									&& flag) {
-								this.SellTower(this.selectedTower);
-								this.ResetSelectedMonsterOrTower();
-								break;
-							}
-							if (this.towerToolbar
-									.CentralCollisionAreaUpgradeButton()
-									.intersects(rectangle)
-									&& flag) {
-								this.selectedTower.Upgrade();
-								this.ResetSelectedMonsterOrTower();
-								break;
+							if (this.towerToolbar.isGemSelectionMode()) {
+								GemType gemType = this.towerToolbar
+										.GetGemSlotAt(rectangle);
+								if (gemType != GemType.None && flag
+										&& this.getGems().getCount(gemType) > 0) {
+									this.selectedTower.TryApplyGem(gemType);
+									break;
+								}
+							} else {
+								if (this.selectedTower.CanSell()
+										&& this.towerToolbar
+												.CentralCollisionAreaSellButton()
+												.intersects(rectangle)
+										&& flag) {
+									this.SellTower(this.selectedTower);
+									this.ResetSelectedMonsterOrTower();
+									break;
+								}
+								if (this.selectedTower.CanUpgrade()
+										&& this.towerToolbar
+												.CentralCollisionAreaUpgradeButton()
+												.intersects(rectangle)
+										&& flag) {
+									this.selectedTower.Upgrade();
+									this.ResetSelectedMonsterOrTower();
+									break;
+								}
 							}
 						}
 						for (TowerButton button : this.towerButtons) {
@@ -636,6 +650,14 @@ public class GameplayScreen extends GameScreen {
 	}
 
 	public final void UpdateUpgradeButtonState() {
+		this.RefreshTowerToolbar();
+	}
+
+	public final void GemsChanged() {
+		this.RefreshTowerToolbar();
+	}
+
+	public final void RefreshTowerToolbar() {
 		if (this.towerToolbar != null) {
 			this.towerToolbar.SetUpgradeButtonState();
 		}
@@ -677,6 +699,16 @@ public class GameplayScreen extends GameScreen {
 
 	public final void setCash(Cash value) {
 		privateCash = value;
+	}
+
+	private Gems privateGems;
+
+	public final Gems getGems() {
+		return privateGems;
+	}
+
+	public final void setGems(Gems value) {
+		privateGems = value;
 	}
 
 	private Difficulty privateDifficulty;

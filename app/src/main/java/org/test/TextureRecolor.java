@@ -24,7 +24,54 @@ public final class TextureRecolor {
 	private TextureRecolor() {
 	}
 
-	/** Cached per texture file + target color — safe when many missiles share one art. */
+	/**
+	 * Dim greyscale variant for disabled UI icons. Clears true transparency and
+	 * opaque black sheet padding (RGB≈0, alpha high) so backgrounds stay empty.
+	 */
+	public static LTexture toGreyscaleDim(LTexture source, float brightness) {
+		LImage image = source.getImage();
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int[] pixels = new int[width * height];
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				LColor pixel = image.getColorAt(x, y);
+				int a = (int) (pixel.a * 255f + 0.5f);
+
+				if (a <= ALPHA_TRANSPARENT_MAX) {
+					pixels[(y * width) + x] = 0;
+				} else if (isBlackRgb(pixel)) {
+					if (a >= OPAQUE_BLACK_ALPHA_MIN) {
+						pixels[(y * width) + x] = 0;
+					} else {
+						pixels[(y * width) + x] = toArgb(pixel.r, pixel.g,
+								pixel.b, pixel.a);
+					}
+				} else {
+					float lum = (0.299f * pixel.r) + (0.587f * pixel.g)
+							+ (0.114f * pixel.b);
+					float v = lum * brightness;
+					pixels[(y * width) + x] = toArgb(v, v, v, pixel.a);
+				}
+			}
+		}
+
+		return new LTexture(LImage.createRGBImage(pixels, width, height, true));
+	}
+
+	public static LTexture toGreyscaleDim(String textureFile, float brightness) {
+		String key = "gs2:" + textureFile + "#" + brightness;
+		LTexture cached = cache.get(key);
+		if (cached != null) {
+			return cached;
+		}
+		LTexture dimmed = toGreyscaleDim(LTextures.loadTexture(textureFile),
+				brightness);
+		cache.put(key, dimmed);
+		return dimmed;
+	}
+
 	public static LTexture recolorBlackTo(String textureFile, LColor target) {
 		String key = "v5:" + textureFile + "#"
 				+ toArgb(target.r, target.g, target.b, 1f);

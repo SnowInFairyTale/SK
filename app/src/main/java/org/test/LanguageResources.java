@@ -242,6 +242,11 @@ public class LanguageResources
 		return "Upgrade";
 	}
 
+	public static String getGem()
+	{
+		return "Gem";
+	}
+
 	public static String getWave()
 	{
 		return "Wave";

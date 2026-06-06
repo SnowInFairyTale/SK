@@ -85,6 +85,7 @@ public class AnimatedSprite extends DrawableGameComponent implements
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
+		batch.resetColor();
 		if (this.getOnlyPlayOnceFeature()) {
 			if (!this.getPlayNow()) {
 				this.spriteIndex = 0;
@@ -126,6 +127,7 @@ public class AnimatedSprite extends DrawableGameComponent implements
 		if (this.spriteIndex >= this.spriteCount) {
 			this.spriteIndex = 0;
 		}
+		batch.resetColor();
 		super.draw(batch, gameTime);
 	}
 
