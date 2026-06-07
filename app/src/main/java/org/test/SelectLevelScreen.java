@@ -9,6 +9,7 @@ import loon.core.graphics.opengl.LTextures;
 import loon.core.timer.GameTime;
 
 public class SelectLevelScreen extends MenuScreen {
+	private static final String TEXTURE_BACKGROUND = "assets/backgrounds/select_level_menu.png";
 	private static final String TEXTURE_FLAG_GREEN = "assets/icon_flag_green.png";
 	private static final String TEXTURE_FLAG_RED = "assets/icon_flag_red.png";
 	private static final String TEXTURE_ICON_HEART = "assets/icon_heart.png";
@@ -55,20 +56,21 @@ public class SelectLevelScreen extends MenuScreen {
 		super.getMenuEntries().add(entry3);
 		super.getMenuEntries().add(entry4);
 		for (CompletedLevel level : game.getCompletedLevels()) {
-			if (level.getDifficulty() == difficulty.getValue()) {
-				if (level.getLevel() == 1) {
-					this.remainingLivesRecordLevel1 = level.getRemainingLives();
-				} else {
-					if (level.getLevel() == 2) {
-						this.remainingLivesRecordLevel2 = level
-								.getRemainingLives();
-						continue;
-					}
-					if (level.getLevel() == 3) {
-						this.remainingLivesRecordLevel3 = level
-								.getRemainingLives();
-					}
-				}
+			if (level.getDifficulty() != difficulty.getValue()) {
+				continue;
+			}
+			switch (level.getLevel()) {
+			case 1:
+				this.remainingLivesRecordLevel1 = level.getRemainingLives();
+				break;
+			case 2:
+				this.remainingLivesRecordLevel2 = level.getRemainingLives();
+				break;
+			case 3:
+				this.remainingLivesRecordLevel3 = level.getRemainingLives();
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -111,6 +113,11 @@ public class SelectLevelScreen extends MenuScreen {
 
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
+		if (this.font == null) {
+			this.LoadContent();
+		}
+		this.texture = this.resolveTexture(this.texture, TEXTURE_BACKGROUND);
+		batch.flush();
 		batch.draw(this.texture, 0f, 0f, LColor.white);
 
 		Utils.drawMenuButtonLabel(batch, this.font,
@@ -171,8 +178,10 @@ public class SelectLevelScreen extends MenuScreen {
 
 	@Override
 	public void LoadContent() {
-		this.texture = LTextures
-				.loadTexture("assets/backgrounds/select_level_menu.png");
+		if (this.font != null) {
+			return;
+		}
+		this.texture = LTextures.loadTexture(TEXTURE_BACKGROUND);
 		this.textureHeart = LTextures.loadTexture(TEXTURE_ICON_HEART);
 		this.textureFlagGreen = LTextures.loadTexture(TEXTURE_FLAG_GREEN);
 		this.textureFlagRed = LTextures.loadTexture(TEXTURE_FLAG_RED);
@@ -181,6 +190,7 @@ public class SelectLevelScreen extends MenuScreen {
 
 	@Override
 	public void UnloadContent() {
+		this.font = null;
 		this.texture = null;
 		this.textureHeart = null;
 		this.textureFlagGreen = null;
