@@ -73,6 +73,7 @@ public class GamePausedScreen extends MenuScreen {
 
 	private void RestartSelected() {
 		this.Exit();
+		super.ExitScreen();
 		super.getScreenManager().AddScreen(
 				new ConfirmScreen(this.game, ScreenType.GamePausedScreen,
 						ConfirmType.RestartGame));
@@ -90,6 +91,7 @@ public class GamePausedScreen extends MenuScreen {
 
 	private void ShowMainMenuSelected() {
 		this.Exit();
+		super.ExitScreen();
 		super.getScreenManager().AddScreen(
 				new ConfirmScreen(this.game, ScreenType.GamePausedScreen,
 						ConfirmType.ExitToMainMenu));
