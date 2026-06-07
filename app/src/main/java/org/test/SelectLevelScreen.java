@@ -9,6 +9,10 @@ import loon.core.graphics.opengl.LTextures;
 import loon.core.timer.GameTime;
 
 public class SelectLevelScreen extends MenuScreen {
+	private static final String TEXTURE_FLAG_GREEN = "assets/icon_flag_green.png";
+	private static final String TEXTURE_FLAG_RED = "assets/icon_flag_red.png";
+	private static final String TEXTURE_ICON_HEART = "assets/icon_heart.png";
+
 	private Difficulty difficulty;
 	private LFont font;
 	private MainGame game;
@@ -134,25 +138,54 @@ public class SelectLevelScreen extends MenuScreen {
 	private void DrawBestRemainingLives(SpriteBatch batch,
 			int remainingLivesRecord, float x, float y, LFont font) {
 		if (remainingLivesRecord >= 0) {
-			batch.draw(this.textureFlagGreen, x, y, LColor.white);
+			this.textureFlagGreen = this.drawLevelIcon(batch,
+					this.textureFlagGreen, TEXTURE_FLAG_GREEN, x, y);
 			Utils.DrawStringAlignRight(batch, font, (remainingLivesRecord) + "/"
 							+ Constants.InitialRemainingLives, new Vector2f(
 					166f, y), LColor.white);
-			batch.draw(this.textureHeart, 168f, y + 6f, LColor.white);
+			this.textureHeart = this.drawLevelIcon(batch, this.textureHeart,
+					TEXTURE_ICON_HEART, 168f, y + 6f);
 		} else {
-			batch.draw(this.textureFlagRed, x, y, LColor.white);
+			this.textureFlagRed = this.drawLevelIcon(batch, this.textureFlagRed,
+					TEXTURE_FLAG_RED, x, y);
 		}
+	}
+
+	private LTexture resolveTexture(LTexture cached, String path) {
+		if (cached == null || cached.isClose()) {
+			return LTextures.loadTexture(path);
+		}
+		if (!cached.isLoaded()) {
+			cached.loadTexture();
+		}
+		return cached;
+	}
+
+	private LTexture drawLevelIcon(SpriteBatch batch, LTexture cached,
+			String path, float x, float y) {
+		LTexture texture = this.resolveTexture(cached, path);
+		batch.flush();
+		batch.draw(texture, x, y, LColor.white);
+		return texture;
 	}
 
 	@Override
 	public void LoadContent() {
 		this.texture = LTextures
 				.loadTexture("assets/backgrounds/select_level_menu.png");
-		this.textureHeart = LTextures.loadTexture("assets/icon_heart.png");
-		this.textureFlagGreen = LTextures
-				.loadTexture("assets/icon_flag_green.png");
-		this.textureFlagRed = LTextures.loadTexture("assets/icon_flag_red.png");
+		this.textureHeart = LTextures.loadTexture(TEXTURE_ICON_HEART);
+		this.textureFlagGreen = LTextures.loadTexture(TEXTURE_FLAG_GREEN);
+		this.textureFlagRed = LTextures.loadTexture(TEXTURE_FLAG_RED);
 		this.font = Constants.font(24);
+	}
+
+	@Override
+	public void UnloadContent() {
+		this.texture = null;
+		this.textureHeart = null;
+		this.textureFlagGreen = null;
+		this.textureFlagRed = null;
+		super.UnloadContent();
 	}
 
 	private void StartGame(int level) {
