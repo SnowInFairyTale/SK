@@ -608,7 +608,6 @@ public class GameplayScreen extends GameScreen {
 							if (selectedMonster != null) {
 								this.ResetSelectedMonsterOrTower(false);
 								MonsterInfoScreen.purgeLeakedPreviews(this.game);
-								this.setGameOpacity(LColor.gray);
 								this.selectedMonster = selectedMonster;
 								this.selectedMonster.StartedSelection();
 								this.RemoveTowerToolbarIfNotNull();
@@ -625,7 +624,6 @@ public class GameplayScreen extends GameScreen {
 								this.selectedTower.StoppedSelection();
 							}
 							this.ResetSelectedMonsterOrTower(false);
-							this.setGameOpacity(LColor.gray);
 							this.selectedTower = selectedTower;
 							this.selectedTower.StartedSelection();
 							this.RemoveTowerToolbarIfNotNull();

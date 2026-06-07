@@ -28,6 +28,10 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	/** Left-aligned stars; 5 fit where the old 4×24px row used to sit. */
 	private static final float LEVEL_STAR_START_X = 10f;
+	private static final float RANGE_CROSS_ARM = 20f;
+	private static final float RANGE_CROSS_THICKNESS = 3f;
+	private static final LColor RANGE_CROSS_COLOR = new LColor(232f / 255f,
+			118f / 255f, 102f / 255f, 1f);
 	private static final float LEVEL_STAR_Y = 70f;
 	private static final int LEVEL_STAR_SIZE = 18;
 	private static final float LEVEL_STAR_STEP = 15f;
@@ -188,6 +192,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 					position.y - range, range * 2, range * 2, 0f, 0f,
 					this.bashTexture.getWidth(), this.bashTexture.getHeight(),
 					gameOpacity);
+			this.drawRangeCenterCross(batch);
 		}
 		super.draw(batch, gameTime);
 	}
@@ -344,6 +349,19 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 		this.setDamage(this.getTowerLevels()[level].getDamage());
 		this.setUpgradeCost(this.getTowerLevels()[level].getCost());
 		this.setUpgradeTime(this.getTowerLevels()[level].getUpgradeTime());
+	}
+
+	private void drawRangeCenterCross(SpriteBatch batch) {
+		float cx = this.getPosition().x;
+		float cy = this.getPosition().y;
+		float halfArm = RANGE_CROSS_ARM;
+		float halfThick = RANGE_CROSS_THICKNESS / 2f;
+		batch.setColor(RANGE_CROSS_COLOR);
+		batch.fillRect(cx - halfArm, cy - halfThick, halfArm * 2f,
+				RANGE_CROSS_THICKNESS);
+		batch.fillRect(cx - halfThick, cy - halfArm, RANGE_CROSS_THICKNESS,
+				halfArm * 2f);
+		batch.resetColor();
 	}
 
 	private void drawEquippedGem(SpriteBatch batch, LColor opacity) {

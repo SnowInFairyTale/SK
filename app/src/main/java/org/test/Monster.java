@@ -45,8 +45,8 @@ public abstract class Monster extends AnimatedSprite {
 			int spriteHeight, int spriteWidth, Vector2f gridPosition) {
 		super(game, textureFile, new Vector2f(2f, 400f), columnCount,
 				spriteCount, spriteWidth, spriteHeight, 1f);
-		if (((gridPosition.x < 2) || (gridPosition.x > 0x10))
-				|| ((gridPosition.y < 0) || (gridPosition.y > 0x12))) {
+		if ((gridPosition.x < 0) || (gridPosition.x > 0x10)
+				|| (gridPosition.y < 0) || (gridPosition.y > 0x12)) {
 			throw new RuntimeException("gridPosition is out of bounds.");
 		}
 		if (game.getGameplayScreen().getDirs()[gridPosition.x()][gridPosition
@@ -61,8 +61,8 @@ public abstract class Monster extends AnimatedSprite {
 			{ 10f, -10f }, { -10f, 10f }, { 10f, 10f } };
 
 	private boolean IsValidSpawnGrid(Vector2f gridPosition) {
-		if (((gridPosition.x < 2) || (gridPosition.x > 0x10))
-				|| ((gridPosition.y < 0) || (gridPosition.y > 0x12))) {
+		if ((gridPosition.x < 0) || (gridPosition.x > 0x10)
+				|| (gridPosition.y < 0) || (gridPosition.y > 0x12)) {
 			return false;
 		}
 		return this.game.getGameplayScreen().getDirs()[gridPosition.x()][gridPosition

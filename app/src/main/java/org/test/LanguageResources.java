@@ -139,7 +139,7 @@ public class LanguageResources {
     }
 
     public static String getNext() {
-        return "预告";
+        return "下波";
     }
 
     public static String getNextWave() {

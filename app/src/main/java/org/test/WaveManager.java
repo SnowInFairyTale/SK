@@ -73,17 +73,17 @@ public class WaveManager extends DrawableGameComponent implements
 			new WaveSpec(10, 1000, 2f, 1000.0, 3, MonsterType.Peasant),
 			new WaveSpec(10, 1050, 2f, 1000.0, 3, MonsterType.Peon),
 			new WaveSpec(10, 1200, 2f, 500.0, 3, MonsterType.Berserker),
-			new WaveSpec(5, 4000, 2f, 4000.0, 30, MonsterType.Chieftain),
-			new WaveSpec(12, 1300, 2f, 800.0, 4, MonsterType.Berserker),
+			new WaveSpec(3, 4000, 2f, 4000.0, 30, MonsterType.Chieftain),
+			new WaveSpec(10, 1300, 2f, 800.0, 4, MonsterType.Berserker),//41
 			new WaveSpec(5, 1200, 2f, 2500.0, 22, MonsterType.Doctor),
-			new WaveSpec(14, 1150, 3.2f, 350.0, 4, MonsterType.Peon),
-			new WaveSpec(15, 1250, 2f, 500.0, 4, MonsterType.Chicken),
-			new WaveSpec(2, 4500, 2f, 2000.0, 35, MonsterType.Chieftain),
+			new WaveSpec(10, 650, 2f, 500.0, 4, MonsterType.Chicken),
+			new WaveSpec(12, 1150, 3.2f, 350.0, 4, MonsterType.Peon),
+			new WaveSpec(4, 4500, 2f, 2000.0, 35, MonsterType.Chieftain),//45
 			new WaveSpec(12, 1500, 2f, 700.0, 5, MonsterType.Peasant),
 			new WaveSpec(6, 1400, 2f, 3500.0, 25, MonsterType.Doctor),
-			new WaveSpec(18, 1450, 2f, 250.0, 5, MonsterType.Berserker),
+			new WaveSpec(14, 1450, 2f, 250.0, 5, MonsterType.Berserker),
 			new WaveSpec(12, 1700, 1.8f, 600.0, 5, MonsterType.Peon),
-			new WaveSpec(3, 5000, 2f, 3500.0, 50, MonsterType.Chieftain),
+			new WaveSpec(5, 5000, 2f, 3500.0, 50, MonsterType.Chieftain),
 	};
 
 	private static final int TOTAL_WAVES = WAVE_SPECS.length;
@@ -138,9 +138,9 @@ public class WaveManager extends DrawableGameComponent implements
 		case Easy:
 			return baseHitPoints;
 		case Medium:
-			return baseHitPoints * 2;
+			return (int) (baseHitPoints * 1.2);
 		case Hard:
-			return baseHitPoints * 3;
+			return (int) (baseHitPoints * 1.5);
 		default:
 			throw new RuntimeException("Unknown difficulty in wavemanager!");
 		}

@@ -33,9 +33,13 @@ public class TowerToolbar extends DrawableGameComponent implements
 	private static final float GEM_SLOT_GAP = 5f;
 	private static final float GEM_SLOT_ICON_SIZE = 44f;
 	private static final float GEM_INFO_ICON_SIZE = 56f;
+	private static final float GEM_INFO_ICON_OFFSET_X = -24f;
+	private static final float GEM_INFO_ICON_OFFSET_Y = 0f;
+	/** Extra width for equipped-gem display panel only (not selection slots). */
+	private static final float GEM_INFO_PANEL_EXTRA_W = 32f;
 	/** Equipped-gem panel spans upgrade + sell area (power frame style). */
 	private static final float GEM_INFO_PANEL_W = SELL_SLOT_X + SHELL_SRC_W
-			- UPGRADE_PANEL_X;
+			- UPGRADE_PANEL_X + GEM_INFO_PANEL_EXTRA_W;
 
 	private AnimatedSprite animatedSpriteTower;
 	private boolean canUpgrade;
@@ -227,9 +231,10 @@ public class TowerToolbar extends DrawableGameComponent implements
 				UPGRADE_FRAME_H);
 		batch.drawString(this.font, LanguageResources.getGem(), panelX + 46f,
 				panelY + 30f, LColor.white);
-		float iconX = panelX + (GEM_INFO_PANEL_W - GEM_INFO_ICON_SIZE) / 2f;
+		float iconX = panelX + (GEM_INFO_PANEL_W - GEM_INFO_ICON_SIZE) / 2f
+				+ GEM_INFO_ICON_OFFSET_X;
 		float iconY = panelY + (UPGRADE_FRAME_H - GEM_INFO_ICON_SIZE) / 2f
-				+ 8f;
+				+ GEM_INFO_ICON_OFFSET_Y;
 		this.drawGemIcon(batch, this.tower.getGemType(), iconX, iconY,
 				GEM_INFO_ICON_SIZE, LColor.white);
 	}
