@@ -140,7 +140,7 @@ public class WaveManager extends DrawableGameComponent implements
 		case Medium:
 			return (int) (baseHitPoints * 1.2);
 		case Hard:
-			return (int) (baseHitPoints * 1.5);
+			return (int) (baseHitPoints * 1.3);
 		default:
 			throw new RuntimeException("Unknown difficulty in wavemanager!");
 		}
