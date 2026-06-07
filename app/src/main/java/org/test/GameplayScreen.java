@@ -337,7 +337,6 @@ public class GameplayScreen extends GameScreen {
 		}
 		if (this.getWaveManager() != null) {
 			this.getWaveManager().Remove();
-			this.setWaveManager(null);
 		}
 		if (this.showMenuButton != null) {
 			this.game.Components().remove(this.showMenuButton);
