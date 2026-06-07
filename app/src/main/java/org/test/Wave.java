@@ -77,9 +77,9 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 		this.RemoveAllMonsters();
 	}
 
-	private void RemoveAllMonsters() {
-		for (int i = 0; i < this.getMonsters().size(); i++) {
-			this.getMonsters().get(i).Remove();
+	public final void RemoveAllMonsters() {
+		while (!this.getMonsters().isEmpty()) {
+			this.getMonsters().get(0).Remove();
 		}
 	}
 

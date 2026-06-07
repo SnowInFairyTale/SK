@@ -215,8 +215,20 @@ public class GameplayScreen extends GameScreen {
 
 	public final void Lose() {
 		this.gameEndedState = GameEndedState.Lose;
+		this.ClearAllActiveMonsters();
 		this.GamePaused(false);
 		setGameState(GameState.Ended);
+	}
+
+	private void ClearAllActiveMonsters() {
+		this.ResetSelectedMonsterOrTower();
+		if (this.monsterToolbar != null) {
+			this.monsterToolbar.Remove();
+			this.monsterToolbar = null;
+		}
+		if (this.getWaveManager() != null) {
+			this.getWaveManager().ClearAllMonsters();
+		}
 	}
 
 	public final boolean MikkelsPathFinding(boolean checkIfMonsterIsBlocking) {
@@ -325,6 +337,7 @@ public class GameplayScreen extends GameScreen {
 		}
 		if (this.getWaveManager() != null) {
 			this.getWaveManager().Remove();
+			this.setWaveManager(null);
 		}
 		if (this.showMenuButton != null) {
 			this.game.Components().remove(this.showMenuButton);
@@ -688,6 +701,7 @@ public class GameplayScreen extends GameScreen {
 				.getGameplayScreen().getDifficulty(), this.game
 				.getGameplayScreen().getLevel());
 		this.gameEndedState = GameEndedState.Win;
+		this.ClearAllActiveMonsters();
 		this.GamePaused(false);
 		setGameState(GameState.Ended);
 	}

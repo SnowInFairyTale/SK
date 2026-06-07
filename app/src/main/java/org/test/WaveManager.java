@@ -233,12 +233,23 @@ public class WaveManager extends DrawableGameComponent implements
 		super.loadContent();
 	}
 
-	public final void Remove() {
-		for (int i = 0; i < this.activeWaves.size(); i++) {
-			this.activeWaves.get(i).Remove();
+	public final void ClearAllMonsters() {
+		for (int i = 0; i < this.waves.size(); i++) {
+			this.waves.get(i).RemoveAllMonsters();
 		}
+	}
+
+	public final void Remove() {
+		for (int i = 0; i < this.waves.size(); i++) {
+			Wave wave = this.waves.get(i);
+			wave.RemoveAllMonsters();
+			this.game.Components().remove(wave);
+		}
+		this.waves.clear();
+		this.activeWaves.clear();
 		if (this.nextWaveMonsterType != null) {
 			super.getGame().Components().remove(this.nextWaveMonsterType);
+			this.nextWaveMonsterType = null;
 		}
 		super.getGame().Components().remove(this);
 	}
