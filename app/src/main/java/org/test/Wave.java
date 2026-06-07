@@ -104,6 +104,25 @@ public class Wave extends DrawableGameComponent implements IGameComponent {
 		return !this.isFinaleWave || this.finaleBossesSpawned;
 	}
 
+	public final boolean hasPendingEncounters() {
+		if (this.getMonsters().size() > 0) {
+			return true;
+		}
+		if (this.getWaveState() != WaveState.Started) {
+			return false;
+		}
+		if (this.numberOfMonstersAdded < this.numMonsters) {
+			return true;
+		}
+		if (this.isBossWave && !this.bossSpawned) {
+			return true;
+		}
+		if (this.isFinaleWave && !this.finaleBossesSpawned) {
+			return true;
+		}
+		return false;
+	}
+
 	private void SpawnBoss() {
 		int reward = Math.max(this.bossValue, this.value * 2);
 		Monster boss = MonsterBoss.Create(this.game, this, this.bossType,

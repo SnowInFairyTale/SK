@@ -265,6 +265,15 @@ public class WaveManager extends DrawableGameComponent implements
 		this.activeWaves.remove(wave);
 	}
 
+	private boolean anyActiveWaveHasPendingEncounters() {
+		for (int i = 0; i < this.activeWaves.size(); i++) {
+			if (this.activeWaves.get(i).hasPendingEncounters()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void update(GameTime gameTime) {
 		if (GameplayScreen.getGameState() == GameState.Started) {
@@ -299,17 +308,9 @@ public class WaveManager extends DrawableGameComponent implements
 					} else {
 						this.isLastWave = true;
 					}
-				} else {
-					boolean flag = true;
-					for (Wave wave : this.activeWaves) {
-						if (wave.getMonsters().size() > 0) {
-							flag = false;
-							break;
-						}
-					}
-					if (flag) {
-						this.game.getGameplayScreen().Win();
-					}
+				} else if (this.isLastWave
+						&& !this.anyActiveWaveHasPendingEncounters()) {
+					this.game.getGameplayScreen().Win();
 				}
 			}
 		}
