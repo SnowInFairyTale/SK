@@ -129,15 +129,10 @@ public class MonsterBoss extends Monster {
 
 	@Override
 	public Vector2f GetNextGridPoint(Vector2f gridPosition) {
-		if (this.getMonsterType() == MonsterType.Chicken
-				&& this.game.getGameplayScreen().getLevel() >= 3) {
-			if (gridPosition.x < 11) {
-				super.setRotation(Utils.GetAngle(new Vector2f(1f, -1f)));
-				this.chickenPathResult.set(gridPosition.x + 1,
-						gridPosition.y - 1);
-				return this.chickenPathResult;
-			}
-			super.setRotation(0f);
+		if (this.getMonsterType() == MonsterType.Chicken) {
+			MonsterChicken.applyFlightPath(this.game, gridPosition,
+					this.chickenPathResult, this);
+			return this.chickenPathResult;
 		}
 		return super.GetNextGridPoint(gridPosition);
 	}

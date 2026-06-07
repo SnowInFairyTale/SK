@@ -18,18 +18,23 @@ public class MonsterChicken extends Monster {
 
 	private Vector2f result = new Vector2f();
 
+	static void applyFlightPath(MainGame game, Vector2f gridPosition,
+			Vector2f out, Monster monster) {
+		if (game.getGameplayScreen().getLevel() >= 3) {
+			if (gridPosition.x < 11) {
+				monster.setRotation(Utils.GetAngle(new Vector2f(1f, -1f)));
+				out.set(gridPosition.x + 1, gridPosition.y - 1);
+				return;
+			}
+			monster.setRotation(0f);
+		}
+		out.set(gridPosition.x + 1, gridPosition.y);
+	}
+
 	@Override
 	public Vector2f GetNextGridPoint(Vector2f gridPosition) {
-		if (this.game.getGameplayScreen().getLevel() >= 3) {
-			if (gridPosition.x < 11) {
-				super.setRotation(Utils.GetAngle(new Vector2f(1f, -1f)));
-				result.set(gridPosition.x + 1, gridPosition.y - 1);
-				return result;
-			}
-			super.setRotation(0f);
-		}
-		result.set(gridPosition.x + 1, gridPosition.y);
-		return result;
+		applyFlightPath(this.game, gridPosition, this.result, this);
+		return this.result;
 	}
 
 	@Override
