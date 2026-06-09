@@ -17,9 +17,9 @@ package com.loon.foundation;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import loon.utils.xml.XMLDocument;
-import loon.utils.xml.XMLElement;
-import loon.utils.xml.XMLParser;
+import com.loon.utils.xml.XMLDocument;
+import com.loon.utils.xml.XMLElement;
+import com.loon.utils.xml.XMLParser;
 
 public class NSDoc {
 

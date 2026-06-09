@@ -22,8 +22,8 @@ package com.loon.action.sprite.node;
 
 import java.util.ArrayList;
 
-import loon.core.geom.Vector2f;
-import loon.utils.StringUtils;
+import com.loon.core.geom.Vector2f;
+import com.loon.utils.StringUtils;
 
 public class DefinitionObject {
 

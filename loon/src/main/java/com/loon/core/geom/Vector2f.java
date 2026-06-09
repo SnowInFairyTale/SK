@@ -22,8 +22,8 @@ package com.loon.core.geom;
 
 import java.io.Serializable;
 
-import loon.action.map.Field2D;
-import loon.utils.MathUtils;
+import com.loon.action.map.Field2D;
+import com.loon.utils.MathUtils;
 
 public class Vector2f implements Serializable {
 	/**

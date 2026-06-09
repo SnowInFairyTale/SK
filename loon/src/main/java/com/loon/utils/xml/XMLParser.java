@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Stack;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.resource.Resources;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.resource.Resources;
 
 /**
  * Copyright 2008 - 2011

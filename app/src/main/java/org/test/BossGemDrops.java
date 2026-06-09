@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 public final class BossGemDrops {
 

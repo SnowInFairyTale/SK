@@ -1,6 +1,6 @@
 package com.loon.core.geom;
 
-import loon.action.collision.CollisionHelper;
+import com.loon.action.collision.CollisionHelper;
 
 /**
  * 

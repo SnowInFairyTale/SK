@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
-import loon.core.LSystem;
-import loon.utils.StringUtils;
+import com.loon.core.LSystem;
+import com.loon.utils.StringUtils;
 
 /**
  * Copyright 2008 - 2011

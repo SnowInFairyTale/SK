@@ -20,8 +20,8 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.RectBox;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.RectBox;
 
 public class LNLabelAtlas extends LNAtlasNode {
 	

@@ -20,11 +20,11 @@
  */
 package com.loon.core.input;
 
-import loon.action.map.Config;
-import loon.core.LSystem;
-import loon.core.geom.Vector3f;
-import loon.core.input.LInputFactory.Key;
-import loon.utils.MathUtils;
+import com.loon.action.map.Config;
+import com.loon.core.LSystem;
+import com.loon.core.geom.Vector3f;
+import com.loon.core.input.LInputFactory.Key;
+import com.loon.utils.MathUtils;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

@@ -1,6 +1,6 @@
 package com.loon.net;
 
-import loon.utils.StringUtils;
+import com.loon.utils.StringUtils;
 
 /**
  * Copyright 2008 - 2011

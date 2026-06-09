@@ -1,7 +1,7 @@
 package com.loon.core.graphics.component;
 
-import loon.core.geom.RectBox;
-import loon.utils.MathUtils;
+import com.loon.core.geom.RectBox;
+import com.loon.utils.MathUtils;
 
 
 /**

@@ -20,7 +20,7 @@
  */
 package com.loon.media;
 
-import loon.core.Callback;
+import com.loon.core.Callback;
 
 public interface Sound {
 

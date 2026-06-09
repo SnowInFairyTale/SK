@@ -22,26 +22,26 @@ package com.loon.action.sprite;
 
 import java.util.HashMap;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.geom.RectBox;
-import loon.core.geom.Shape;
-import loon.core.geom.Triangle;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GL;
-import loon.core.graphics.opengl.GLAttributes;
-import loon.core.graphics.opengl.GLBatch;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.GLMesh;
-import loon.core.graphics.opengl.LSTRDictionary;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextureRegion;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.core.graphics.opengl.GLAttributes.Usage;
-import loon.core.graphics.opengl.GLMesh.VertexDataType;
-import loon.utils.MathUtils;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Shape;
+import com.loon.core.geom.Triangle;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GL;
+import com.loon.core.graphics.opengl.GLAttributes;
+import com.loon.core.graphics.opengl.GLBatch;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.GLMesh;
+import com.loon.core.graphics.opengl.LSTRDictionary;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureRegion;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.core.graphics.opengl.GLAttributes.Usage;
+import com.loon.core.graphics.opengl.GLMesh.VertexDataType;
+import com.loon.utils.MathUtils;
 
 public class SpriteBatch implements LRelease {
 

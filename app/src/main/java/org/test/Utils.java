@@ -1,10 +1,10 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.utils.MathUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.utils.MathUtils;
 
 public class Utils {
 	public static Vector2f ConvertToGridPoint(Vector2f positionCoordinates) {

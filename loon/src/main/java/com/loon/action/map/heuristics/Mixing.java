@@ -20,8 +20,8 @@
  */
 package com.loon.action.map.heuristics;
 
-import loon.action.map.AStarFindHeuristic;
-import loon.utils.MathUtils;
+import com.loon.action.map.AStarFindHeuristic;
+import com.loon.utils.MathUtils;
 
 
 public class Mixing implements AStarFindHeuristic {

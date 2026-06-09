@@ -15,7 +15,7 @@
  */
 package com.loon.core;
 
-import loon.core.event.Updateable;
+import com.loon.core.event.Updateable;
 
 public abstract class CallQueue {
 

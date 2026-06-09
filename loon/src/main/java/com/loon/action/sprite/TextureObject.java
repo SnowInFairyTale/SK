@@ -1,6 +1,6 @@
 package com.loon.action.sprite;
 
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexture;
 
 public class TextureObject extends SimpleObject{
 

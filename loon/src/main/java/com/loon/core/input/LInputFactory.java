@@ -1,10 +1,10 @@
 package com.loon.core.input;
 
-import loon.core.EmulatorButtons;
-import loon.core.LSystem;
-import loon.core.event.ActionKey;
-import loon.core.geom.Vector2f;
-import loon.utils.collection.IntArray;
+import com.loon.core.EmulatorButtons;
+import com.loon.core.LSystem;
+import com.loon.core.event.ActionKey;
+import com.loon.core.geom.Vector2f;
+import com.loon.utils.collection.IntArray;
 
 import android.util.Log;
 import android.view.KeyEvent;

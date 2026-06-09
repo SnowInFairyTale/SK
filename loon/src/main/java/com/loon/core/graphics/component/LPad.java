@@ -20,14 +20,14 @@
  */
 package com.loon.core.graphics.component;
 
-import loon.core.LSystem;
-import loon.core.graphics.LComponent;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTexturePack;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.input.LInputFactory.Touch;
-import loon.utils.MathUtils;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexturePack;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.input.LInputFactory.Touch;
+import com.loon.utils.MathUtils;
 
 
 public class LPad extends LComponent {

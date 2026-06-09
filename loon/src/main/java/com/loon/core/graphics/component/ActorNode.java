@@ -1,6 +1,6 @@
 package com.loon.core.graphics.component;
 
-import loon.core.LRelease;
+import com.loon.core.LRelease;
 
 /**
  * 

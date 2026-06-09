@@ -22,9 +22,9 @@ package com.loon.core.graphics.opengl;
 
 import java.nio.FloatBuffer;
 
-import loon.core.LRelease;
-import loon.core.graphics.LColor;
-import loon.jni.NativeSupport;
+import com.loon.core.LRelease;
+import com.loon.core.graphics.LColor;
+import com.loon.jni.NativeSupport;
 
 //0.3.3新增的顶点操作用类，视有无native支持而采取不同的操作方针。
 public class GLBatch implements LRelease {

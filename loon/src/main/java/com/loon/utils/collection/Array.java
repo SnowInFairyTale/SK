@@ -20,9 +20,9 @@
  */
 package com.loon.utils.collection;
 
-import loon.core.LRelease;
-import loon.utils.CollectionUtils;
-import loon.utils.MathUtils;
+import com.loon.core.LRelease;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.MathUtils;
 
 /*
  * 0.3.3新增类，以非数组，而是对象链表的方式构建集合.

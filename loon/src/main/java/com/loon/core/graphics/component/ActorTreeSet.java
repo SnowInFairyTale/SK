@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import loon.utils.CollectionUtils;
+import com.loon.utils.CollectionUtils;
 
 
 /**

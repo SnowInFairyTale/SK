@@ -1,12 +1,12 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.input.LInput;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.input.LInput;
+import com.loon.core.timer.GameTime;
 
 public class InstructionScreen extends MenuScreen {
 	private boolean componentsDetached;

@@ -1,18 +1,18 @@
 package com.loon.core.input;
 
-import loon.action.map.Config;
-import loon.action.sprite.ISprite;
-import loon.action.sprite.effect.ArcEffect;
-import loon.action.sprite.effect.CrossEffect;
-import loon.action.sprite.effect.FadeEffect;
-import loon.action.sprite.effect.PShadowEffect;
-import loon.action.sprite.effect.SplitEffect;
-import loon.core.LSystem;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.utils.MathUtils;
+import com.loon.action.map.Config;
+import com.loon.action.sprite.ISprite;
+import com.loon.action.sprite.effect.ArcEffect;
+import com.loon.action.sprite.effect.CrossEffect;
+import com.loon.action.sprite.effect.FadeEffect;
+import com.loon.action.sprite.effect.PShadowEffect;
+import com.loon.action.sprite.effect.SplitEffect;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.utils.MathUtils;
 
 
 /**

@@ -15,7 +15,7 @@
  */
 package com.loon.physics;
 
-import loon.utils.CollectionUtils;
+import com.loon.utils.CollectionUtils;
 
 public class PSweepAndPrune
 {

@@ -20,7 +20,7 @@
  */
 package com.loon.action.sprite.painting;
 
-import loon.core.timer.GameTime;
+import com.loon.core.timer.GameTime;
 
 public interface IUpdateable
 {

@@ -1,10 +1,10 @@
 package org.test;
 
-import loon.action.sprite.painting.DrawableGameComponent;
-import loon.action.sprite.painting.IGameComponent;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.painting.DrawableGameComponent;
+import com.loon.action.sprite.painting.IGameComponent;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.timer.GameTime;
 
 public class Wave extends DrawableGameComponent implements IGameComponent {
 

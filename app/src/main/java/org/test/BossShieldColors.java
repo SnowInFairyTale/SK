@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.core.graphics.LColor;
+import com.loon.core.graphics.LColor;
 
 /** Boss shield tints for {@link MonsterBoss}. */
 public final class BossShieldColors {

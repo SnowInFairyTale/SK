@@ -15,8 +15,8 @@
  */
 package com.loon.foundation;
 
-import loon.core.LSystem;
-import loon.utils.collection.ArrayMap;
+import com.loon.core.LSystem;
+import com.loon.utils.collection.ArrayMap;
 
 public class NSDictionary extends NSObject {
 

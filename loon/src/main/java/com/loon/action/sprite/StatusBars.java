@@ -22,11 +22,11 @@ package com.loon.action.sprite;
 
 import java.util.ArrayList;
 
-import loon.core.LObject;
-import loon.core.geom.RectBox;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.utils.CollectionUtils;
+import com.loon.core.LObject;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.utils.CollectionUtils;
 
 
 public final class StatusBars extends LObject implements ISprite {

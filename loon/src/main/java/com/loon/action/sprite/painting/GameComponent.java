@@ -20,9 +20,9 @@
  */
 package com.loon.action.sprite.painting;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.LRelease;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.LRelease;
+import com.loon.core.timer.GameTime;
 
 public class GameComponent implements IGameComponent, IUpdateable,
 		Comparable<GameComponent>, LRelease {

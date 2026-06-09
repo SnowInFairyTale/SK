@@ -2,14 +2,14 @@ package com.loon.action.sprite;
 
 import java.util.ArrayList;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.event.Updateable;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.utils.CollectionUtils;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.event.Updateable;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.utils.CollectionUtils;
 
 /**
  * Copyright 2008 - 2011

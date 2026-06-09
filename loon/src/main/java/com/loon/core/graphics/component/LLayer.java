@@ -3,19 +3,19 @@ package com.loon.core.graphics.component;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import loon.action.map.Field2D;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LComponent;
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextureBatch;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.timer.LTimer;
-import loon.utils.CollectionUtils;
-import loon.utils.collection.ArrayMap;
+import com.loon.action.map.Field2D;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.device.LGraphics;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureBatch;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.timer.LTimer;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.collection.ArrayMap;
 
 
 /**

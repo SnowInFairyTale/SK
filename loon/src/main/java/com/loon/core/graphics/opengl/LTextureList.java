@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.resource.Resources;
-import loon.utils.CollectionUtils;
-import loon.utils.xml.XMLDocument;
-import loon.utils.xml.XMLElement;
-import loon.utils.xml.XMLParser;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.resource.Resources;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.xml.XMLDocument;
+import com.loon.utils.xml.XMLElement;
+import com.loon.utils.xml.XMLParser;
 
 /**
  * Copyright 2008 - 2011

@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.timer.GameTime;
 
 public final class GameComponentCollection {
 

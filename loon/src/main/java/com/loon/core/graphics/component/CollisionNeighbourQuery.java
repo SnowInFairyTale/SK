@@ -1,6 +1,6 @@
 package com.loon.core.graphics.component;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 /**
  * 

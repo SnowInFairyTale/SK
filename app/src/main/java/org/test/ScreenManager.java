@@ -1,15 +1,15 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.painting.DrawableGameComponent;
-import loon.core.LSystem;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.painting.DrawableGameComponent;
+import com.loon.core.LSystem;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.timer.GameTime;
 
 public class ScreenManager extends DrawableGameComponent
 {

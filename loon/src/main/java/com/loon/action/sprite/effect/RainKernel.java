@@ -1,10 +1,10 @@
 package com.loon.action.sprite.effect;
 
-import loon.core.LSystem;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.utils.MathUtils;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.utils.MathUtils;
 
 
 /**

@@ -1,7 +1,7 @@
 package org.test;
 
-import loon.core.RefObject;
-import loon.core.geom.Vector2f;
+import com.loon.core.RefObject;
+import com.loon.core.geom.Vector2f;
 
 public class AnimatedSpriteTower extends AnimatedSprite {
 

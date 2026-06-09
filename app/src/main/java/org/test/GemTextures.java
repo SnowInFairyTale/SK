@@ -1,7 +1,7 @@
 package org.test;
 
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
 
 /** Shared bright/dim gem icons — one GPU copy for map towers and toolbar. */
 public final class GemTextures {

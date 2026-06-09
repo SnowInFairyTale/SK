@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.core.graphics.LColor;
+import com.loon.core.graphics.LColor;
 
 /** Flying weapon tint for gem towers only; non-gem towers use raw sprite art. */
 public final class GemWeaponColors {

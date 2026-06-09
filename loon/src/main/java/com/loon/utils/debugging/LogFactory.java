@@ -2,7 +2,7 @@ package com.loon.utils.debugging;
 
 import java.util.WeakHashMap;
 
-import loon.core.LSystem;
+import com.loon.core.LSystem;
 
 /**
  * Copyright 2008 - 2009

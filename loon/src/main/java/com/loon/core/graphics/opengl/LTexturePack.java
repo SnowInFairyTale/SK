@@ -4,20 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import loon.action.sprite.SpriteRegion;
-import loon.core.LRelease;
-import loon.core.geom.RectBox;
-import loon.core.geom.Point.Point2i;
-import loon.core.geom.RectBox.Rect2i;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.resource.Resources;
-import loon.utils.collection.ArrayMap;
-import loon.utils.xml.XMLDocument;
-import loon.utils.xml.XMLElement;
-import loon.utils.xml.XMLParser;
+import com.loon.action.sprite.SpriteRegion;
+import com.loon.core.LRelease;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Point.Point2i;
+import com.loon.core.geom.RectBox.Rect2i;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.device.LGraphics;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.resource.Resources;
+import com.loon.utils.collection.ArrayMap;
+import com.loon.utils.xml.XMLDocument;
+import com.loon.utils.xml.XMLElement;
+import com.loon.utils.xml.XMLParser;
 
 /**
  * Copyright 2008 - 2011

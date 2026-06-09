@@ -1,6 +1,6 @@
 package com.loon.action;
 
-import loon.action.sprite.ISprite;
+import com.loon.action.sprite.ISprite;
 
 /**
  * Copyright 2008 - 2011

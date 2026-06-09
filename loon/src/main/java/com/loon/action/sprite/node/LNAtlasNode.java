@@ -20,7 +20,7 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexture;
 
 public class LNAtlasNode extends LNNode {
 

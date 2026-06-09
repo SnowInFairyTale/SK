@@ -15,8 +15,8 @@
  */
 package com.loon;
 
-import loon.LGame.LMode;
-import loon.core.LSystem;
+import com.loon.LGame.LMode;
+import com.loon.core.LSystem;
 
 public class LSetting {
 

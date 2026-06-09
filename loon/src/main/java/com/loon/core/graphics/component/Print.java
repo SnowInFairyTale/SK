@@ -1,14 +1,14 @@
 package com.loon.core.graphics.component;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LSTRFont;
-import loon.core.graphics.opengl.LTexture;
-import loon.utils.StringUtils;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LSTRFont;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.utils.StringUtils;
 
 
 /**

@@ -2,7 +2,7 @@ package com.loon.action.map;
 
 import java.util.LinkedList;
 
-import loon.core.geom.Vector2f;
+import com.loon.core.geom.Vector2f;
 
 
 /**

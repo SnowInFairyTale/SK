@@ -1,11 +1,11 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.painting.DrawableGameComponent;
-import loon.action.sprite.painting.IGameComponent;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.painting.DrawableGameComponent;
+import com.loon.action.sprite.painting.IGameComponent;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.timer.GameTime;
 
 /** Monster info overlay text — background is drawn by {@link MonsterInfoScreen}. */
 public class MonsterInfoScreenSpriteWithText extends DrawableGameComponent

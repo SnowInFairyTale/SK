@@ -1,10 +1,10 @@
 package com.loon.core;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextureRegion;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureRegion;
 
 /**
  * Copyright 2008 - 2010

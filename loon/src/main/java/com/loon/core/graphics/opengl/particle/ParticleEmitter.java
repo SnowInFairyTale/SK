@@ -20,7 +20,7 @@
  */
 package com.loon.core.graphics.opengl.particle;
 
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexture;
 
 public interface ParticleEmitter {
 

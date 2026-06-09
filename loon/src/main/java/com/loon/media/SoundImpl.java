@@ -22,9 +22,9 @@ package com.loon.media;
 
 import java.util.List;
 
-import loon.core.Callback;
-import loon.core.CallbackList;
-import loon.utils.MathUtils;
+import com.loon.core.Callback;
+import com.loon.core.CallbackList;
+import com.loon.utils.MathUtils;
 
 public abstract class SoundImpl<I> implements Sound {
 	

@@ -1,6 +1,6 @@
 package com.loon.core.geom;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 /**
  * 

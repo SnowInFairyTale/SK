@@ -22,15 +22,15 @@ package com.loon.core.graphics.component;
 
 import java.util.ArrayList;
 
-import loon.core.LSystem;
-import loon.core.geom.Path;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LComponent;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.input.LInputFactory.Touch;
-import loon.utils.MathUtils;
+import com.loon.core.LSystem;
+import com.loon.core.geom.Path;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.input.LInputFactory.Touch;
+import com.loon.utils.MathUtils;
 
 
 //0.3.3版新增类,用以进行跨平台手势操作。

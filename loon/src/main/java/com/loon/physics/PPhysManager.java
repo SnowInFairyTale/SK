@@ -1,11 +1,11 @@
 package com.loon.physics;
 
-import loon.core.geom.Circle;
-import loon.core.geom.Polygon;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.opengl.LTexture;
-import loon.utils.CollectionUtils;
+import com.loon.core.geom.Circle;
+import com.loon.core.geom.Polygon;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.utils.CollectionUtils;
 
 public class PPhysManager {
 	public float scale;

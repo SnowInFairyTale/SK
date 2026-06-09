@@ -22,7 +22,7 @@ package com.loon.action.sprite.node;
 
 import java.util.ArrayList;
 
-import loon.utils.StringUtils;
+import com.loon.utils.StringUtils;
 
 public class DefAnimation extends DefinitionObject {
 

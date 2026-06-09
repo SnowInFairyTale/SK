@@ -20,7 +20,7 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 public class Easing {
 

@@ -20,8 +20,8 @@
  */
 package com.loon.action.sprite;
 
-import loon.action.map.TileMap;
-import loon.core.geom.Vector2f;
+import com.loon.action.map.TileMap;
+import com.loon.core.geom.Vector2f;
 
 
 public class JumpObject extends SpriteBatchObject {

@@ -3,10 +3,10 @@ package com.loon.core.graphics.opengl;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
 
 /**
  * Copyright 2008 - 2011

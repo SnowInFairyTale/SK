@@ -1,17 +1,17 @@
 package com.loon.action.sprite.effect;
 
-import loon.action.sprite.ISprite;
-import loon.core.LObject;
-import loon.core.LSystem;
-import loon.core.geom.RectBox;
-import loon.core.graphics.GraphicsUtils;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.timer.LTimer;
-import loon.jni.NativeSupport;
-import loon.utils.CollectionUtils;
+import com.loon.action.sprite.ISprite;
+import com.loon.core.LObject;
+import com.loon.core.LSystem;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.GraphicsUtils;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.timer.LTimer;
+import com.loon.jni.NativeSupport;
+import com.loon.utils.CollectionUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;

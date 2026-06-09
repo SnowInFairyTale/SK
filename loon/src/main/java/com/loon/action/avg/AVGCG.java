@@ -1,15 +1,15 @@
 package com.loon.action.avg;
 
-import loon.action.sprite.ISprite;
-import loon.core.LSystem;
-import loon.core.event.Updateable;
-import loon.core.geom.Point.Point2i;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.utils.StringUtils;
-import loon.utils.collection.ArrayMap;
+import com.loon.action.sprite.ISprite;
+import com.loon.core.LSystem;
+import com.loon.core.event.Updateable;
+import com.loon.core.geom.Point.Point2i;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.utils.StringUtils;
+import com.loon.utils.collection.ArrayMap;
 
 /**
  * Copyright 2008 - 2010

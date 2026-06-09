@@ -1,7 +1,7 @@
 package org.test;
 
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LFont;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LFont;
 
 /**
  * Native 2x layout (640×960). All pixel positions, sizes, and font sizes are

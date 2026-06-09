@@ -2,21 +2,21 @@ package org.test;
 
 import java.util.HashMap;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.painting.GameComponentCollection;
-import loon.core.RefObject;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.input.LInput;
-import loon.core.input.LInputFactory;
-import loon.core.input.LTouchCollection;
-import loon.core.input.LTouchLocation;
-import loon.core.input.LTouchLocationState;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.painting.GameComponentCollection;
+import com.loon.core.RefObject;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.input.LInput;
+import com.loon.core.input.LInputFactory;
+import com.loon.core.input.LTouchCollection;
+import com.loon.core.input.LTouchLocation;
+import com.loon.core.input.LTouchLocationState;
+import com.loon.core.timer.GameTime;
 
 public class GameplayScreen extends GameScreen {
 

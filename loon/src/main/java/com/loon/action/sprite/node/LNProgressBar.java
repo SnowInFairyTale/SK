@@ -20,8 +20,8 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.action.sprite.SpriteBatch;
-import loon.utils.MathUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.utils.MathUtils;
 
 public class LNProgressBar extends LNSprite {
 	private float _percent;

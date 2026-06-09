@@ -1,9 +1,9 @@
 package org.test;
 
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
 
 /**
  * Inverted recolor: non-black pixels → target color; semi-transparent black halo

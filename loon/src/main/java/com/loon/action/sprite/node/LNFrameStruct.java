@@ -20,12 +20,12 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.action.sprite.SpriteBatch.BlendState;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.graphics.opengl.LTextures;
+import com.loon.action.sprite.SpriteBatch.BlendState;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.graphics.opengl.LTextures;
 
 public class LNFrameStruct {
 

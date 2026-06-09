@@ -2,13 +2,13 @@ package com.loon.action.collision;
 
 import java.util.ArrayList;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.geom.Point;
-import loon.core.geom.Polygon;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.geom.Point;
+import com.loon.core.geom.Polygon;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

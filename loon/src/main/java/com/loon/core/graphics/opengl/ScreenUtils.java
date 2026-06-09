@@ -3,11 +3,11 @@ package com.loon.core.graphics.opengl;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.jni.NativeSupport;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.jni.NativeSupport;
 
 
 /**

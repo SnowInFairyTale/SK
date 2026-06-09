@@ -26,10 +26,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import loon.core.resource.Resources;
-import loon.media.Audio;
-import loon.media.Sound;
-import loon.utils.CollectionUtils;
+import com.loon.core.resource.Resources;
+import com.loon.media.Audio;
+import com.loon.media.Sound;
+import com.loon.utils.CollectionUtils;
 
 //0.3.3版新增的单例资源加载器，默认只有同步加载，建议使用时与多线程配合(比如丢到Screen的onLoad函数下，效果上就等于异步了)。
 public class Assets {

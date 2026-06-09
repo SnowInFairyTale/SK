@@ -2,7 +2,7 @@ package com.loon.core.geom;
 
 import java.util.ArrayList;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 
 /**

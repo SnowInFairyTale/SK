@@ -20,7 +20,7 @@
  */
 package com.loon.action.sprite.node;
 
-import loon.core.geom.Vector2f;
+import com.loon.core.geom.Vector2f;
 
 public class LNMoveTo extends LNAction {
 

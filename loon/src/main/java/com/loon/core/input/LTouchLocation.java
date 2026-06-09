@@ -20,9 +20,9 @@
  */
 package com.loon.core.input;
 
-import loon.core.RefObject;
-import loon.core.geom.Vector2f;
-import loon.core.input.LInputFactory.Touch;
+import com.loon.core.RefObject;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.input.LInputFactory.Touch;
 
 public class LTouchLocation {
 

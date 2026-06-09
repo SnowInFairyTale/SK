@@ -2,8 +2,8 @@ package com.loon.core.geom;
 
 import java.util.ArrayList;
 
-import loon.physics.PPolygon;
-import loon.utils.CollectionUtils;
+import com.loon.physics.PPolygon;
+import com.loon.utils.CollectionUtils;
 
 /**
  * 

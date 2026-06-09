@@ -17,7 +17,7 @@ package com.loon.foundation;
 
 import java.io.UnsupportedEncodingException;
 
-import loon.utils.FileUtils;
+import com.loon.utils.FileUtils;
 
 public class NSString extends NSObject {
 

@@ -3,7 +3,7 @@ package com.loon.core.resource;
 import java.io.InputStream;
 import java.net.URI;
 
-import loon.core.LRelease;
+import com.loon.core.LRelease;
 
 
 /**

@@ -22,7 +22,7 @@ package com.loon.action.sprite.node;
 
 import java.util.HashMap;
 
-import loon.core.LRelease;
+import com.loon.core.LRelease;
 
 public class LNDataCache implements LRelease {
 

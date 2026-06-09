@@ -1,6 +1,6 @@
 package com.loon.core.graphics.component;
 
-import loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.GLEx;
 
 /**
  * Copyright 2008 - 2011

@@ -3,7 +3,7 @@ package com.loon.core.graphics.component;
 import java.util.Iterator;
 import java.util.List;
 
-import loon.core.LRelease;
+import com.loon.core.LRelease;
 
 
 /**

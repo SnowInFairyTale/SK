@@ -2,9 +2,9 @@ package com.loon.core.graphics.opengl;
 
 import java.util.HashMap;
 
-import loon.core.LSystem;
-import loon.core.event.Updateable;
-import loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.LSystem;
+import com.loon.core.event.Updateable;
+import com.loon.core.graphics.opengl.LTexture.Format;
 
 
 /**

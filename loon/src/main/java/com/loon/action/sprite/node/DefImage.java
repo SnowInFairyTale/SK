@@ -22,10 +22,10 @@ package com.loon.action.sprite.node;
 
 import java.util.ArrayList;
 
-import loon.action.sprite.SpriteBatch.BlendState;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.utils.StringUtils;
+import com.loon.action.sprite.SpriteBatch.BlendState;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.utils.StringUtils;
 
 public class DefImage extends DefinitionObject {
 

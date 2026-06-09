@@ -22,8 +22,8 @@ package com.loon.media;
 
 import java.util.HashMap;
 
-import loon.core.Assets;
-import loon.utils.CollectionUtils;
+import com.loon.core.Assets;
+import com.loon.utils.CollectionUtils;
 
 public abstract class SoundBox {
 

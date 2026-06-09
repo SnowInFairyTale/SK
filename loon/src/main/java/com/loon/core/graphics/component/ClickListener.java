@@ -20,7 +20,7 @@
  */
 package com.loon.core.graphics.component;
 
-import loon.core.graphics.LComponent;
+import com.loon.core.graphics.LComponent;
 
 public interface ClickListener {
 

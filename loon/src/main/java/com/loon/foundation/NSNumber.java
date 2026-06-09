@@ -15,8 +15,8 @@
  */
 package com.loon.foundation;
 
-import loon.utils.MathUtils;
-import loon.utils.StringUtils;
+import com.loon.utils.MathUtils;
+import com.loon.utils.StringUtils;
 
 public class NSNumber extends NSObject {
 

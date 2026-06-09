@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.timer.GameTime;
 
 public class SpriteWithText extends Sprite {
 	private LFont font;

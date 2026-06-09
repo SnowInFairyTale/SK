@@ -1,6 +1,6 @@
 package com.loon.physics;
 
-import loon.core.geom.FloatValue;
+import com.loon.core.geom.FloatValue;
 
 public class PWorldBox {
 

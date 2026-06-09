@@ -20,8 +20,8 @@
  */
 package com.loon.core.graphics.opengl;
 
-import loon.core.graphics.LColor;
-import loon.utils.MathUtils;
+import com.loon.core.graphics.LColor;
+import com.loon.utils.MathUtils;
 
 public class GLRenderer {
 

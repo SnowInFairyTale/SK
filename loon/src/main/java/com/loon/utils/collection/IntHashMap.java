@@ -15,7 +15,7 @@
  */
 package com.loon.utils.collection;
 
-import loon.utils.CollectionUtils;
+import com.loon.utils.CollectionUtils;
 
 public class IntHashMap {
 

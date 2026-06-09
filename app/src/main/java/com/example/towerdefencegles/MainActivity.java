@@ -7,9 +7,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import loon.LGame;
-import loon.LSetting;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.LGame;
+import com.loon.LSetting;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 public class MainActivity extends LGame {

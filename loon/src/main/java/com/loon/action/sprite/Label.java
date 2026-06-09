@@ -1,11 +1,11 @@
 package com.loon.action.sprite;
 
-import loon.core.LObject;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.LObject;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

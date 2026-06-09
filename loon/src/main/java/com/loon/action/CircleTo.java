@@ -1,6 +1,6 @@
 package com.loon.action;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 /**
  * Copyright 2008 - 2011

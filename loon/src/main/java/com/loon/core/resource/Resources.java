@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import loon.core.LSystem;
-import loon.utils.StringUtils;
-import loon.utils.collection.ArrayByte;
+import com.loon.core.LSystem;
+import com.loon.utils.StringUtils;
+import com.loon.utils.collection.ArrayByte;
 
 import android.content.res.AssetManager;
 

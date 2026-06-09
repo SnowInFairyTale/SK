@@ -3,14 +3,14 @@ package com.loon;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import loon.LGame.Location;
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.input.LInput.ClickEvent;
-import loon.core.input.LInput.SelectEvent;
-import loon.core.input.LInput.TextEvent;
+import com.loon.LGame.Location;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.input.LInput.ClickEvent;
+import com.loon.core.input.LInput.SelectEvent;
+import com.loon.core.input.LInput.TextEvent;
 
 import android.content.DialogInterface;
 import android.content.Intent;

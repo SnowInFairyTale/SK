@@ -1,14 +1,14 @@
 package com.loon.core.graphics.component;
 
-import loon.core.graphics.LColor;
-import loon.core.graphics.LComponent;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.core.input.LInputFactory.Key;
-import loon.core.input.LInputFactory.Touch;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.core.input.LInputFactory.Key;
+import com.loon.core.input.LInputFactory.Touch;
 
 
 /**

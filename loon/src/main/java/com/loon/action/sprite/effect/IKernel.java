@@ -1,8 +1,8 @@
 package com.loon.action.sprite.effect;
 
-import loon.core.LRelease;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.LRelease;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

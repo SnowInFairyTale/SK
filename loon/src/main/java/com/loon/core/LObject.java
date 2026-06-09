@@ -1,9 +1,9 @@
 package com.loon.core;
 
-import loon.action.map.Config;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.utils.MathUtils;
+import com.loon.action.map.Config;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.utils.MathUtils;
 
 
 /**

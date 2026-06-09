@@ -3,16 +3,16 @@ package com.loon.action.sprite;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import loon.core.LObject;
-import loon.core.geom.Path;
-import loon.core.geom.Polygon;
-import loon.core.geom.RectBox;
-import loon.core.geom.Shape;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.timer.LTimer;
-import loon.utils.MathUtils;
+import com.loon.core.LObject;
+import com.loon.core.geom.Path;
+import com.loon.core.geom.Polygon;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Shape;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.timer.LTimer;
+import com.loon.utils.MathUtils;
 
 
 /**

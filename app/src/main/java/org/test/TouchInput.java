@@ -1,7 +1,7 @@
 package org.test;
 
-import loon.core.input.LInputFactory;
-import loon.core.input.LTouchCollection;
+import com.loon.core.input.LInputFactory;
+import com.loon.core.input.LTouchCollection;
 
 /** Work around jar {@code LInputFactory.getTouchState()} crash on empty touches. */
 final class TouchInput {

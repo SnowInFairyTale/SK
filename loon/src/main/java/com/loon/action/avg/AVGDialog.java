@@ -2,11 +2,11 @@ package com.loon.action.avg;
 
 import java.util.HashMap;
 
-import loon.core.graphics.GraphicsUtils;
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
-import loon.core.graphics.opengl.GLLoader;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.GraphicsUtils;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.device.LGraphics;
+import com.loon.core.graphics.opengl.GLLoader;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

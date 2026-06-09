@@ -17,16 +17,16 @@ package com.loon.action.sprite;
 
 import java.util.ArrayList;
 
-import loon.action.sprite.SpriteBatch.SpriteEffects;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.GLLoader;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.resource.Resources;
-import loon.utils.collection.ArrayByte;
+import com.loon.action.sprite.SpriteBatch.SpriteEffects;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.GLLoader;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.resource.Resources;
+import com.loon.utils.collection.ArrayByte;
 
 //通过LGame工具提取XNA字库生成的PAK文件，可以通过此类重新读取及显示
 public class SpriteFont {

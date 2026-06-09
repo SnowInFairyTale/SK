@@ -1,12 +1,12 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.SpriteBatch.SpriteEffects;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.SpriteBatch.SpriteEffects;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.timer.GameTime;
 
 public class MonsterBoss extends Monster {
 

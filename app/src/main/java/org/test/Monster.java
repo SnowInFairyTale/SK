@@ -1,8 +1,8 @@
 package org.test;
 
-import loon.core.geom.Vector2f;
-import loon.core.timer.GameTime;
-import loon.utils.MathUtils;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.timer.GameTime;
+import com.loon.utils.MathUtils;
 
 public abstract class Monster extends AnimatedSprite {
 

@@ -10,13 +10,13 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextureBatch;
-import loon.core.graphics.opengl.LTextureBatch.GLCache;
-import loon.core.resource.Resources;
-import loon.utils.MathUtils;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureBatch;
+import com.loon.core.graphics.opengl.LTextureBatch.GLCache;
+import com.loon.core.resource.Resources;
+import com.loon.utils.MathUtils;
 
 
 /**

@@ -20,15 +20,15 @@
  */
 package com.loon.action.sprite;
 
-import loon.action.ActionBind;
-import loon.action.map.Attribute;
-import loon.action.map.Config;
-import loon.action.map.Field2D;
-import loon.action.map.TileMap;
-import loon.core.LObject;
-import loon.core.LRelease;
-import loon.core.geom.RectBox;
-import loon.core.graphics.LColor;
+import com.loon.action.ActionBind;
+import com.loon.action.map.Attribute;
+import com.loon.action.map.Config;
+import com.loon.action.map.Field2D;
+import com.loon.action.map.TileMap;
+import com.loon.core.LObject;
+import com.loon.core.LRelease;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.LColor;
 
 public abstract class SpriteBatchObject extends LObject implements Config,
 		LRelease, ActionBind {

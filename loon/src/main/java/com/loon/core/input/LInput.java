@@ -1,6 +1,6 @@
 package com.loon.core.input;
 
-import loon.core.geom.Point.Point2i;
+import com.loon.core.geom.Point.Point2i;
 
 /**
  * Copyright 2008 - 2011

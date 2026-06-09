@@ -20,8 +20,8 @@
  */
 package com.loon.action;
 
-import loon.action.map.Field2D;
-import loon.core.geom.RectBox;
+import com.loon.action.map.Field2D;
+import com.loon.core.geom.RectBox;
 
 /**
  * 修改了动作控制方式，自0.3.3起，只要实现了Action接口的类都可以被ActionControl执行。

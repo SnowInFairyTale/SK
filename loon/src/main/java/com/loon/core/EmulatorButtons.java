@@ -1,14 +1,14 @@
 package com.loon.core;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.event.Updateable;
-import loon.core.geom.RectBox;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexturePack;
-import loon.core.graphics.opengl.LTextureRegion;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.input.LTouch;
-import loon.core.input.MultitouchUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.event.Updateable;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexturePack;
+import com.loon.core.graphics.opengl.LTextureRegion;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.input.LTouch;
+import com.loon.core.input.MultitouchUtils;
 
 import android.view.MotionEvent;
 

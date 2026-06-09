@@ -15,10 +15,10 @@
  */
 package com.loon.physics;
 
-import loon.core.geom.AABB;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.utils.MathUtils;
+import com.loon.core.geom.AABB;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.utils.MathUtils;
 
 public abstract class PShape {
 

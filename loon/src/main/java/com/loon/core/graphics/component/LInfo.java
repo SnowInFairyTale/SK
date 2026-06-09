@@ -2,17 +2,17 @@ package com.loon.core.graphics.component;
 
 import java.util.ArrayList;
 
-import loon.core.graphics.LColor;
-import loon.core.graphics.LComponent;
-import loon.core.graphics.LContainer;
-import loon.core.graphics.LFont;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LSTRFont;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.input.LInputFactory.Key;
-import loon.core.timer.LTimer;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.LContainer;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LSTRFont;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.input.LInputFactory.Key;
+import com.loon.core.timer.LTimer;
 
 
 /**

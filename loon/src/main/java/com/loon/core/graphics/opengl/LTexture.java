@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
-import loon.action.collision.CollisionMask;
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.event.Updateable;
-import loon.core.geom.Polygon;
-import loon.core.geom.Shape;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LTextureBatch.GLCache;
-import loon.jni.NativeSupport;
-import loon.utils.CollectionUtils;
+import com.loon.action.collision.CollisionMask;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.event.Updateable;
+import com.loon.core.geom.Polygon;
+import com.loon.core.geom.Shape;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LTextureBatch.GLCache;
+import com.loon.jni.NativeSupport;
+import com.loon.utils.CollectionUtils;
 
 /**
  * Copyright 2008 - 2011

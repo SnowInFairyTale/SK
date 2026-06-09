@@ -1,7 +1,7 @@
 package com.loon.core.input;
 
-import loon.core.input.LInputFactory.Key;
-import loon.utils.collection.ArrayByte;
+import com.loon.core.input.LInputFactory.Key;
+import com.loon.utils.collection.ArrayByte;
 
 /**
  * Copyright 2008 - 2011

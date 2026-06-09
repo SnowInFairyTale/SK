@@ -20,7 +20,7 @@
  */
 package com.loon.action.sprite;
 
-import loon.action.map.TileMap;
+import com.loon.action.map.TileMap;
 
 public abstract class SimpleObject extends SpriteBatchObject {
 

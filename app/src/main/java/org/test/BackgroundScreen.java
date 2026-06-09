@@ -1,9 +1,9 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.timer.GameTime;
 
 public class BackgroundScreen extends GameScreen {
 

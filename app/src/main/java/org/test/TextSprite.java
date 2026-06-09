@@ -1,11 +1,11 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LSTRFont;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LSTRFont;
+import com.loon.core.graphics.opengl.LTexture;
 
 /** Rasterized label; avoids jar {@code drawString} / LSTRDictionary cache misses. */
 final class TextSprite {

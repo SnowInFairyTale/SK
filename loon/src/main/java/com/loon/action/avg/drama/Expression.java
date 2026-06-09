@@ -2,7 +2,7 @@ package com.loon.action.avg.drama;
 
 import java.util.Random;
 
-import loon.core.LSystem;
+import com.loon.core.LSystem;
 
 
 /**

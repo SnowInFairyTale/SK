@@ -2,14 +2,14 @@ package com.loon.core.graphics.opengl;
 
 import java.util.HashMap;
 
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LFont;
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.graphics.opengl.LTextureBatch.GLCache;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LFont;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.device.LGraphics;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.graphics.opengl.LTextureBatch.GLCache;
 
 
 /**

@@ -20,9 +20,9 @@
  */
 package com.loon.action;
 
-import loon.action.map.Field2D;
-import loon.core.LSystem;
-import loon.utils.MathUtils;
+import com.loon.action.map.Field2D;
+import com.loon.core.LSystem;
+import com.loon.utils.MathUtils;
 
 //0.3.3新增动作，让指定对象做弓箭射出状（抛物线）
 public class ArrowTo extends ActionEvent {

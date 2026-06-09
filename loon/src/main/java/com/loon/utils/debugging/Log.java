@@ -1,6 +1,6 @@
 package com.loon.utils.debugging;
 
-import loon.utils.FileUtils;
+import com.loon.utils.FileUtils;
 
 /**
  * Copyright 2008 - 2009

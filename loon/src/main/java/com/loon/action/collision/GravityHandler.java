@@ -2,10 +2,10 @@ package com.loon.action.collision;
 
 import java.util.ArrayList;
 
-import loon.action.ActionBind;
-import loon.core.LRelease;
-import loon.core.LSystem;
-import loon.utils.MathUtils;
+import com.loon.action.ActionBind;
+import com.loon.core.LRelease;
+import com.loon.core.LSystem;
+import com.loon.utils.MathUtils;
 
 /**
  * Copyright 2008 - 2012

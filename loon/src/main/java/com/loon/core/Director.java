@@ -17,7 +17,7 @@ package com.loon.core;
 
 import java.util.ArrayList;
 
-import loon.core.geom.Vector2f;
+import com.loon.core.geom.Vector2f;
 
 public class Director {
 

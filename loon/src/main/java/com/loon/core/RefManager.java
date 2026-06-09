@@ -23,7 +23,7 @@ package com.loon.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import loon.utils.CollectionUtils;
+import com.loon.utils.CollectionUtils;
 //引用管理器，作用是保存实现了LRelease接口的对象，然后统一释放。
 public class RefManager implements LRelease {
 

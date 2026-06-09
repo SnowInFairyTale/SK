@@ -20,8 +20,8 @@
  */
 package com.loon.core.graphics.opengl.particle;
 
-import loon.core.graphics.opengl.LTexture;
-import loon.utils.MathUtils;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.utils.MathUtils;
 
 
 public class FireEmitter implements ParticleEmitter {

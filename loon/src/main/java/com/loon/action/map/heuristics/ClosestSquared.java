@@ -20,7 +20,7 @@
  */
 package com.loon.action.map.heuristics;
 
-import loon.action.map.AStarFindHeuristic;
+import com.loon.action.map.AStarFindHeuristic;
 
 public class ClosestSquared implements AStarFindHeuristic {
 

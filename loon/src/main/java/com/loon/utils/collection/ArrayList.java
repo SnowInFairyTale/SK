@@ -20,8 +20,8 @@
  */
 package com.loon.utils.collection;
 
-import loon.utils.CollectionUtils;
-import loon.utils.MathUtils;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.MathUtils;
 
 public class ArrayList {
 

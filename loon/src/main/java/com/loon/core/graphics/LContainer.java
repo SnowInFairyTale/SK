@@ -3,8 +3,8 @@ package com.loon.core.graphics;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import loon.core.graphics.opengl.GLEx;
-import loon.utils.CollectionUtils;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.utils.CollectionUtils;
 
 /**
  * 

@@ -24,10 +24,10 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-import loon.core.LRelease;
-import loon.core.graphics.opengl.GLAttributes.Usage;
-import loon.core.graphics.opengl.GLAttributes.VertexAttribute;
-import loon.jni.NativeSupport;
+import com.loon.core.LRelease;
+import com.loon.core.graphics.opengl.GLAttributes.Usage;
+import com.loon.core.graphics.opengl.GLAttributes.VertexAttribute;
+import com.loon.jni.NativeSupport;
 
 
 public class GLMesh {

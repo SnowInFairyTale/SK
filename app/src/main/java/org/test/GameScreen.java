@@ -1,10 +1,10 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.graphics.LColorPool;
-import loon.core.input.LInput;
-import loon.core.timer.GameTime;
-import loon.utils.MathUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.graphics.LColorPool;
+import com.loon.core.input.LInput;
+import com.loon.core.timer.GameTime;
+import com.loon.utils.MathUtils;
 
 public abstract class GameScreen {
 

@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.core.geom.Vector2f;
+import com.loon.core.geom.Vector2f;
 
 public class ConfirmScreen extends MenuScreen
 {

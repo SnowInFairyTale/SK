@@ -2,7 +2,7 @@ package com.loon.action.map.tmx;
 
 import java.util.ArrayList;
 
-import loon.utils.xml.XMLElement;
+import com.loon.utils.xml.XMLElement;
 
 /**
  * 

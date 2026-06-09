@@ -24,11 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.GL;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.TextureUtils;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.GL;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.TextureUtils;
 
 
 public class ParticleSystem {

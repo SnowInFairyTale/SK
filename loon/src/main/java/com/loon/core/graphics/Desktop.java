@@ -2,12 +2,12 @@ package com.loon.core.graphics;
 
 import java.util.ArrayList;
 
-import loon.core.LRelease;
-import loon.core.graphics.component.LLayer;
-import loon.core.graphics.component.LPanel;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.input.LInput;
-import loon.core.input.LInputFactory.Touch;
+import com.loon.core.LRelease;
+import com.loon.core.graphics.component.LLayer;
+import com.loon.core.graphics.component.LPanel;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.input.LInput;
+import com.loon.core.input.LInputFactory.Touch;
 
 /**
  * 

@@ -22,9 +22,9 @@ package com.loon.utils.collection;
 
 import java.util.Arrays;
 
-import loon.utils.CollectionUtils;
-import loon.utils.MathUtils;
-import loon.utils.StringUtils;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.MathUtils;
+import com.loon.utils.StringUtils;
 
 public class IntArray {
 

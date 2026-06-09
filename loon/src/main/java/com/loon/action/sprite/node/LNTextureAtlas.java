@@ -22,12 +22,12 @@ package com.loon.action.sprite.node;
 
 import java.util.ArrayList;
 
-import loon.action.sprite.SpriteBatch;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.utils.MathUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.utils.MathUtils;
 
 public class LNTextureAtlas {
 

@@ -1,16 +1,16 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.SpriteBatch.SpriteEffects;
-import loon.action.sprite.painting.DrawableGameComponent;
-import loon.action.sprite.painting.IGameComponent;
-import loon.core.geom.RectBox;
-import loon.core.geom.Vector2f;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextures;
-import loon.core.timer.GameTime;
-import loon.utils.MathUtils;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.SpriteBatch.SpriteEffects;
+import com.loon.action.sprite.painting.DrawableGameComponent;
+import com.loon.action.sprite.painting.IGameComponent;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextures;
+import com.loon.core.timer.GameTime;
+import com.loon.utils.MathUtils;
 
 public class AnimatedSprite extends DrawableGameComponent implements
 		IGameComponent {

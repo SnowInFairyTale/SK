@@ -1,13 +1,13 @@
 package com.loon.action.collision;
 
-import loon.core.LSystem;
-import loon.core.geom.Line;
-import loon.core.geom.Point;
-import loon.core.geom.RectBox;
-import loon.core.geom.Shape;
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.utils.MathUtils;
+import com.loon.core.LSystem;
+import com.loon.core.geom.Line;
+import com.loon.core.geom.Point;
+import com.loon.core.geom.RectBox;
+import com.loon.core.geom.Shape;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.utils.MathUtils;
 
 
 /**

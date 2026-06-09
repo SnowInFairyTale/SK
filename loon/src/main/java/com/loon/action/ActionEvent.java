@@ -1,6 +1,6 @@
 package com.loon.action;
 
-import loon.core.timer.LTimer;
+import com.loon.core.timer.LTimer;
 
 /**
  * Copyright 2008 - 2011

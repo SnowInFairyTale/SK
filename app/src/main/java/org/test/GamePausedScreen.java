@@ -1,7 +1,7 @@
 package org.test;
 
-import loon.core.geom.Vector2f;
-import loon.core.timer.GameTime;
+import com.loon.core.geom.Vector2f;
+import com.loon.core.timer.GameTime;
 
 public class GamePausedScreen extends MenuScreen {
 	private MainGame game;

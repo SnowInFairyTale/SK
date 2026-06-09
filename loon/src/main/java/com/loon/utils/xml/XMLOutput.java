@@ -26,8 +26,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Stack;
 
-import loon.core.LRelease;
-import loon.utils.MathUtils;
+import com.loon.core.LRelease;
+import com.loon.utils.MathUtils;
 
 public class XMLOutput extends Writer implements LRelease {
 

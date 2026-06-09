@@ -15,7 +15,7 @@
  */
 package com.loon.physics;
 
-import loon.core.geom.AABB;
+import com.loon.core.geom.AABB;
 
 public class PSortableAABB {
 

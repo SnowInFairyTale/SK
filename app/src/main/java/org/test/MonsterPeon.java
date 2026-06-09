@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.core.geom.Vector2f;
+import com.loon.core.geom.Vector2f;
 
 public class MonsterPeon extends Monster {
 	public MonsterPeon(MainGame game, Wave wave, float speed,

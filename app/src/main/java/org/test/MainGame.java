@@ -2,12 +2,12 @@ package org.test;
 
 import java.util.ArrayList;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.painting.DrawableScreen;
-import loon.core.input.LInputFactory;
-import loon.core.input.LKey;
-import loon.core.input.LTouch;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.painting.DrawableScreen;
+import com.loon.core.input.LInputFactory;
+import com.loon.core.input.LKey;
+import com.loon.core.input.LTouch;
+import com.loon.core.timer.GameTime;
 
 public class MainGame extends DrawableScreen {
 

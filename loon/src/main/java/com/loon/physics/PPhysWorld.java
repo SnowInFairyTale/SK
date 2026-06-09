@@ -15,8 +15,8 @@
  */
 package com.loon.physics;
 
-import loon.core.geom.Vector2f;
-import loon.utils.CollectionUtils;
+import com.loon.core.geom.Vector2f;
+import com.loon.utils.CollectionUtils;
 
 public class PPhysWorld {
 

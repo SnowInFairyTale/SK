@@ -1,6 +1,6 @@
 package org.test;
 
-import loon.core.timer.GameTime;
+import com.loon.core.timer.GameTime;
 
 public class LoadingScreen extends GameScreen
 {

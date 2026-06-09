@@ -24,8 +24,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import loon.core.LSystem;
-import loon.core.resource.Resources;
+import com.loon.core.LSystem;
+import com.loon.core.resource.Resources;
 
 public class JSONTokenizer {
 

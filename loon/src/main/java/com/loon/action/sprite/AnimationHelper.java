@@ -2,12 +2,12 @@ package com.loon.action.sprite;
 
 import java.util.HashMap;
 
-import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.TextureUtils;
-import loon.utils.CollectionUtils;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.device.LGraphics;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.TextureUtils;
+import com.loon.utils.CollectionUtils;
 
 
 /**

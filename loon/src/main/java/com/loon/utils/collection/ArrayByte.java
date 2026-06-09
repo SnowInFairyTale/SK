@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UTFDataFormatException;
 
-import loon.core.LRelease;
-import loon.utils.MathUtils;
+import com.loon.core.LRelease;
+import com.loon.utils.MathUtils;
 
 /**
  * Copyright 2008 - 2009

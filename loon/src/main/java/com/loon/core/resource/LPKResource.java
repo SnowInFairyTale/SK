@@ -3,11 +3,11 @@ package com.loon.core.resource;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import loon.core.graphics.LImage;
-import loon.core.graphics.opengl.LTexture;
-import loon.jni.NativeSupport;
-import loon.utils.CollectionUtils;
-import loon.utils.collection.ArrayByte;
+import com.loon.core.graphics.LImage;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.jni.NativeSupport;
+import com.loon.utils.CollectionUtils;
+import com.loon.utils.collection.ArrayByte;
 
 /**
  * Copyright 2008 - 2012

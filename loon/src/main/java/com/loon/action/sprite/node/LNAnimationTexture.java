@@ -22,10 +22,10 @@ package com.loon.action.sprite.node;
 
 import java.util.ArrayList;
 
-import loon.action.sprite.Animation;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTexture.Format;
-import loon.core.graphics.opengl.LTextures;
+import com.loon.action.sprite.Animation;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTexture.Format;
+import com.loon.core.graphics.opengl.LTextures;
 
 public class LNAnimationTexture {
 

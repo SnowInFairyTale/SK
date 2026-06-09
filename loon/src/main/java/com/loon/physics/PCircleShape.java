@@ -15,7 +15,7 @@
  */
 package com.loon.physics;
 
-import loon.core.geom.Circle;
+import com.loon.core.geom.Circle;
 
 public class PCircleShape extends PShape {
 

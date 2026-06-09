@@ -20,7 +20,7 @@
  */
 package com.loon.utils.json;
 
-import loon.utils.MathUtils;
+import com.loon.utils.MathUtils;
 
 public class JSONParser {
 

@@ -2,8 +2,8 @@ package com.loon.core.graphics.component;
 
 import java.util.List;
 
-import loon.core.geom.Vector2f;
-import loon.utils.MathUtils;
+import com.loon.core.geom.Vector2f;
+import com.loon.utils.MathUtils;
 
 
 /**

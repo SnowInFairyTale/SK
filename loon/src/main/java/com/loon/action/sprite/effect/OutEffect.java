@@ -1,12 +1,12 @@
 package com.loon.action.sprite.effect;
 
-import loon.action.map.Config;
-import loon.action.sprite.ISprite;
-import loon.core.LObject;
-import loon.core.LSystem;
-import loon.core.geom.RectBox;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.action.map.Config;
+import com.loon.action.sprite.ISprite;
+import com.loon.core.LObject;
+import com.loon.core.LSystem;
+import com.loon.core.geom.RectBox;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

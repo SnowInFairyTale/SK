@@ -1,10 +1,10 @@
 package com.loon.action.sprite;
 
-import loon.core.LRelease;
-import loon.core.graphics.LColor;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTextureBatch.GLCache;
+import com.loon.core.LRelease;
+import com.loon.core.graphics.LColor;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureBatch.GLCache;
 
 /**
  * 

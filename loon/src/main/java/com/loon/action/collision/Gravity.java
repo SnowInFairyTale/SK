@@ -1,7 +1,7 @@
 package com.loon.action.collision;
 
-import loon.action.ActionBind;
-import loon.core.LRelease;
+import com.loon.action.ActionBind;
+import com.loon.core.LRelease;
 
 
 /**

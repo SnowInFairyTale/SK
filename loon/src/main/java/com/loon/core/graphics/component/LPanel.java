@@ -1,9 +1,9 @@
 package com.loon.core.graphics.component;
 
-import loon.core.graphics.LComponent;
-import loon.core.graphics.LContainer;
-import loon.core.graphics.opengl.GLEx;
-import loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.LComponent;
+import com.loon.core.graphics.LContainer;
+import com.loon.core.graphics.opengl.GLEx;
+import com.loon.core.graphics.opengl.LTexture;
 
 
 /**

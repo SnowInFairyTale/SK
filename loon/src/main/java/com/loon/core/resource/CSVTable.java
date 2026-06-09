@@ -3,8 +3,8 @@ package com.loon.core.resource;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import loon.utils.collection.ArrayMap;
-import loon.utils.collection.ArrayMap.Entry;
+import com.loon.utils.collection.ArrayMap;
+import com.loon.utils.collection.ArrayMap.Entry;
 
 
 /**

@@ -1,6 +1,6 @@
 package com.loon.action;
 
-import loon.core.geom.RectBox;
+import com.loon.core.geom.RectBox;
 
 /**
  * Copyright 2008 - 2011

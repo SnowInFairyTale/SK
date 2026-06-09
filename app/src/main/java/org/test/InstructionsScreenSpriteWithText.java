@@ -1,10 +1,10 @@
 package org.test;
 
-import loon.action.sprite.SpriteBatch;
-import loon.action.sprite.painting.DrawableGameComponent;
-import loon.action.sprite.painting.IGameComponent;
-import loon.core.graphics.LFont;
-import loon.core.timer.GameTime;
+import com.loon.action.sprite.SpriteBatch;
+import com.loon.action.sprite.painting.DrawableGameComponent;
+import com.loon.action.sprite.painting.IGameComponent;
+import com.loon.core.graphics.LFont;
+import com.loon.core.timer.GameTime;
 
 /** Introduction screen button labels — background is drawn by {@link InstructionScreen}. */
 public class InstructionsScreenSpriteWithText extends DrawableGameComponent
