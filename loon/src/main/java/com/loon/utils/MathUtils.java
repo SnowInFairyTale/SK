@@ -552,7 +552,7 @@ public class MathUtils {
 	}
 
 	static public final float sqrt(float a) {
-		return Math.sqrt(a);
+		return (float) Math.sqrt(a);
 	}
 
 	static public final float log(float a) {
