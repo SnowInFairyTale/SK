@@ -105,7 +105,7 @@ public final class LGraphics implements LTrans {
 		this.canvas.clipRect(0, 0, width, height);
 		this.clip = canvas.getClipBounds();
 		this.setFont(defaultFont);
-		this.canvas.save(Canvas.CLIP_SAVE_FLAG);
+		this.canvas.save();
 		this.setColor(LColor.white);
 		this.isClose = false;
 	}
@@ -145,7 +145,7 @@ public final class LGraphics implements LTrans {
 			}
 			this.clip = canvas.getClipBounds();
 			this.setFont(defaultFont);
-			this.canvas.save(Canvas.CLIP_SAVE_FLAG);
+			this.canvas.save();
 		}
 	}
 
@@ -168,7 +168,7 @@ public final class LGraphics implements LTrans {
 		if (isClose) {
 			return;
 		}
-		canvas.save(flag);
+		canvas.save();
 	}
 
 	/**
@@ -1615,7 +1615,7 @@ public final class LGraphics implements LTrans {
 		if (x < clip.left || x + width > clip.right || y < clip.top
 				|| y + height > clip.bottom) {
 			canvas.restore();
-			canvas.save(Canvas.CLIP_SAVE_FLAG);
+			canvas.save();
 		}
 		clip.left = x;
 		clip.top = y;
