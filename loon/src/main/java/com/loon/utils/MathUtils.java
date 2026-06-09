@@ -1,6 +1,5 @@
 package com.loon.utils;
 
-import android.util.FloatMath;
 import com.loon.core.LSystem;
 import com.loon.core.geom.RectBox;
 
@@ -90,7 +89,7 @@ public class MathUtils {
 	/**
 	 * 判断是否为数字
 	 * 
-	 * @param param
+	 * @param str
 	 * @return
 	 */
 	public static boolean isNan(String str) {
@@ -228,13 +227,13 @@ public class MathUtils {
 	static {
 		for (int i = 0; i < SIN_COUNT; i++) {
 			float a = (i + 0.5f) / SIN_COUNT * radFull;
-			sin[i] = FloatMath.sin(a);
-			cos[i] = FloatMath.cos(a);
+			sin[i] = (float) Math.sin(a);
+			cos[i] = (float) Math.cos(a);
 		}
 		for (int i = 0; i < 360; i += 90) {
-			sin[(int) (i * degToIndex) & SIN_MASK] = FloatMath.sin(i
+			sin[(int) (i * degToIndex) & SIN_MASK] = (float) Math.sin(i
 					* DEG_TO_RAD);
-			cos[(int) (i * degToIndex) & SIN_MASK] = FloatMath.cos(i
+			cos[(int) (i * degToIndex) & SIN_MASK] = (float) Math.cos(i
 					* DEG_TO_RAD);
 		}
 	}
@@ -520,11 +519,11 @@ public class MathUtils {
 	}
 
 	static public final float mag(float a, float b) {
-		return FloatMath.sqrt(a * a + b * b);
+		return (float) Math.sqrt(a * a + b * b);
 	}
 
 	static public final float mag(float a, float b, float c) {
-		return FloatMath.sqrt(a * a + b * b + c * c);
+		return (float) Math.sqrt(a * a + b * b + c * c);
 	}
 
 	static public final float dist(float x1, float y1, float x2, float y2) {
@@ -553,7 +552,7 @@ public class MathUtils {
 	}
 
 	static public final float sqrt(float a) {
-		return FloatMath.sqrt(a);
+		return Math.sqrt(a);
 	}
 
 	static public final float log(float a) {
