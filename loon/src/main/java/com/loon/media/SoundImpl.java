@@ -18,7 +18,7 @@
  * @email javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.media;
+package com.loon.media;
 
 import java.util.List;
 

@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.resource;
+package com.loon.core.resource;
 
 import java.io.BufferedReader;
 import java.io.IOException;

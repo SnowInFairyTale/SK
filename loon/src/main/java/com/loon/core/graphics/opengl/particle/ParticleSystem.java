@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.graphics.opengl.particle;
+package com.loon.core.graphics.opengl.particle;
 
 import java.util.ArrayList;
 import java.util.HashMap;

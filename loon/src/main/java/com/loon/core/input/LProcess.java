@@ -1,4 +1,4 @@
-package loon.core.input;
+package com.loon.core.input;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

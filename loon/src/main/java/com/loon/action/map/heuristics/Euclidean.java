@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.action.map.heuristics;
+package com.loon.action.map.heuristics;
 
 import loon.action.map.AStarFindHeuristic;
 import loon.utils.MathUtils;

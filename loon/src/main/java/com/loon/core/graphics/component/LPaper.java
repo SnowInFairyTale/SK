@@ -1,4 +1,4 @@
-package loon.core.graphics.component;
+package com.loon.core.graphics.component;
 
 import loon.action.sprite.Animation;
 import loon.core.graphics.LComponent;

@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.action;
+package com.loon.action;
 
 import loon.action.map.Field2D;
 import loon.core.geom.RectBox;

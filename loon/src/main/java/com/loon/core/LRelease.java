@@ -1,4 +1,4 @@
-package loon.core;
+package com.loon.core;
 
 /**
  * Copyright 2008 - 2011

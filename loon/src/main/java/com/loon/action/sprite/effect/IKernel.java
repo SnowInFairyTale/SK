@@ -1,4 +1,4 @@
-package loon.action.sprite.effect;
+package com.loon.action.sprite.effect;
 
 import loon.core.LRelease;
 import loon.core.graphics.opengl.GLEx;

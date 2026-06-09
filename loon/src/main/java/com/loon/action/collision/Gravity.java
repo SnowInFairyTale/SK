@@ -1,4 +1,4 @@
-package loon.action.collision;
+package com.loon.action.collision;
 
 import loon.action.ActionBind;
 import loon.core.LRelease;

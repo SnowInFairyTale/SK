@@ -1,4 +1,4 @@
-package loon.core;
+package com.loon.core;
 
 import loon.action.map.Config;
 import loon.core.geom.RectBox;

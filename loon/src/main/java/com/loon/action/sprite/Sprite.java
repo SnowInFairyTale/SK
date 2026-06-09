@@ -1,4 +1,4 @@
-package loon.action.sprite;
+package com.loon.action.sprite;
 
 import loon.action.ActionBind;
 import loon.action.collision.CollisionHelper;

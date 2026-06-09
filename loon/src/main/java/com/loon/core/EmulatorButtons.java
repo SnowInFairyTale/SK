@@ -1,4 +1,4 @@
-package loon.core;
+package com.loon.core;
 
 import loon.action.sprite.SpriteBatch;
 import loon.core.event.Updateable;

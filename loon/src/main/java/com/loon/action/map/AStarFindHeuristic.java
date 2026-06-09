@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.action.map;
+package com.loon.action.map;
 
 public interface AStarFindHeuristic {
 

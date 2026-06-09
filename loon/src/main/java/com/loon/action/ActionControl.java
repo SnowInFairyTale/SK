@@ -1,4 +1,4 @@
-package loon.action;
+package com.loon.action;
 
 /**
  * Copyright 2008 - 2011

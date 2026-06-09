@@ -1,4 +1,4 @@
-package loon.core.graphics.device;
+package com.loon.core.graphics.device;
 
 /**
  * Copyright 2008 - 2010

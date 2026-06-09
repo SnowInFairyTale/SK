@@ -1,4 +1,4 @@
-package loon.core.graphics.component;
+package com.loon.core.graphics.component;
 
 /**
  * Copyright 2008 - 2010

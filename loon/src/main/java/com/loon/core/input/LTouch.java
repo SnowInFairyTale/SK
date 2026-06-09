@@ -1,4 +1,4 @@
-package loon.core.input;
+package com.loon.core.input;
 
 import loon.core.input.LInputFactory.Touch;
 import loon.utils.collection.ArrayByte;

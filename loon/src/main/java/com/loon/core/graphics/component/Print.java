@@ -1,4 +1,4 @@
-package loon.core.graphics.component;
+package com.loon.core.graphics.component;
 
 import loon.core.LRelease;
 import loon.core.LSystem;

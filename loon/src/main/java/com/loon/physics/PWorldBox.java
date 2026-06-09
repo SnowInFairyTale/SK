@@ -1,4 +1,4 @@
-package loon.physics;
+package com.loon.physics;
 
 import loon.core.geom.FloatValue;
 

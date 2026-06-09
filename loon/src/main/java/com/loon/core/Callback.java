@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core;
+package com.loon.core;
 
 public interface Callback<T> {
 

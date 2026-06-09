@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.graphics.opengl;
+package com.loon.core.graphics.opengl;
 
 import java.nio.FloatBuffer;
 

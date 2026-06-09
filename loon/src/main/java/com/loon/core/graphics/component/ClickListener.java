@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.graphics.component;
+package com.loon.core.graphics.component;
 
 import loon.core.graphics.LComponent;
 

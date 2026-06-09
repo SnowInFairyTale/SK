@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.action.sprite.painting;
+package com.loon.action.sprite.painting;
 
 import loon.core.timer.GameTime;
 

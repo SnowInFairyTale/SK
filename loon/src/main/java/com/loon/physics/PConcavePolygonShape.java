@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package loon.physics;
+package com.loon.physics;
 
 import loon.core.geom.Vector2f;
 import loon.utils.CollectionUtils;

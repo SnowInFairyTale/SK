@@ -1,4 +1,4 @@
-package loon.core.graphics.opengl;
+package com.loon.core.graphics.opengl;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;

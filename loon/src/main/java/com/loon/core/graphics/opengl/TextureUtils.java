@@ -1,4 +1,4 @@
-package loon.core.graphics.opengl;
+package com.loon.core.graphics.opengl;
 
 import loon.core.LSystem;
 import loon.core.graphics.LColor;

@@ -1,4 +1,4 @@
-package loon.core.graphics;
+package com.loon.core.graphics;
 
 import loon.action.ActionBind;
 import loon.action.map.Field2D;

@@ -1,4 +1,4 @@
-package loon.core.input;
+package com.loon.core.input;
 
 import loon.core.EmulatorButtons;
 import loon.core.LSystem;

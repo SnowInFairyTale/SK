@@ -1,4 +1,4 @@
-package loon.action.avg;
+package com.loon.action.avg;
 
 import java.io.BufferedReader;
 import java.io.IOException;

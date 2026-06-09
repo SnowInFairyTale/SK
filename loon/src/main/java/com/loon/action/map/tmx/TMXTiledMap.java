@@ -1,4 +1,4 @@
-package loon.action.map.tmx;
+package com.loon.action.map.tmx;
 
 import java.io.IOException;
 import java.io.InputStream;

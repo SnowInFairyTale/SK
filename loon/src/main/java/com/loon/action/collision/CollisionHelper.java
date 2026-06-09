@@ -1,4 +1,4 @@
-package loon.action.collision;
+package com.loon.action.collision;
 
 import loon.core.LSystem;
 import loon.core.geom.Line;

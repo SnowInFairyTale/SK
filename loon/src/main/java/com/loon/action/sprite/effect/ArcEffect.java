@@ -1,4 +1,4 @@
-package loon.action.sprite.effect;
+package com.loon.action.sprite.effect;
 
 import loon.action.sprite.ISprite;
 import loon.core.LObject;

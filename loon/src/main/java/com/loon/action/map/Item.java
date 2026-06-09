@@ -1,4 +1,4 @@
-package loon.action.map;
+package com.loon.action.map;
 
 /**
  * Copyright 2008 - 2011

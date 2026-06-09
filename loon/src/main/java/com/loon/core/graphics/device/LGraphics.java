@@ -1,4 +1,4 @@
-package loon.core.graphics.device;
+package com.loon.core.graphics.device;
 
 import loon.core.LSystem;
 import loon.core.geom.RectBox;

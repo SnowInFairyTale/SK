@@ -1,4 +1,4 @@
-package loon.action.avg;
+package com.loon.action.avg;
 
 import loon.action.sprite.ISprite;
 import loon.core.LSystem;

@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.utils.collection;
+package com.loon.utils.collection;
 
 import loon.core.LRelease;
 import loon.utils.CollectionUtils;

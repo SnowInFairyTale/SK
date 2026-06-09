@@ -1,4 +1,4 @@
-package loon.core.graphics;
+package com.loon.core.graphics;
 
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;

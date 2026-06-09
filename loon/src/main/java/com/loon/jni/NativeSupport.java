@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.jni;
+package com.loon.jni;
 
 import java.io.File;
 import java.nio.Buffer;

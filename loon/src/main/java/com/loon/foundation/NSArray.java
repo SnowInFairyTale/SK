@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package loon.foundation;
+package com.loon.foundation;
 
 import loon.core.LSystem;
 import loon.utils.collection.ArrayList;

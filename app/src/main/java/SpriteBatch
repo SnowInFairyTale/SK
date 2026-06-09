@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package loon.action.sprite;
+package com.loon.action.sprite;
 
 import java.util.HashMap;
 import loon.core.LRelease;

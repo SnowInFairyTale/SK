@@ -1,4 +1,4 @@
-package loon.core.input;
+package com.loon.core.input;
 
 import java.lang.reflect.Method;
 

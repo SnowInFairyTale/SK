@@ -1,4 +1,4 @@
-package loon.core.graphics;
+package com.loon.core.graphics;
 
 import java.io.IOException;
 import java.io.InputStream;

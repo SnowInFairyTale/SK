@@ -1,4 +1,4 @@
-package loon.core.resource;
+package com.loon.core.resource;
 
 import java.io.IOException;
 import java.io.InputStream;

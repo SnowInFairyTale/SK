@@ -1,4 +1,4 @@
-package loon.core.graphics.opengl;
+package com.loon.core.graphics.opengl;
 
 import javax.microedition.khronos.opengles.GL10;
 

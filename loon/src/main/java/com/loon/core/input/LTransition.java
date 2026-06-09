@@ -1,4 +1,4 @@
-package loon.core.input;
+package com.loon.core.input;
 
 import loon.action.map.Config;
 import loon.action.sprite.ISprite;

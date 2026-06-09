@@ -1,4 +1,4 @@
-package loon.action.avg.drama;
+package com.loon.action.avg.drama;
 
 import java.io.BufferedReader;
 import java.io.IOException;

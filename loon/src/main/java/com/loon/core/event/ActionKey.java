@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.event;
+package com.loon.core.event;
 
 public class ActionKey {
 

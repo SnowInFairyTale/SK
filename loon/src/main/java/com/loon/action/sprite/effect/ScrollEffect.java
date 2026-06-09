@@ -1,4 +1,4 @@
-package loon.action.sprite.effect;
+package com.loon.action.sprite.effect;
 
 import loon.action.map.Config;
 import loon.action.sprite.ISprite;

@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.geom;
+package com.loon.core.geom;
 
 public class FloatValue {
 

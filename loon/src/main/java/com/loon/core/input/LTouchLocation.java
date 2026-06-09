@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.input;
+package com.loon.core.input;
 
 import loon.core.RefObject;
 import loon.core.geom.Vector2f;

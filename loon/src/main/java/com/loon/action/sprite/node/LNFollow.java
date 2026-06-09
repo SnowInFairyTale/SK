@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.action.sprite.node;
+package com.loon.action.sprite.node;
 
 import loon.core.LSystem;
 import loon.core.geom.RectBox;

@@ -18,7 +18,7 @@
  * @email：javachenpeng@yahoo.com
  * @version 0.3.3
  */
-package loon.core.input;
+package com.loon.core.input;
 
 public enum LTouchLocationState {
 	
