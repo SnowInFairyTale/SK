@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package loon;
+package com.loon;
 
 import loon.LGame.LMode;
 import loon.core.LSystem;

@@ -1,4 +1,4 @@
-package loon;
+package com.loon;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
