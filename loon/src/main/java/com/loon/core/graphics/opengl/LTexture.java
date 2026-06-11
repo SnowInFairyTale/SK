@@ -82,6 +82,14 @@ public class LTexture implements LRelease {
 
 	private final int[] GENERATED_TEXTUREID = new int[1];
 
+	private static int nextDebugID;
+
+	private static synchronized int nextDebugID() {
+		return ++nextDebugID;
+	}
+
+	private final int debugID = nextDebugID();
+
 	private LColor[] colors;
 
 	private int subX, subY, subWidth, subHeight;
@@ -864,12 +872,13 @@ public class LTexture implements LRelease {
 		GLEx.noteExternalTextureBind(textureID, getDebugName());
 	}
 
-	String getDebugName() {
+	public final String getDebugName() {
 		String name = getFileName();
 		if (name != null) {
 			return name;
 		}
-		return "generated@" + getWidth() + "x" + getHeight();
+		return "generated#" + debugID + "@" + getWidth() + "x"
+				+ getHeight();
 	}
 
 	public synchronized void bind(int unit) {

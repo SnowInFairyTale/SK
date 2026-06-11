@@ -653,12 +653,7 @@ public class SpriteBatch implements LRelease {
 		if (texture == null) {
 			return "null";
 		}
-		String name = texture.getFileName();
-		if (name == null) {
-			name = "generated@" + texture.getWidth() + "x"
-					+ texture.getHeight();
-		}
-		return texture.getTextureID() + ":" + name;
+		return texture.getTextureID() + ":" + texture.getDebugName();
 	}
 
 	public void draw(LTexture texture, float x, float y, float rotation) {
