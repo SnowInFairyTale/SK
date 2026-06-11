@@ -55,9 +55,6 @@ public class TowerToolbar extends DrawableGameComponent implements
 	private LTexture textureUpgradeButtonActive;
 	private LTexture textureUpgradeButtonInactive;
 	private Tower tower;
-	private LColor upgradeButtonGreenColor;
-	private LColor upgradeButtonRedColor;
-	private LColor upgradeButtonWhiteColor;
 	private final CachedText attackIntervalLabel = new CachedText();
 	private final CachedText attackIntervalValueLabel = new CachedText();
 	private final CachedText powerLabel = new CachedText();
@@ -179,16 +176,16 @@ public class TowerToolbar extends DrawableGameComponent implements
 		this.refreshDynamicTextSprites();
 		this.drawToolbarLabel(batch, this.attackIntervalLabel,
 				this.drawPosition.x + 128f, this.drawPosition.y + 66f,
-				this.upgradeButtonWhiteColor);
+				LColor.white);
 		this.drawToolbarLabelCentered(batch, this.attackIntervalValueLabel,
 				this.drawPosition.x + 240f, this.drawPosition.y + 66f,
-				this.upgradeButtonGreenColor);
+				LColor.white);
 		this.drawToolbarLabel(batch, this.powerLabel,
 				this.drawPosition.x + 128f, this.drawPosition.y + 30f,
-				this.upgradeButtonWhiteColor);
+				LColor.white);
 		this.drawToolbarLabelCentered(batch, this.powerValueLabel,
 				this.drawPosition.x + 240f, this.drawPosition.y + 30f,
-				this.upgradeButtonRedColor);
+				LColor.white);
 
 		if (this.isGemSelectionMode()) {
 			this.drawGemSelection(batch);
@@ -289,8 +286,7 @@ public class TowerToolbar extends DrawableGameComponent implements
 				LColor.white);
 		this.drawToolbarLabel(batch, this.upgradeLabel,
 				this.drawPositionUpgradeButton.x + 46f,
-				this.drawPositionUpgradeButton.y + 30f,
-				this.upgradeButtonWhiteColor);
+				this.drawPositionUpgradeButton.y + 30f, LColor.white);
 		float sellX = this.drawPosition.x + SELL_SLOT_X;
 		float sellY = this.drawPosition.y;
 		this.drawShellFrame(batch, sellX, sellY, LColor.white);
@@ -303,16 +299,13 @@ public class TowerToolbar extends DrawableGameComponent implements
 		if (this.tower.IsMoreUpgradeLevelsAvailable()) {
 			this.drawToolbarLabelCentered(batch, this.upgradeCostLabel,
 					this.drawPositionUpgradeButton.x + 154f,
-					this.drawPositionUpgradeButton.y + 30f,
-					this.upgradeButtonWhiteColor);
+					this.drawPositionUpgradeButton.y + 30f, LColor.white);
 			this.drawToolbarLabelCentered(batch, this.upgradeDamageLabel,
 					this.drawPositionUpgradeButton.x + 88f,
-					this.drawPositionUpgradeButton.y + 66f,
-					this.upgradeButtonRedColor);
+					this.drawPositionUpgradeButton.y + 66f, LColor.white);
 			this.drawToolbarLabelCentered(batch, this.upgradeRangeLabel,
 					this.drawPositionUpgradeButton.x + 148f,
-					this.drawPositionUpgradeButton.y + 66f,
-					this.upgradeButtonGreenColor);
+					this.drawPositionUpgradeButton.y + 66f, LColor.white);
 		}
 	}
 
@@ -406,12 +399,6 @@ public class TowerToolbar extends DrawableGameComponent implements
 		this.canUpgrade = this.tower.CanUpgrade();
 		this.textureUpgradeButton = this.canUpgrade ? this.textureUpgradeButtonActive
 				: this.textureUpgradeButtonInactive;
-		this.upgradeButtonWhiteColor = this.canUpgrade ? LColor.white
-				: this.game.getGameplayScreen().getGameOpacity();
-		this.upgradeButtonGreenColor = this.canUpgrade ? new LColor(0f, 1f, 0f,
-				1f) : new LColor(0f, 0.7f, 0f, 1f);
-		this.upgradeButtonRedColor = this.canUpgrade ? LColor.red
-				: LColor.darkGray;
 		this.refreshDynamicTextSprites();
 	}
 
