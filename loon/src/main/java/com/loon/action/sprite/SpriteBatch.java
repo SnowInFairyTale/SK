@@ -634,6 +634,12 @@ public class SpriteBatch implements LRelease {
 
 	private void ensureCapacity(int count) {
 		if (idx + count > vertices.length) {
+			if (idx != vertices.length) {
+				LTextureDebugLog.write("spritebatch-capacity-guard idx=" + idx
+						+ " count=" + count + " capacity="
+						+ vertices.length + " texture="
+						+ textureInfo(lastTexture));
+			}
 			submit();
 		}
 	}
@@ -1489,7 +1495,12 @@ public class SpriteBatch implements LRelease {
 		checkTexture(texture);
 
 		int remainingVertices = vertices.length - idx;
-		if (remainingVertices == 0) {
+		if (remainingVertices <= 0) {
+			if (remainingVertices < 0) {
+				LTextureDebugLog.write("spritebatch-negative-capacity idx="
+						+ idx + " capacity=" + vertices.length
+						+ " texture=" + textureInfo(lastTexture));
+			}
 			submit();
 			remainingVertices = vertices.length;
 		}
