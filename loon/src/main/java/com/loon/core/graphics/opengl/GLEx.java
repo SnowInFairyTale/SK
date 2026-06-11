@@ -382,6 +382,7 @@ public final class GLEx implements LTrans {
 		this.clip = new Clip(0, 0, viewPort.width, viewPort.height);
 		this.isTex2DEnabled = false;
 		this.isClose = false;
+		lazyTextureID = 0;
 		if (g10 == null || baseGL == g10) {
 			return;
 		}
@@ -2214,6 +2215,14 @@ public final class GLEx implements LTrans {
 	}
 
 	final static void deleteTexture(int textureID) {
+		if (textureID <= 0) {
+			return;
+		}
+		if (lazyTextureID == textureID) {
+			LTextureDebugLog.write("delete-bound-texture-cache-reset id="
+					+ textureID);
+			lazyTextureID = 0;
+		}
 		delTextureID[0] = textureID;
 		gl10.glDeleteTextures(1, delTextureID, 0);
 	}

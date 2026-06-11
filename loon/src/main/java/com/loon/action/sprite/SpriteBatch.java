@@ -604,9 +604,14 @@ public class SpriteBatch implements LRelease {
 
 	private void checkTexture(final LTexture texture) {
 		checkDrawing();
-		boolean needsLoad = !texture.isLoaded();
 		LTexture tex2d = texture.getParent();
 		LTexture bindTexture = tex2d == null ? texture : tex2d;
+		boolean needsLoad = !texture.isLoaded() || !bindTexture.isLoaded();
+		if (texture.isLoaded() && !bindTexture.isLoaded()) {
+			LTextureDebugLog.write("child-loaded-parent-unloaded child="
+					+ textureInfo(texture) + " parent="
+					+ textureInfo(bindTexture) + " drawFloats=" + idx);
+		}
 		if (bindTexture != lastTexture) {
 			if (idx > 0 && needsLoad) {
 				LTextureDebugLog.write("preflush-before-texture-load old="

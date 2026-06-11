@@ -287,7 +287,15 @@ public class LTexture implements LRelease {
 	}
 
 	private synchronized void loadTextureBuffer() {
-		if (!reload) {
+		if (reload) {
+			int oldID = textureID;
+			GLEx.gl10.glGenTextures(1, GENERATED_TEXTUREID, 0);
+			textureID = GENERATED_TEXTUREID[0];
+			GLEx.lazyTextureID = 0;
+			LTextureDebugLog.write("texture-reload-new-id old=" + oldID
+					+ " new=" + textureID + " source=" + getDebugName());
+			reload = false;
+		} else {
 			this.textureID = createTextureID();
 			this.reload = false;
 		}
