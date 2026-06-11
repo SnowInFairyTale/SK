@@ -5,6 +5,7 @@ import org.test.MainGame;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
 import com.loon.LGame;
@@ -21,6 +22,22 @@ public class MainActivity extends LGame {
 		if (layout != null) {
 			layout.setBackgroundColor(Color.BLACK);
 		}
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+			if (event.getAction() == KeyEvent.ACTION_UP) {
+				moveTaskToBack(true);
+			}
+			return true;
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
+	@Override
+	public void onBackPressed() {
+		moveTaskToBack(true);
 	}
 
 	@Override
