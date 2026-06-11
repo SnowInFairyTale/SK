@@ -620,12 +620,19 @@ public class LInputFactory implements OnKeyListener, OnTouchListener {
 			int code = e.getAction();
 			if (MultitouchUtils.isMultitouch()) {
 				final int action = code & MultitouchUtils.ACTION_MASK;
-				int pointerIndex = (code & MultitouchUtils.ACTION_POINTER_ID_MASK) >> MultitouchUtils.ACTION_POINTER_ID_SHIFT;
-				int pointerId = MultitouchUtils.getPointId(e, pointerIndex);
+				int pointerIndex = (code & MultitouchUtils.ACTION_POINTER_INDEX_MASK) >> MultitouchUtils.ACTION_POINTER_INDEX_SHIFT;
 				int pointerCount = MultitouchUtils.getPointerCount(e);
-				touchX = (MultitouchUtils.getX(e, pointerId) - handler.getX())
+				if (pointerIndex < 0 || pointerIndex >= pointerCount) {
+					LInputDebugLog.write("bad-pointer-index action=" + action
+							+ " index=" + pointerIndex + " count="
+							+ pointerCount + " collection="
+							+ touchCollection.size());
+					pointerIndex = 0;
+				}
+				int pointerId = MultitouchUtils.getPointId(e, pointerIndex);
+				touchX = (MultitouchUtils.getX(e, pointerIndex) - handler.getX())
 						/ LSystem.scaleWidth;
-				touchY = (MultitouchUtils.getY(e, pointerId) - handler.getY())
+				touchY = (MultitouchUtils.getY(e, pointerIndex) - handler.getY())
 						/ LSystem.scaleHeight;
 				finalTouch.x = touchX;
 				finalTouch.y = touchY;
@@ -653,14 +660,38 @@ public class LInputFactory implements OnKeyListener, OnTouchListener {
 					handler.mousePressed(finalTouch);
 					isDraging = false;
 					break;
+				case MultitouchUtils.ACTION_CANCEL:
+				case MultitouchUtils.ACTION_OUTSIDE:
+					if (useTouchCollection) {
+						LInputDebugLog.write("touch-sequence-cancel action="
+								+ action + " pointerId=" + finalTouch.id
+								+ " pointerCount=" + pointerCount
+								+ " cleared=" + touchCollection.size());
+						touchCollection.clear();
+					}
+					if (finalTouch.button == Touch.TOUCH_DOWN
+							|| finalTouch.button == Touch.TOUCH_MOVE) {
+						finalTouch.button = Touch.TOUCH_UP;
+					}
+					handler.mouseReleased(finalTouch);
+					isDraging = false;
+					break;
 				case MultitouchUtils.ACTION_UP:
 				case MultitouchUtils.ACTION_POINTER_UP:
-				case MultitouchUtils.ACTION_OUTSIDE:
-				case MultitouchUtils.ACTION_CANCEL:
 					if (useTouchCollection) {
-						touchCollection.update(finalTouch.id,
-								LTouchLocationState.Released, finalTouch.x,
-								finalTouch.y);
+						if (action == MultitouchUtils.ACTION_UP) {
+							if (touchCollection.size() > 1) {
+								LInputDebugLog.write("touch-up-clear-residue pointerId="
+										+ finalTouch.id + " pointerCount="
+										+ pointerCount + " cleared="
+										+ touchCollection.size());
+							}
+							touchCollection.clear();
+						} else {
+							touchCollection.update(finalTouch.id,
+									LTouchLocationState.Released, finalTouch.x,
+									finalTouch.y);
+						}
 					}
 					if (finalTouch.button == Touch.TOUCH_DOWN
 							|| finalTouch.button == Touch.TOUCH_MOVE) {
@@ -722,12 +753,24 @@ public class LInputFactory implements OnKeyListener, OnTouchListener {
 					isDraging = false;
 					return true;
 				case MotionEvent.ACTION_UP:
-				case MotionEvent.ACTION_OUTSIDE:
-				case MotionEvent.ACTION_CANCEL:
 					if (useTouchCollection) {
 						touchCollection.update(finalTouch.id,
 								LTouchLocationState.Released, finalTouch.x,
 								finalTouch.y);
+					}
+					finalTouch.button = Touch.TOUCH_UP;
+					handler.mouseReleased(finalTouch);
+					isDraging = false;
+					return true;
+				case MotionEvent.ACTION_OUTSIDE:
+				case MotionEvent.ACTION_CANCEL:
+					if (useTouchCollection) {
+						if (touchCollection.size() > 0) {
+							LInputDebugLog.write("single-touch-cancel action="
+									+ code + " cleared="
+									+ touchCollection.size());
+						}
+						touchCollection.clear();
 					}
 					finalTouch.button = Touch.TOUCH_UP;
 					handler.mouseReleased(finalTouch);
