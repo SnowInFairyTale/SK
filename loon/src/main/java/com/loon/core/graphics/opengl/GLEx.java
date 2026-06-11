@@ -3785,6 +3785,14 @@ public final class GLEx implements LTrans {
 		}
 	}
 
+	static void noteExternalTextureBind(int id, String source) {
+		if (lazyTextureID != id) {
+			LTextureDebugLog.write("external-bind-sync from=" + lazyTextureID
+					+ " to=" + id + " source=" + source);
+		}
+		lazyTextureID = id;
+	}
+
 	public void bind(LTexture tex2d) {
 		if (!tex2d.isVisible) {
 			return;

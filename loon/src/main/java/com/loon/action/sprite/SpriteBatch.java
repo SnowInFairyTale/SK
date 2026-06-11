@@ -37,6 +37,7 @@ import com.loon.core.graphics.opengl.GLEx;
 import com.loon.core.graphics.opengl.GLMesh;
 import com.loon.core.graphics.opengl.LSTRDictionary;
 import com.loon.core.graphics.opengl.LTexture;
+import com.loon.core.graphics.opengl.LTextureDebugLog;
 import com.loon.core.graphics.opengl.LTextureRegion;
 import com.loon.core.graphics.opengl.TextureUtils;
 import com.loon.core.graphics.opengl.GLAttributes.Usage;
@@ -603,27 +604,42 @@ public class SpriteBatch implements LRelease {
 
 	private void checkTexture(final LTexture texture) {
 		checkDrawing();
-		if (!texture.isLoaded()) {
-			texture.loadTexture();
-		}
+		boolean needsLoad = !texture.isLoaded();
 		LTexture tex2d = texture.getParent();
-		if (tex2d != null) {
-			if (tex2d != lastTexture) {
-				submit();
-				lastTexture = tex2d;
-			} else if (idx == vertices.length) {
-				submit();
+		LTexture bindTexture = tex2d == null ? texture : tex2d;
+		if (bindTexture != lastTexture) {
+			if (idx > 0 && needsLoad) {
+				LTextureDebugLog.write("preflush-before-texture-load old="
+						+ textureInfo(lastTexture) + " new="
+						+ textureInfo(bindTexture) + " drawFloats=" + idx);
 			}
-			invTexWidth = (1f / texture.getWidth()) * texture.widthRatio;
-			invTexHeight = (1f / texture.getHeight()) * texture.heightRatio;
-		} else if (texture != lastTexture) {
 			submit();
-			lastTexture = texture;
-			invTexWidth = (1f / texture.getWidth()) * texture.widthRatio;
-			invTexHeight = (1f / texture.getHeight()) * texture.heightRatio;
-		} else if (idx == vertices.length) {
+			lastTexture = bindTexture;
+		}
+		if (needsLoad) {
+			texture.loadTexture();
+			tex2d = texture.getParent();
+			bindTexture = tex2d == null ? texture : tex2d;
+			if (bindTexture != lastTexture) {
+				submit();
+				lastTexture = bindTexture;
+				LTextureDebugLog.write("texture-parent-after-load active="
+						+ textureInfo(bindTexture) + " source="
+						+ textureInfo(texture));
+			}
+		}
+		if (idx == vertices.length) {
 			submit();
 		}
+		invTexWidth = (1f / texture.getWidth()) * texture.widthRatio;
+		invTexHeight = (1f / texture.getHeight()) * texture.heightRatio;
+	}
+
+	private String textureInfo(LTexture texture) {
+		if (texture == null) {
+			return "null";
+		}
+		return texture.getTextureID() + ":" + texture.getFileName();
 	}
 
 	public void draw(LTexture texture, float x, float y, float rotation) {

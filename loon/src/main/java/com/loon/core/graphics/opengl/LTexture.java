@@ -853,6 +853,7 @@ public class LTexture implements LRelease {
 	public synchronized void bind() {
 		GLEx.gl10.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
 		GLEx.gl10.glBindTexture(GL.GL_TEXTURE_2D, textureID);
+		GLEx.noteExternalTextureBind(textureID, getFileName());
 	}
 
 	public synchronized void bind(int unit) {
