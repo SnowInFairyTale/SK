@@ -663,10 +663,12 @@ public class LInputFactory implements OnKeyListener, OnTouchListener {
 				case MultitouchUtils.ACTION_CANCEL:
 				case MultitouchUtils.ACTION_OUTSIDE:
 					if (useTouchCollection) {
-						LInputDebugLog.write("touch-sequence-cancel action="
-								+ action + " pointerId=" + finalTouch.id
-								+ " pointerCount=" + pointerCount
-								+ " cleared=" + touchCollection.size());
+						if (touchCollection.size() > 0) {
+							LInputDebugLog.write("touch-sequence-cancel action="
+									+ action + " pointerId=" + finalTouch.id
+									+ " pointerCount=" + pointerCount
+									+ " cleared=" + touchCollection.size());
+						}
 						touchCollection.clear();
 					}
 					if (finalTouch.button == Touch.TOUCH_DOWN
@@ -686,7 +688,14 @@ public class LInputFactory implements OnKeyListener, OnTouchListener {
 										+ pointerCount + " cleared="
 										+ touchCollection.size());
 							}
-							touchCollection.clear();
+							for (int i = touchCollection.size() - 1; i >= 0; --i) {
+								if (touchCollection.get(i).getId() != finalTouch.id) {
+									touchCollection.remove(i);
+								}
+							}
+							touchCollection.update(finalTouch.id,
+									LTouchLocationState.Released, finalTouch.x,
+									finalTouch.y);
 						} else {
 							touchCollection.update(finalTouch.id,
 									LTouchLocationState.Released, finalTouch.x,
