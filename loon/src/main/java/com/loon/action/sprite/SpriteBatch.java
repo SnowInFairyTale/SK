@@ -628,11 +628,14 @@ public class SpriteBatch implements LRelease {
 						+ textureInfo(texture));
 			}
 		}
-		if (idx == vertices.length) {
-			submit();
-		}
 		invTexWidth = (1f / texture.getWidth()) * texture.widthRatio;
 		invTexHeight = (1f / texture.getHeight()) * texture.heightRatio;
+	}
+
+	private void ensureCapacity(int count) {
+		if (idx + count > vertices.length) {
+			submit();
+		}
 	}
 
 	private String textureInfo(LTexture texture) {
@@ -1081,6 +1084,7 @@ public class SpriteBatch implements LRelease {
 			float srcWidth, float srcHeight, boolean flipX, boolean flipY,
 			boolean off) {
 		checkTexture(texture);
+		ensureCapacity(SPRITE_SIZE);
 
 		float worldOriginX = x + originX;
 		float worldOriginY = y + originY;
@@ -1297,6 +1301,7 @@ public class SpriteBatch implements LRelease {
 			float srcHeight, boolean flipX, boolean flipY) {
 
 		checkTexture(texture);
+		ensureCapacity(SPRITE_SIZE);
 
 		float u = srcX * invTexWidth + texture.xOff;
 		float v = srcY * invTexHeight + texture.yOff;
@@ -1370,6 +1375,7 @@ public class SpriteBatch implements LRelease {
 	public void draw(LTexture texture, float x, float y, float srcX,
 			float srcY, float srcWidth, float srcHeight) {
 		checkTexture(texture);
+		ensureCapacity(SPRITE_SIZE);
 
 		float u = srcX * invTexWidth + texture.xOff;
 		float v = srcY * invTexHeight + texture.yOff;
@@ -1443,6 +1449,7 @@ public class SpriteBatch implements LRelease {
 			return;
 		}
 		checkTexture(texture);
+		ensureCapacity(SPRITE_SIZE);
 
 		final float fx2 = x + width;
 		final float fy2 = y + height;
@@ -1518,6 +1525,7 @@ public class SpriteBatch implements LRelease {
 	public void draw(LTextureRegion region, float x, float y, float width,
 			float height) {
 		checkTexture(region.getTexture());
+		ensureCapacity(SPRITE_SIZE);
 
 		final float fx2 = x + width;
 		final float fy2 = y + height;
@@ -1556,6 +1564,7 @@ public class SpriteBatch implements LRelease {
 			float scaleY, float rotation) {
 
 		checkTexture(region.getTexture());
+		ensureCapacity(SPRITE_SIZE);
 
 		final float worldOriginX = x + originX;
 		final float worldOriginY = y + originY;
@@ -1662,6 +1671,7 @@ public class SpriteBatch implements LRelease {
 			float scaleY, float rotation, boolean clockwise) {
 
 		checkTexture(region.getTexture());
+		ensureCapacity(SPRITE_SIZE);
 
 		final float worldOriginX = x + originX;
 		final float worldOriginY = y + originY;
