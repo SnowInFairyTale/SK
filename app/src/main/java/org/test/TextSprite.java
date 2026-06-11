@@ -40,6 +40,11 @@ final class TextSprite {
 				this.height);
 	}
 
+	void drawCentered(SpriteBatch batch, float centerX, float topY, LColor color) {
+		batch.draw(this.texture, centerX - (this.width / 2f), topY, this.width,
+				this.height, 0f, color);
+	}
+
 	void drawCenteredInButton(SpriteBatch batch, float centerX,
 			float buttonTopY, float buttonHeight) {
 		this.drawCenteredInButton(batch, centerX, buttonTopY, buttonHeight, 0f);
@@ -54,6 +59,10 @@ final class TextSprite {
 
 	void drawLeft(SpriteBatch batch, float x, float topY) {
 		batch.draw(this.texture, x, topY, this.width, this.height);
+	}
+
+	void drawLeft(SpriteBatch batch, float x, float topY, LColor color) {
+		batch.draw(this.texture, x, topY, this.width, this.height, 0f, color);
 	}
 
 	void dispose() {

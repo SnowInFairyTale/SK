@@ -58,6 +58,55 @@ public class TowerToolbar extends DrawableGameComponent implements
 	private LColor upgradeButtonGreenColor;
 	private LColor upgradeButtonRedColor;
 	private LColor upgradeButtonWhiteColor;
+	private final CachedText attackIntervalLabel = new CachedText();
+	private final CachedText attackIntervalValueLabel = new CachedText();
+	private final CachedText powerLabel = new CachedText();
+	private final CachedText powerValueLabel = new CachedText();
+	private final CachedText upgradeLabel = new CachedText();
+	private final CachedText sellLabel = new CachedText();
+	private final CachedText sellValueLabel = new CachedText();
+	private final CachedText upgradeCostLabel = new CachedText();
+	private final CachedText upgradeDamageLabel = new CachedText();
+	private final CachedText upgradeRangeLabel = new CachedText();
+	private final CachedText gemLabel = new CachedText();
+
+	private static final class CachedText {
+		private String text;
+		private TextSprite sprite;
+
+		void set(LFont font, String value) {
+			if (value == null) {
+				value = "";
+			}
+			if (value.equals(this.text)) {
+				return;
+			}
+			this.dispose();
+			this.text = value;
+			this.sprite = TextSprite.create(font, value);
+		}
+
+		void drawLeft(SpriteBatch batch, float x, float y, LColor color) {
+			if (this.sprite != null) {
+				this.sprite.drawLeft(batch, x, y, color);
+			}
+		}
+
+		void drawCentered(SpriteBatch batch, float centerX, float y,
+				LColor color) {
+			if (this.sprite != null) {
+				this.sprite.drawCentered(batch, centerX, y, color);
+			}
+		}
+
+		void dispose() {
+			if (this.sprite != null) {
+				this.sprite.dispose();
+				this.sprite = null;
+			}
+			this.text = null;
+		}
+	}
 
 	public TowerToolbar(MainGame game, Tower tower) {
 		super(game);
@@ -127,17 +176,17 @@ public class TowerToolbar extends DrawableGameComponent implements
 		// textures first and then reuses that state for the tower sprite.
 		this.animatedSpriteTower.initialize();
 		this.animatedSpriteTower.draw(batch, gameTime);
-		this.drawToolbarLabel(batch, LanguageResources.getAttackInterval(),
+		this.refreshDynamicTextSprites();
+		this.drawToolbarLabel(batch, this.attackIntervalLabel,
 				this.drawPosition.x + 128f, this.drawPosition.y + 66f,
 				this.upgradeButtonWhiteColor);
-		this.drawToolbarLabelCentered(batch,
-				formatAttackInterval(this.tower.getReloadTime()),
+		this.drawToolbarLabelCentered(batch, this.attackIntervalValueLabel,
 				this.drawPosition.x + 240f, this.drawPosition.y + 66f,
 				this.upgradeButtonGreenColor);
-		this.drawToolbarLabel(batch, LanguageResources.getPower(),
+		this.drawToolbarLabel(batch, this.powerLabel,
 				this.drawPosition.x + 128f, this.drawPosition.y + 30f,
 				this.upgradeButtonWhiteColor);
-		this.drawToolbarLabelCentered(batch, "" + this.tower.getDamage(),
+		this.drawToolbarLabelCentered(batch, this.powerValueLabel,
 				this.drawPosition.x + 240f, this.drawPosition.y + 30f,
 				this.upgradeButtonRedColor);
 
@@ -153,23 +202,55 @@ public class TowerToolbar extends DrawableGameComponent implements
 	}
 
 	/** Flush batch before labels — avoids jar SpriteBatch / drawString state bleed. */
-	private void drawToolbarLabel(SpriteBatch batch, String text, float x,
+	private void drawToolbarLabel(SpriteBatch batch, CachedText text, float x,
 			float y, LColor color) {
 		batch.flush();
 		batch.resetColor();
-		batch.drawString(this.font, text, x, y, color);
+		text.drawLeft(batch, x, this.textTop(y), color);
 	}
 
-	private void drawToolbarLabelCentered(SpriteBatch batch, String text,
+	private void drawToolbarLabelCentered(SpriteBatch batch, CachedText text,
 			float centerX, float centerY, LColor color) {
 		batch.flush();
 		batch.resetColor();
-		Utils.DrawStringAlignCenter(batch, this.font, text, centerX, centerY,
-				color);
+		text.drawCentered(batch, centerX, this.textTop(centerY), color);
 	}
 
 	private static String formatAttackInterval(float seconds) {
 		return String.format("%.1f", seconds);
+	}
+
+	private float textTop(float drawStringY) {
+		return drawStringY + this.font.getHeight()
+				- Constants.TEXT_LABEL_DRAWSTRING_HEIGHT_ADJUST
+				+ this.font.getAscent();
+	}
+
+	private void buildStaticTextSprites() {
+		this.attackIntervalLabel.set(this.font,
+				LanguageResources.getAttackInterval());
+		this.powerLabel.set(this.font, LanguageResources.getPower());
+		this.upgradeLabel.set(this.font, LanguageResources.getUpgrade());
+		this.sellLabel.set(this.font, LanguageResources.getSell());
+		this.gemLabel.set(this.font, LanguageResources.getGem());
+	}
+
+	private void refreshDynamicTextSprites() {
+		if (this.font == null) {
+			return;
+		}
+		this.attackIntervalValueLabel.set(this.font,
+				formatAttackInterval(this.tower.getReloadTime()));
+		this.powerValueLabel.set(this.font, "" + this.tower.getDamage());
+		this.sellValueLabel.set(this.font, "" + this.tower.GetSellValue());
+		if (this.tower.IsMoreUpgradeLevelsAvailable()) {
+			this.upgradeCostLabel.set(this.font, this.tower.GetUpgradeCost()
+					.toString());
+			this.upgradeDamageLabel.set(this.font, this.tower
+					.GetUpgradeDamage().toString());
+			this.upgradeRangeLabel.set(this.font, this.tower.GetUpgradeRange()
+					.toString());
+		}
 	}
 
 	private void drawPowerPanel(SpriteBatch batch, float x, float y,
@@ -206,30 +287,30 @@ public class TowerToolbar extends DrawableGameComponent implements
 	private void drawUpgradeAndSell(SpriteBatch batch) {
 		batch.draw(this.textureUpgradeButton, this.drawPositionUpgradeButton,
 				LColor.white);
-		this.drawToolbarLabel(batch, LanguageResources.getUpgrade(),
+		this.drawToolbarLabel(batch, this.upgradeLabel,
 				this.drawPositionUpgradeButton.x + 46f,
 				this.drawPositionUpgradeButton.y + 30f,
 				this.upgradeButtonWhiteColor);
 		float sellX = this.drawPosition.x + SELL_SLOT_X;
 		float sellY = this.drawPosition.y;
 		this.drawShellFrame(batch, sellX, sellY, LColor.white);
-		this.drawToolbarLabel(batch, LanguageResources.getSell(),
+		this.drawToolbarLabel(batch, this.sellLabel,
 				this.drawPosition.x + 548f, this.drawPosition.y + 30f,
 				LColor.white);
-		this.drawToolbarLabelCentered(batch, "" + this.tower.GetSellValue(),
+		this.drawToolbarLabelCentered(batch, this.sellValueLabel,
 				this.drawPosition.x + SELL_VALUE_CENTER_X,
 				this.drawPosition.y + 66f, LColor.white);
 		if (this.tower.IsMoreUpgradeLevelsAvailable()) {
-			this.drawToolbarLabelCentered(batch, this.tower.GetUpgradeCost()
-					.toString(), this.drawPositionUpgradeButton.x + 154f,
+			this.drawToolbarLabelCentered(batch, this.upgradeCostLabel,
+					this.drawPositionUpgradeButton.x + 154f,
 					this.drawPositionUpgradeButton.y + 30f,
 					this.upgradeButtonWhiteColor);
-			this.drawToolbarLabelCentered(batch, this.tower.GetUpgradeDamage()
-					.toString(), this.drawPositionUpgradeButton.x + 88f,
+			this.drawToolbarLabelCentered(batch, this.upgradeDamageLabel,
+					this.drawPositionUpgradeButton.x + 88f,
 					this.drawPositionUpgradeButton.y + 66f,
 					this.upgradeButtonRedColor);
-			this.drawToolbarLabelCentered(batch, this.tower.GetUpgradeRange()
-					.toString(), this.drawPositionUpgradeButton.x + 148f,
+			this.drawToolbarLabelCentered(batch, this.upgradeRangeLabel,
+					this.drawPositionUpgradeButton.x + 148f,
 					this.drawPositionUpgradeButton.y + 66f,
 					this.upgradeButtonGreenColor);
 		}
@@ -248,7 +329,7 @@ public class TowerToolbar extends DrawableGameComponent implements
 		float panelY = this.drawPositionUpgradeButton.y;
 		this.drawPowerPanel(batch, panelX, panelY, GEM_INFO_PANEL_W,
 				UPGRADE_FRAME_H);
-		this.drawToolbarLabel(batch, LanguageResources.getGem(), panelX + 46f,
+		this.drawToolbarLabel(batch, this.gemLabel, panelX + 46f,
 				panelY + 30f, LColor.white);
 		float iconX = panelX + (GEM_INFO_PANEL_W - GEM_INFO_ICON_SIZE) / 2f
 				+ GEM_INFO_ICON_OFFSET_X;
@@ -311,10 +392,12 @@ public class TowerToolbar extends DrawableGameComponent implements
 				.loadTexture("assets/button_upgrade_greyed.png");
 		GemTextures.ensureLoaded();
 		this.font = Constants.font(18);
+		this.buildStaticTextSprites();
 		this.SetUpgradeButtonState();
 	}
 
 	public final void Remove() {
+		this.disposeTextSprites();
 		this.game.Components().remove(this);
 	}
 
@@ -329,6 +412,27 @@ public class TowerToolbar extends DrawableGameComponent implements
 				1f) : new LColor(0f, 0.7f, 0f, 1f);
 		this.upgradeButtonRedColor = this.canUpgrade ? LColor.red
 				: LColor.darkGray;
+		this.refreshDynamicTextSprites();
+	}
+
+	private void disposeTextSprites() {
+		this.attackIntervalLabel.dispose();
+		this.attackIntervalValueLabel.dispose();
+		this.powerLabel.dispose();
+		this.powerValueLabel.dispose();
+		this.upgradeLabel.dispose();
+		this.sellLabel.dispose();
+		this.sellValueLabel.dispose();
+		this.upgradeCostLabel.dispose();
+		this.upgradeDamageLabel.dispose();
+		this.upgradeRangeLabel.dispose();
+		this.gemLabel.dispose();
+	}
+
+	@Override
+	protected void dispose(boolean disposing) {
+		this.disposeTextSprites();
+		super.dispose(disposing);
 	}
 
 	@Override
