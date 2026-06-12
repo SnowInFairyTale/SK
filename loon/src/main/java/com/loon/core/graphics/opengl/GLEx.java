@@ -2210,12 +2210,38 @@ public final class GLEx implements LTrans {
 		if (!vboOn) {
 			return;
 		}
+		if (!LSystem.isThreadDrawing()) {
+			final int id = bufferID;
+			LSystem.load(new com.loon.core.event.Updateable() {
+				@Override
+				public void action() {
+					deleteBuffer(id);
+				}
+			});
+			return;
+		}
+		if (gl11 == null) {
+			return;
+		}
 		delBufferID[0] = bufferID;
 		gl11.glDeleteBuffers(1, delBufferID, 0);
 	}
 
 	final static void deleteTexture(int textureID) {
 		if (textureID <= 0) {
+			return;
+		}
+		if (!LSystem.isThreadDrawing()) {
+			final int id = textureID;
+			LSystem.load(new com.loon.core.event.Updateable() {
+				@Override
+				public void action() {
+					deleteTexture(id);
+				}
+			});
+			return;
+		}
+		if (gl10 == null) {
 			return;
 		}
 		if (lazyTextureID == textureID) {
@@ -3788,6 +3814,9 @@ public final class GLEx implements LTrans {
 	 * @param id
 	 */
 	public void bind(int id) {
+		if (!LSystem.isThreadDrawing() || gl10 == null) {
+			return;
+		}
 		if (lazyTextureID != id) {
 			gl10.glBindTexture(GL.GL_TEXTURE_2D, id);
 			lazyTextureID = id;

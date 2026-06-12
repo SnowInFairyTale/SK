@@ -886,6 +886,9 @@ public class LTexture implements LRelease {
 	}
 
 	public synchronized void bind() {
+		if (!LSystem.isThreadDrawing() || GLEx.gl10 == null) {
+			return;
+		}
 		GLEx.gl10.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
 		GLEx.gl10.glBindTexture(GL.GL_TEXTURE_2D, textureID);
 		GLEx.noteExternalTextureBind(textureID, getDebugName());
@@ -901,6 +904,9 @@ public class LTexture implements LRelease {
 	}
 
 	public synchronized void bind(int unit) {
+		if (!LSystem.isThreadDrawing() || GLEx.gl10 == null) {
+			return;
+		}
 		GLEx.gl10.glActiveTexture(GL.GL_TEXTURE0 + unit);
 		GLEx.gl10.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
 		GLEx.gl10.glBindTexture(GL.GL_TEXTURE_2D, textureID);
