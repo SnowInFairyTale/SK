@@ -7,6 +7,7 @@ import com.loon.action.sprite.painting.DrawableScreen;
 import com.loon.core.input.LInputFactory;
 import com.loon.core.input.LKey;
 import com.loon.core.input.LTouch;
+import com.loon.core.graphics.opengl.LSTRDictionary;
 import com.loon.core.timer.GameTime;
 
 public class MainGame extends DrawableScreen {
@@ -61,6 +62,7 @@ public class MainGame extends DrawableScreen {
 	@Override
 	public void loadContent() {
 
+		LSTRDictionary.addGlobalChars(LanguageResources.getFontPreloadChars());
 		LInputFactory.startTouchCollection();
 		this.screenManager = new ScreenManager(this);
 		this.setSoundEnabled(true);

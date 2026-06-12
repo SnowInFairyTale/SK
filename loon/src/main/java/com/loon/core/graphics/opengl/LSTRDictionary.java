@@ -45,6 +45,8 @@ public final class LSTRDictionary {
 
 	private static StringBuffer lazyKey;
 
+	private static String globalChars = "";
+
 	static class Dict implements LRelease {
 
 		ArrayList<Character> dicts;
@@ -93,7 +95,7 @@ public final class LSTRDictionary {
 	private final static int size = LSystem.DEFAULT_MAX_CACHE_SIZE * 5;
 
 	public final static Dict bind(final LFont font, final String mes) {
-		final String message = mes + added;
+		final String message = mes + added + globalChars;
 		if (cacheList.size() > size) {
 			clearStringLazy();
 		}
@@ -130,6 +132,22 @@ public final class LSTRDictionary {
 				}
 			}
 			return pDict;
+		}
+	}
+
+	public static void addGlobalChars(String chars) {
+		if (chars == null || chars.length() == 0) {
+			return;
+		}
+		synchronized (cacheList) {
+			StringBuilder builder = new StringBuilder(globalChars);
+			for (int i = 0; i < chars.length(); i++) {
+				char ch = chars.charAt(i);
+				if (builder.indexOf(String.valueOf(ch)) < 0) {
+					builder.append(ch);
+				}
+			}
+			globalChars = builder.toString();
 		}
 	}
 

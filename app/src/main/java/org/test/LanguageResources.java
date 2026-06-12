@@ -9,6 +9,57 @@ public class LanguageResources {
         return "确定退出吗？";
     }
 
+    public static String getFontPreloadChars() {
+        return "0123456789 /.-+:%"
+                + getAreYouSure()
+                + getBack()
+                + getBlocking()
+                + getEasy()
+                + getEnemies()
+                + getHard()
+                + getInstructions()
+                + getLevel1Title()
+                + getLevel2Title()
+                + getLevel3Title()
+                + getLevel4Title()
+                + getLevel5Title()
+                + getLevel6Title()
+                + getLevel7Title()
+                + getLevel8Title()
+                + getLevel9Title()
+                + getLoseHeader()
+                + getLosePar1()
+                + getMainMenu()
+                + getMedium()
+                + getMenu()
+                + getMonsterInfoPar1()
+                + getMonsterInfoPar2()
+                + getMonsterInfoPar3()
+                + getMonsterInfoPar4()
+                + getMonsterInfoPar5()
+                + getMonsterInfoPar6()
+                + getNext()
+                + getNextWave()
+                + getNo()
+                + getPower()
+                + getAttackInterval()
+                + getMaxHealth()
+                + getRestart()
+                + getResume()
+                + getSell()
+                + getStart()
+                + getTowerInfoPar1()
+                + getTowerInfoPar2()
+                + getTowerInfoPar3()
+                + getTowerInfoPar4()
+                + getTowers()
+                + getUpgrade()
+                + getGem()
+                + getWinHeader()
+                + getWinPar1()
+                + getYes();
+    }
+
     public static String getBack() {
         return "返回";
     }
