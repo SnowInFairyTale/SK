@@ -213,6 +213,7 @@ public final class LSTRDictionary {
 					str = null;
 				}
 			}
+			lazyEnglish.clear();
 		}
 	}
 
