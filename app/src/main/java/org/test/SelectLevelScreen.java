@@ -13,6 +13,10 @@ public class SelectLevelScreen extends MenuScreen {
 	private static final String TEXTURE_FLAG_GREEN = "assets/icon_flag_green.png";
 	private static final String TEXTURE_FLAG_RED = "assets/icon_flag_red.png";
 	private static final String TEXTURE_ICON_HEART = "assets/icon_heart.png";
+	private static final float LEVEL_BUTTON_HIT_X = 80f;
+	private static final float LEVEL_BUTTON_HIT_WIDTH = 460f;
+	private static final float BACK_BUTTON_HIT_X = 172f;
+	private static final float BACK_BUTTON_HIT_WIDTH = 296f;
 
 	private Difficulty difficulty;
 	private LFont font;
@@ -34,23 +38,14 @@ public class SelectLevelScreen extends MenuScreen {
 		this.game = game;
 		super.setScreenType(ScreenType.SelectLevelScreen);
 		this.difficulty = difficulty;
-		Vector2f vector = new Vector2f(220f, 82f);
-		MenuEntry item = new MenuEntry("");
-		item.setuseButtonBackground(false);
-		item.setPosition(new Vector2f(172f, 420f));
-		item.setnoButtonBackgroundSize(vector);
-		MenuEntry entry2 = new MenuEntry("");
-		entry2.setuseButtonBackground(false);
-		entry2.setPosition(new Vector2f(172f, 540f));
-		entry2.setnoButtonBackgroundSize(vector);
-		MenuEntry entry3 = new MenuEntry("");
-		entry3.setuseButtonBackground(false);
-		entry3.setPosition(new Vector2f(172f, 660f));
-		entry3.setnoButtonBackgroundSize(vector);
-		MenuEntry entry4 = new MenuEntry("");
-		entry4.setuseButtonBackground(false);
-		entry4.setPosition(new Vector2f(172f, 780f));
-		entry4.setnoButtonBackgroundSize(vector);
+		MenuEntry item = this.createHitEntry(LEVEL_BUTTON_HIT_X,
+				Constants.MENU_BTN_ROW_1_Y, LEVEL_BUTTON_HIT_WIDTH);
+		MenuEntry entry2 = this.createHitEntry(LEVEL_BUTTON_HIT_X,
+				Constants.MENU_BTN_ROW_2_Y, LEVEL_BUTTON_HIT_WIDTH);
+		MenuEntry entry3 = this.createHitEntry(LEVEL_BUTTON_HIT_X,
+				Constants.MENU_BTN_ROW_3_Y, LEVEL_BUTTON_HIT_WIDTH);
+		MenuEntry entry4 = this.createHitEntry(BACK_BUTTON_HIT_X,
+				Constants.MENU_BTN_ROW_4_Y, BACK_BUTTON_HIT_WIDTH);
 		super.getMenuEntries().add(item);
 		super.getMenuEntries().add(entry2);
 		super.getMenuEntries().add(entry3);
@@ -109,6 +104,15 @@ public class SelectLevelScreen extends MenuScreen {
 
 			}
 		};
+	}
+
+	private MenuEntry createHitEntry(float x, float y, float width) {
+		MenuEntry entry = new MenuEntry("");
+		entry.setuseButtonBackground(false);
+		entry.setPosition(new Vector2f(x, y));
+		entry.setnoButtonBackgroundSize(new Vector2f(width,
+				Constants.MENU_BTN_HEIGHT));
+		return entry;
 	}
 
 	@Override
