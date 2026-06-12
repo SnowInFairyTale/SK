@@ -110,6 +110,8 @@ public class LTexture implements LRelease {
 
 	boolean isLoaded, isClose, hasAlpha;
 
+	boolean loadQueued;
+
 	boolean isVisible = true;
 
 	boolean isChild;
@@ -272,6 +274,23 @@ public class LTexture implements LRelease {
 	}
 
 	public synchronized final void loadTexture() {
+		if (!LSystem.isThreadDrawing()) {
+			if (!loadQueued) {
+				loadQueued = true;
+				final LTexture self = this;
+				LSystem.load(new Updateable() {
+					@Override
+					public void action() {
+						synchronized (self) {
+							self.loadQueued = false;
+						}
+						self.loadTexture();
+					}
+				});
+			}
+			return;
+		}
+		loadQueued = false;
 		if (parent != null) {
 			parent.loadTexture();
 			textureID = parent.textureID;
