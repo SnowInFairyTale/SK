@@ -12,9 +12,7 @@ import com.loon.core.graphics.opengl.LTexture;
 /** Rasterized label; avoids jar {@code drawString} / LSTRDictionary cache misses. */
 final class TextSprite {
 
-	private static final int MAX_CACHE_ENTRIES = 256;
 	private static final HashMap<String, SharedTextSprite> CACHE = new HashMap<String, SharedTextSprite>();
-	private static int cacheUseSerial;
 
 	private final SharedTextSprite shared;
 	private boolean disposed;
@@ -25,8 +23,6 @@ final class TextSprite {
 		final LTexture texture;
 		final float width;
 		final float height;
-		int refs;
-		int lastUsed;
 
 		SharedTextSprite(String key, LTexture texture, float width, float height,
 				float buttonLabelTopOffset) {
@@ -50,8 +46,6 @@ final class TextSprite {
 		synchronized (CACHE) {
 			SharedTextSprite cached = CACHE.get(key);
 			if (cached != null) {
-				cached.refs++;
-				cached.lastUsed = ++cacheUseSerial;
 				return new TextSprite(cached);
 			}
 		}
@@ -64,15 +58,10 @@ final class TextSprite {
 		synchronized (CACHE) {
 			SharedTextSprite cached = CACHE.get(key);
 			if (cached != null) {
-				cached.refs++;
-				cached.lastUsed = ++cacheUseSerial;
 				shared.texture.dispose();
 				return new TextSprite(cached);
 			}
-			shared.refs = 1;
-			shared.lastUsed = ++cacheUseSerial;
 			CACHE.put(key, shared);
-			trimCacheLocked();
 		}
 		return new TextSprite(shared);
 	}
@@ -80,23 +69,6 @@ final class TextSprite {
 	private static String cacheKey(LFont font, String text) {
 		return font.getFontName().toLowerCase() + "|" + font.getStyle() + "|"
 				+ font.getSize() + "|" + text;
-	}
-
-	private static void trimCacheLocked() {
-		while (CACHE.size() > MAX_CACHE_ENTRIES) {
-			SharedTextSprite oldest = null;
-			for (SharedTextSprite sprite : CACHE.values()) {
-				if (sprite.refs == 0
-						&& (oldest == null || sprite.lastUsed < oldest.lastUsed)) {
-					oldest = sprite;
-				}
-			}
-			if (oldest == null) {
-				return;
-			}
-			CACHE.remove(oldest.key);
-			oldest.texture.dispose();
-		}
 	}
 
 	void drawCentered(SpriteBatch batch, float centerX, float topY) {
@@ -136,12 +108,5 @@ final class TextSprite {
 			return;
 		}
 		this.disposed = true;
-		synchronized (CACHE) {
-			if (this.shared.refs > 0) {
-				this.shared.refs--;
-			}
-			this.shared.lastUsed = ++cacheUseSerial;
-			trimCacheLocked();
-		}
 	}
 }
