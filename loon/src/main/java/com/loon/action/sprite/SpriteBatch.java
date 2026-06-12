@@ -612,12 +612,13 @@ public class SpriteBatch implements LRelease {
 					+ textureInfo(texture) + " parent="
 					+ textureInfo(bindTexture) + " drawFloats=" + idx);
 		}
+		if (needsLoad && idx > 0) {
+			LTextureDebugLog.write("preflush-before-texture-load old="
+					+ textureInfo(lastTexture) + " new="
+					+ textureInfo(bindTexture) + " drawFloats=" + idx);
+			submit();
+		}
 		if (bindTexture != lastTexture) {
-			if (idx > 0 && needsLoad) {
-				LTextureDebugLog.write("preflush-before-texture-load old="
-						+ textureInfo(lastTexture) + " new="
-						+ textureInfo(bindTexture) + " drawFloats=" + idx);
-			}
 			submit();
 			lastTexture = bindTexture;
 		}

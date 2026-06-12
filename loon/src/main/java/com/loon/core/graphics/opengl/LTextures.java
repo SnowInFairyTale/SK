@@ -33,6 +33,8 @@ public class LTextures {
 	private static HashMap<String, LTexture> lazyTextures = new HashMap<String, LTexture>(
 			100);
 
+	private static long generatedTextureSerial;
+
 	public static int count() {
 		return lazyTextures.size();
 	}
@@ -77,7 +79,7 @@ public class LTextures {
 	}
 
 	public static LTexture loadTexture(LTexture texture) {
-		return loadTexture(System.currentTimeMillis(), texture);
+		return loadTexture(0, texture);
 	}
 
 	public static LTexture loadTexture(long id, LTexture tex2d) {
@@ -85,8 +87,10 @@ public class LTextures {
 			return null;
 		}
 		synchronized (lazyTextures) {
-			String key = tex2d.lazyName == null ? String.valueOf(id)
-					: tex2d.lazyName;
+			if (tex2d.lazyName == null) {
+				tex2d.lazyName = "generated:" + (++generatedTextureSerial);
+			}
+			String key = tex2d.lazyName;
 			LTexture texture = lazyTextures.get(key);
 			if (texture != null && !texture.isClose) {
 				texture.refCount++;
