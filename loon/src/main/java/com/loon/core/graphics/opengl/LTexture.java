@@ -469,7 +469,7 @@ public class LTexture implements LRelease {
 		}
 
 		GL10 gl10 = GLEx.gl10;
-		if (gl10 == null) {
+		if (!LSystem.isThreadDrawing() || gl10 == null) {
 			return;
 		}
 		gl10.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,

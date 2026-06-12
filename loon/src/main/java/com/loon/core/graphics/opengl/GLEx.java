@@ -2164,6 +2164,9 @@ public final class GLEx implements LTrans {
 		if (!vboOn) {
 			return;
 		}
+		if (!LSystem.isThreadDrawing() || gl11 == null) {
+			return;
+		}
 		IntBuffer buff = genBuffers(1);
 		texture.bufferID = buff.get(0);
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, texture.bufferID);
@@ -2176,6 +2179,9 @@ public final class GLEx implements LTrans {
 		if (!vboOn) {
 			return -1;
 		}
+		if (!LSystem.isThreadDrawing() || gl11 == null) {
+			return -1;
+		}
 		IntBuffer buffer = NativeSupport.newIntBuffer(1);
 		gl11.glGenBuffers(1, buffer);
 		return buffer.get(0);
@@ -2185,12 +2191,18 @@ public final class GLEx implements LTrans {
 		if (!vboOn) {
 			return IntBuffer.wrap(new int[] { -1 });
 		}
+		if (!LSystem.isThreadDrawing() || gl11 == null) {
+			return IntBuffer.wrap(new int[] { -1 });
+		}
 		IntBuffer buffer = NativeSupport.newIntBuffer(bcount);
 		gl11.glGenBuffers(bcount, buffer);
 		return buffer;
 	}
 
 	final static void bufferDataARR(int bufferID, FloatBuffer data, int usage) {
+		if (!LSystem.isThreadDrawing() || gl11 == null || bufferID <= 0) {
+			return;
+		}
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, bufferID);
 		gl11.glBufferData(GL11.GL_ARRAY_BUFFER, data.remaining(), data, usage);
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
@@ -2199,6 +2211,9 @@ public final class GLEx implements LTrans {
 
 	final static void bufferSubDataARR(int bufferID, int offset,
 			FloatBuffer data) {
+		if (!LSystem.isThreadDrawing() || gl11 == null || bufferID <= 0) {
+			return;
+		}
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, bufferID);
 		gl11.glBufferSubData(GL11.GL_ARRAY_BUFFER, offset, data.remaining(),
 				data);
