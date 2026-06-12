@@ -1,6 +1,7 @@
 package com.loon.core.graphics.opengl;
 
-import java.util.HashMap;
+import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.loon.core.LSystem;
@@ -31,15 +32,13 @@ import com.loon.core.graphics.opengl.LTexture.Format;
 
 public class LTextures {
 
-	private static HashMap<String, LTexture> lazyTextures = new HashMap<String, LTexture>(
+	private static final ConcurrentHashMap<String, LTexture> lazyTextures = new ConcurrentHashMap<String, LTexture>(
 			100);
 
 	private static final AtomicLong generatedTextureSerial = new AtomicLong();
 
 	public static int count() {
-		synchronized (lazyTextures) {
-			return lazyTextures.size();
-		}
+		return lazyTextures.size();
 	}
 
 	public static LTexture loadTexture(String path) {
@@ -47,9 +46,7 @@ public class LTextures {
 	}
 
 	public static boolean containsValue(LTexture texture) {
-		synchronized (lazyTextures) {
-			return lazyTextures.containsValue(texture);
-		}
+		return lazyTextures.containsValue(texture);
 	}
 
 	public static int getRefCount(LTexture texture) {
@@ -60,10 +57,10 @@ public class LTextures {
 		if (fileName == null) {
 			return 0;
 		}
-		String key = fileName.trim().toLowerCase();
-		synchronized (lazyTextures) {
-			LTexture texture = lazyTextures.get(key);
-			if (texture != null) {
+		String key = normalizeKey(fileName);
+		LTexture texture = lazyTextures.get(key);
+		if (texture != null) {
+			synchronized (texture) {
 				return texture.refCount;
 			}
 		}
@@ -74,17 +71,25 @@ public class LTextures {
 		if (fileName == null) {
 			return null;
 		}
-		synchronized (lazyTextures) {
-			String key = fileName.trim().toLowerCase();
+		String key = normalizeKey(fileName);
+		while (true) {
 			LTexture texture = lazyTextures.get(key);
-			if (texture != null && !texture.isClose) {
-				texture.refCount++;
-				return texture;
+			if (texture != null) {
+				synchronized (texture) {
+					if (!texture.isClose) {
+						texture.refCount++;
+						return texture;
+					}
+				}
+				lazyTextures.remove(key, texture);
+				continue;
 			}
-			texture = new LTexture(fileName, format);
-			texture.lazyName = fileName;
-			lazyTextures.put(key, texture);
-			return texture;
+			LTexture created = new LTexture(fileName, format);
+			created.lazyName = key;
+			LTexture raced = lazyTextures.putIfAbsent(key, created);
+			if (raced == null) {
+				return created;
+			}
 		}
 	}
 
@@ -96,150 +101,217 @@ public class LTextures {
 		if (tex2d == null) {
 			return null;
 		}
-		synchronized (lazyTextures) {
-			if (tex2d.lazyName == null) {
-				tex2d.lazyName = "generated:"
-						+ generatedTextureSerial.incrementAndGet();
+		if (tex2d.lazyName == null) {
+			synchronized (tex2d) {
+				if (tex2d.lazyName == null) {
+					tex2d.lazyName = "generated:"
+							+ generatedTextureSerial.incrementAndGet();
+				}
 			}
-			String key = tex2d.lazyName;
+		}
+		String key = normalizeKey(tex2d.lazyName);
+		tex2d.lazyName = key;
+		while (true) {
 			LTexture texture = lazyTextures.get(key);
-			if (texture != null && !texture.isClose) {
-				texture.refCount++;
-				return texture;
+			if (texture != null) {
+				synchronized (texture) {
+					if (!texture.isClose) {
+						texture.refCount++;
+						return texture;
+					}
+				}
+				lazyTextures.remove(key, texture);
+				continue;
 			}
-			texture = tex2d;
-			texture.lazyName = key;
-			lazyTextures.put(key, texture);
-			return texture;
+			LTexture raced = lazyTextures.putIfAbsent(key, tex2d);
+			if (raced == null) {
+				return tex2d;
+			}
 		}
 	}
 
 	public static int removeTexture(String name, final boolean remove) {
-		synchronized (lazyTextures) {
-			final LTexture texture = lazyTextures.get(name);
-			if (texture != null) {
-				if (texture.refCount <= 0) {
-					if (remove) {
-						lazyTextures.remove(name);
-					}
-					if (!texture.isClose) {
-						Updateable u = new Updateable() {
-							@Override
-							public void action() {
-								synchronized (texture) {
-									if (texture.textureID > 0) {
-										if (texture.parent == null) {
-											GLEx.deleteTexture(texture.textureID);
-										}
-										texture.textureID = -1;
-										GLEx.deleteBuffer(texture.bufferID);
-										texture.bufferID = -1;
-									}
-									texture.isLoaded = false;
-									texture.isClose = true;
-									LTextureBatch.isBatchCacheDitry = true;
-								}
-							}
-						};
-						LSystem.load(u);
-						if (texture.imageData != null && texture.parent == null) {
-							if (texture.imageData.fileName == null) {
-								texture.imageData.source = null;
-								texture.imageData = null;
-							}
-						}
-						if (texture.childs != null) {
-							texture.childs.clear();
-							texture.childs = null;
-						}
-					}
-				} else {
+		if (name == null) {
+			return -1;
+		}
+		final String key = normalizeKey(name);
+		final LTexture texture = lazyTextures.get(key);
+		if (texture != null) {
+			int refCount;
+			synchronized (texture) {
+				if (texture.refCount > 0) {
 					texture.refCount--;
+					return texture.refCount;
 				}
-				return texture.refCount;
+				if (remove) {
+					lazyTextures.remove(key, texture);
+				}
+				if (texture.isClose) {
+					return texture.refCount;
+				}
+				texture.isLoaded = false;
+				texture.isClose = true;
+				texture.reload = false;
+				refCount = texture.refCount;
 			}
+			closeTexture(texture);
+			return refCount;
 		}
 		return -1;
 	}
 
 	public static int removeTexture(LTexture texture, final boolean remove) {
+		if (texture == null) {
+			return -1;
+		}
 		return removeTexture(texture.lazyName, remove);
 	}
 
 	public static void reload() {
-		synchronized (lazyTextures) {
-			if (lazyTextures.size() > 0) {
-				for (final LTexture texture : lazyTextures.values()) {
-					if (texture != null) {
+		if (lazyTextures.size() > 0) {
+			LTexture[] textures = lazyTextures.values().toArray(
+					new LTexture[0]);
+			for (final LTexture texture : textures) {
+				if (texture != null && !texture.isClose) {
+					synchronized (texture) {
 						texture.isLoaded = false;
 						texture.reload = true;
 						texture._hashCode = 1;
-						if (texture.childs != null) {
-							Updateable u = new Updateable() {
-								@Override
-								public void action() {
+					}
+					if (texture.childs != null) {
+						Updateable u = new Updateable() {
+							@Override
+							public void action() {
+								synchronized (texture) {
 									texture.loadTexture();
-									for (int i = 0; i < texture.childs.size(); i++) {
-										LTexture child = texture.childs.get(i);
-										if (child != null) {
-											child.textureID = texture.textureID;
-											child.isLoaded = texture.isLoaded;
-											child.reload = texture.reload;
-											if (GLEx.isVbo()) {
-												child.bufferID = GLEx
-														.createBufferID();
-												GLEx.bufferDataARR(
-														child.bufferID,
-														texture.data,
-														GL11.GL_STATIC_DRAW);
+									if (texture.childs != null) {
+										for (int i = 0; i < texture.childs.size(); i++) {
+											LTexture child = texture.childs
+													.get(i);
+											if (child != null) {
+												synchronized (child) {
+													child.textureID = texture.textureID;
+													child.isLoaded = texture.isLoaded;
+													child.reload = texture.reload;
+												}
+												if (GLEx.isVbo()) {
+													child.bufferID = GLEx
+															.createBufferID();
+													GLEx.bufferDataARR(
+															child.bufferID,
+															texture.data,
+															GL11.GL_STATIC_DRAW);
+												}
 											}
 										}
 									}
-									LTextureBatch.isBatchCacheDitry = true;
 								}
-							};
-							LSystem.load(u);
-						}
+								LTextureBatch.isBatchCacheDitry = true;
+							}
+						};
+						LSystem.load(u);
 					}
 				}
 			}
-			GLUtils.reload();
 		}
+		GLUtils.reload();
 	}
 
 	public static void disposeAll() {
-		synchronized (lazyTextures) {
-			if (lazyTextures.size() > 0) {
-				LTexture[] textures = lazyTextures.values().toArray(
-						new LTexture[lazyTextures.size()]);
-				for (LTexture tex2d : textures) {
-					if (tex2d != null && !tex2d.isClose) {
+		if (lazyTextures.size() > 0) {
+			LTexture[] textures = lazyTextures.values().toArray(
+					new LTexture[0]);
+			for (LTexture tex2d : textures) {
+				if (tex2d != null && !tex2d.isClose) {
+					removeTextureMapping(tex2d);
+					boolean close = false;
+					synchronized (tex2d) {
 						tex2d.refCount = 0;
-						tex2d.dispose(false);
-						tex2d = null;
+						if (!tex2d.isClose) {
+							tex2d.isLoaded = false;
+							tex2d.isClose = true;
+							tex2d.reload = false;
+							close = true;
+						}
 					}
+					if (close) {
+						closeTexture(tex2d);
+					}
+					tex2d = null;
 				}
-				lazyTextures.clear();
 			}
 		}
 		LSTRDictionary.dispose();
 	}
 
 	public static void destroyAll() {
-		synchronized (lazyTextures) {
-			if (lazyTextures.size() > 0) {
-				LTexture[] textures = lazyTextures.values().toArray(
-						new LTexture[lazyTextures.size()]);
-				for (LTexture tex2d : textures) {
-					if (tex2d != null && !tex2d.isClose) {
+		if (lazyTextures.size() > 0) {
+			LTexture[] textures = lazyTextures.values().toArray(
+					new LTexture[0]);
+			for (LTexture tex2d : textures) {
+				if (tex2d != null && !tex2d.isClose) {
+					removeTextureMapping(tex2d);
+					boolean close = false;
+					synchronized (tex2d) {
 						tex2d.refCount = 0;
-						tex2d.destroy(false);
-						tex2d = null;
+						if (!tex2d.isClose) {
+							tex2d.isLoaded = false;
+							tex2d.isClose = true;
+							tex2d.reload = false;
+							close = true;
+						}
 					}
+					if (close) {
+						closeTexture(tex2d);
+					}
+					tex2d.freeCache();
+					tex2d.freeBatch();
+					tex2d = null;
 				}
-				lazyTextures.clear();
 			}
 		}
 		LSTRDictionary.dispose();
+	}
+
+	private static String normalizeKey(String name) {
+		return name.trim().toLowerCase(Locale.ROOT);
+	}
+
+	private static void removeTextureMapping(LTexture texture) {
+		if (texture != null && texture.lazyName != null) {
+			lazyTextures.remove(normalizeKey(texture.lazyName), texture);
+		}
+	}
+
+	private static void closeTexture(final LTexture texture) {
+		Updateable u = new Updateable() {
+			@Override
+			public void action() {
+				synchronized (texture) {
+					if (texture.textureID > 0) {
+						if (texture.parent == null) {
+							GLEx.deleteTexture(texture.textureID);
+						}
+						texture.textureID = -1;
+						GLEx.deleteBuffer(texture.bufferID);
+						texture.bufferID = -1;
+					}
+					texture.isLoaded = false;
+					texture.isClose = true;
+					LTextureBatch.isBatchCacheDitry = true;
+				}
+			}
+		};
+		LSystem.load(u);
+		if (texture.imageData != null && texture.parent == null) {
+			if (texture.imageData.fileName == null) {
+				texture.imageData.source = null;
+				texture.imageData = null;
+			}
+		}
+		if (texture.childs != null) {
+			texture.childs.clear();
+			texture.childs = null;
+		}
 	}
 }
