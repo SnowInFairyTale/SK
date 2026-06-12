@@ -1,6 +1,7 @@
 package com.loon.core.graphics.opengl;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.loon.core.LSystem;
 import com.loon.core.event.Updateable;
@@ -33,7 +34,7 @@ public class LTextures {
 	private static HashMap<String, LTexture> lazyTextures = new HashMap<String, LTexture>(
 			100);
 
-	private static long generatedTextureSerial;
+	private static final AtomicLong generatedTextureSerial = new AtomicLong();
 
 	public static int count() {
 		return lazyTextures.size();
@@ -88,7 +89,8 @@ public class LTextures {
 		}
 		synchronized (lazyTextures) {
 			if (tex2d.lazyName == null) {
-				tex2d.lazyName = "generated:" + (++generatedTextureSerial);
+				tex2d.lazyName = "generated:"
+						+ generatedTextureSerial.incrementAndGet();
 			}
 			String key = tex2d.lazyName;
 			LTexture texture = lazyTextures.get(key);
