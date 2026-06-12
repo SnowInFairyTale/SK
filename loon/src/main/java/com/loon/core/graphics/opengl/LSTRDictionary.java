@@ -30,9 +30,6 @@ import com.loon.core.graphics.LFont;
  */
 public final class LSTRDictionary {
 
-	private final static HashMap<String, LFont> cacheList = new HashMap<String, LFont>(
-			20);
-
 	private final static HashMap<LFont, Dict> fontList = new HashMap<LFont, Dict>(
 			20);
 
@@ -76,11 +73,6 @@ public final class LSTRDictionary {
 	}
 
 	public static void clearStringLazy() {
-		synchronized (cacheList) {
-			if (cacheList != null) {
-				cacheList.clear();
-			}
-		}
 		synchronized (fontList) {
 			for (Dict d : fontList.values()) {
 				if (d != null) {
@@ -91,44 +83,35 @@ public final class LSTRDictionary {
 			fontList.clear();
 		}
 	}
-	
-	private final static int size = LSystem.DEFAULT_MAX_CACHE_SIZE * 5;
 
 	public final static Dict bind(final LFont font, final String mes) {
-		final String message = mes + added + globalChars;
-		if (cacheList.size() > size) {
-			clearStringLazy();
-		}
+		final String message = (mes == null ? "" : mes) + added + globalChars;
 		synchronized (fontList) {
-			LFont cFont = cacheList.get(message);
 			Dict pDict = fontList.get(font);
-			if (cFont == null || pDict == null) {
-				if (pDict == null) {
-					pDict = Dict.newDict();
-					fontList.put(font, pDict);
+			if (pDict == null) {
+				pDict = Dict.newDict();
+				fontList.put(font, pDict);
+			}
+			synchronized (pDict) {
+				ArrayList<Character> charas = pDict.dicts;
+				int oldSize = charas.size();
+				char[] chars = message.toCharArray();
+				for (int i = 0; i < chars.length; i++) {
+					if (!charas.contains(chars[i])) {
+						charas.add(chars[i]);
+					}
 				}
-				synchronized (pDict) {
-					cacheList.put(message, font);
-					ArrayList<Character> charas = pDict.dicts;
-					int oldSize = charas.size();
-					char[] chars = message.toCharArray();
-					for (int i = 0; i < chars.length; i++) {
-						if (!charas.contains(chars[i])) {
-							charas.add(chars[i]);
-						}
+				int newSize = charas.size();
+				if (oldSize != newSize) {
+					if (pDict.font != null) {
+						pDict.font.dispose();
+						pDict.font = null;
 					}
-					int newSize = charas.size();
-					if (oldSize != newSize) {
-						if (pDict.font != null) {
-							pDict.font.dispose();
-							pDict.font = null;
-						}
-						StringBuffer sbr = new StringBuffer(newSize);
-						for (int i = 0; i < newSize; i++) {
-							sbr.append(charas.get(i));
-						}
-						pDict.font = new LSTRFont(font, sbr.toString());
+					StringBuffer sbr = new StringBuffer(newSize);
+					for (int i = 0; i < newSize; i++) {
+						sbr.append(charas.get(i));
 					}
+					pDict.font = new LSTRFont(font, sbr.toString());
 				}
 			}
 			return pDict;
@@ -139,7 +122,7 @@ public final class LSTRDictionary {
 		if (chars == null || chars.length() == 0) {
 			return;
 		}
-		synchronized (cacheList) {
+		synchronized (fontList) {
 			StringBuilder builder = new StringBuilder(globalChars);
 			for (int i = 0; i < chars.length(); i++) {
 				char ch = chars.charAt(i);

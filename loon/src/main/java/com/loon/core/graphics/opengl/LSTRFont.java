@@ -1,9 +1,11 @@
 package com.loon.core.graphics.opengl;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import com.loon.core.LRelease;
-import com.loon.core.LSystem;
 import com.loon.core.graphics.LColor;
 import com.loon.core.graphics.LFont;
 import com.loon.core.graphics.LImage;
@@ -35,6 +37,8 @@ import com.loon.core.graphics.opengl.LTextureBatch.GLCache;
 public class LSTRFont implements LRelease {
 
 	private boolean useCache;
+
+	private static final int DISPLAY_CACHE_LIMIT = 1024;
 
 	/**
 	 * 获得指定字符串的LImage图像
@@ -72,7 +76,7 @@ public class LSTRFont implements LRelease {
 		return image;
 	}
 
-	private HashMap<String, GLCache> displays;
+	private LinkedHashMap<String, GLCache> displays;
 
 	private int totalCharSet = 256;
 
@@ -132,7 +136,8 @@ public class LSTRFont implements LRelease {
 
 	public LSTRFont(LFont font, boolean antiAlias, char[] additionalChars) {
 		if (displays == null) {
-			displays = new HashMap<String, GLCache>(totalCharSet);
+			displays = new LinkedHashMap<String, GLCache>(totalCharSet, 0.75f,
+					true);
 		} else {
 			displays.clear();
 		}
@@ -256,16 +261,10 @@ public class LSTRFont implements LRelease {
 			float ay, float rotation, String chars, LColor c, int startIndex,
 			int endIndex) {
 
-		if (displays.size() > LSystem.DEFAULT_MAX_CACHE_SIZE) {
+		if (displays.size() > DISPLAY_CACHE_LIMIT) {
 			synchronized (displays) {
-				for (GLCache cache : displays.values()) {
-					if (cache != null) {
-						cache.dispose();
-						cache = null;
-					}
-				}
+				trimDisplayCache();
 			}
-			displays.clear();
 		}
 
 		this.intObject = null;
@@ -313,6 +312,11 @@ public class LSTRFont implements LRelease {
 				}
 				fontBatch.commitQuad(c, x, y, sx, sy, ax, ay, rotation);
 				displays.put(chars, display = fontBatch.newGLCache());
+				if (displays.size() > DISPLAY_CACHE_LIMIT) {
+					synchronized (displays) {
+						trimDisplayCache();
+					}
+				}
 			} else if (display != null && fontBatch != null
 					&& fontBatch.getTexture() != null) {
 				LTextureBatch.commitQuad(fontBatch.getTexture(), display, c, x,
@@ -342,6 +346,22 @@ public class LSTRFont implements LRelease {
 				}
 			}
 			fontBatch.commitQuad(c, x, y, sx, sy, ax, ay, rotation);
+		}
+	}
+
+	private void trimDisplayCache() {
+		while (displays.size() > DISPLAY_CACHE_LIMIT) {
+			Iterator<Entry<String, GLCache>> iterator = displays.entrySet()
+					.iterator();
+			if (!iterator.hasNext()) {
+				return;
+			}
+			Entry<String, GLCache> entry = iterator.next();
+			GLCache cache = entry.getValue();
+			iterator.remove();
+			if (cache != null) {
+				cache.dispose();
+			}
 		}
 	}
 
