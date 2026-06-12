@@ -224,7 +224,7 @@ public class LSTRFont implements LRelease {
 			LTexture texture = new LTexture(GLLoader.getTextureData(imgTemp),
 					Format.LINEAR);
 			texture.setDebugName("font-atlas:" + font.getFontName() + "/"
-					+ font.getStyle() + "/" + font.getSize() + " custom="
+					+ font.getStyle() + "/" + font.getSize() + " chars="
 					+ (customCharsArray == null ? 0 : customCharsArray.length)
 					+ " size=" + textureWidth + "x" + textureHeight);
 
@@ -277,6 +277,15 @@ public class LSTRFont implements LRelease {
 		if (useCache) {
 			display = displays.get(chars);
 			if (display == null) {
+				if (fontBatch == null || fontBatch.getTexture() == null) {
+					LTextureDebugLog.writeRare("font-cache-create-no-atlas:"
+							+ font.getFontName() + ":" + font.getSize(),
+							"font-cache-create-no-atlas text=\"" + chars
+									+ "\" font=" + font.getFontName() + "/"
+									+ font.getStyle() + "/" + font.getSize(),
+							5000);
+					return;
+				}
 				LTextureDebugLog.writeRare("font-cache-create:"
 						+ font.getFontName() + ":" + font.getSize() + ":"
 						+ chars,
@@ -308,6 +317,17 @@ public class LSTRFont implements LRelease {
 									intObject.storedY + intObject.height);
 						}
 						totalWidth += intObject.width;
+					} else {
+						LTextureDebugLog.writeRare("font-char-miss:"
+								+ font.getFontName() + ":" + font.getSize()
+								+ ":" + charCurrent,
+								"font-char-miss charCode="
+										+ ((int) charCurrent) + " text=\""
+										+ chars + "\" font="
+										+ font.getFontName() + "/"
+										+ font.getStyle() + "/"
+										+ font.getSize(),
+								5000);
 					}
 				}
 				fontBatch.commitQuad(c, x, y, sx, sy, ax, ay, rotation);
@@ -321,8 +341,24 @@ public class LSTRFont implements LRelease {
 					&& fontBatch.getTexture() != null) {
 				LTextureBatch.commitQuad(fontBatch.getTexture(), display, c, x,
 						y,sx, sy, ax, ay, rotation);
+			} else {
+				LTextureDebugLog.writeRare("font-cache-hit-no-atlas:"
+						+ font.getFontName() + ":" + font.getSize(),
+						"font-cache-hit-no-atlas text=\"" + chars
+								+ "\" font=" + font.getFontName() + "/"
+								+ font.getStyle() + "/" + font.getSize(),
+						5000);
 			}
 		} else {
+			if (fontBatch == null || fontBatch.getTexture() == null) {
+				LTextureDebugLog.writeRare("font-draw-no-cache-no-atlas:"
+						+ font.getFontName() + ":" + font.getSize(),
+						"font-draw-no-cache-no-atlas text=\"" + chars
+								+ "\" font=" + font.getFontName() + "/"
+								+ font.getStyle() + "/" + font.getSize(),
+						5000);
+				return;
+			}
 			fontBatch.glBegin();
 			char[] charList = chars.toCharArray();
 			for (int i = 0; i < charList.length; i++) {
@@ -343,6 +379,15 @@ public class LSTRFont implements LRelease {
 										+ intObject.height);
 					}
 					totalWidth += intObject.width;
+				} else {
+					LTextureDebugLog.writeRare("font-char-miss:"
+							+ font.getFontName() + ":" + font.getSize() + ":"
+							+ charCurrent,
+							"font-char-miss charCode=" + ((int) charCurrent)
+									+ " text=\"" + chars + "\" font="
+									+ font.getFontName() + "/"
+									+ font.getStyle() + "/" + font.getSize(),
+							5000);
 				}
 			}
 			fontBatch.commitQuad(c, x, y, sx, sy, ax, ay, rotation);
@@ -359,6 +404,13 @@ public class LSTRFont implements LRelease {
 			Entry<String, GLCache> entry = iterator.next();
 			GLCache cache = entry.getValue();
 			iterator.remove();
+			LTextureDebugLog.writeRare("font-display-cache-trim:"
+					+ font.getFontName() + ":" + font.getSize(),
+					"font-display-cache-trim font=" + font.getFontName() + "/"
+							+ font.getStyle() + "/" + font.getSize()
+							+ " remaining=" + displays.size()
+							+ " removed=\"" + entry.getKey() + "\"",
+					1000);
 			if (cache != null) {
 				cache.dispose();
 			}

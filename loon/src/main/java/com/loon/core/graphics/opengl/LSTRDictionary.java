@@ -63,16 +63,24 @@ public final class LSTRDictionary {
 		}
 
 		boolean addChars(String text) {
-			boolean changed = false;
+			return addCharsCount(text) > 0;
+		}
+
+		int addCharsCount(String text) {
+			int addedCount = 0;
 			if (text == null) {
-				return false;
+				return 0;
 			}
 			for (int i = 0; i < text.length(); i++) {
 				if (chars.add(Character.valueOf(text.charAt(i)))) {
-					changed = true;
+					addedCount++;
 				}
 			}
-			return changed;
+			return addedCount;
+		}
+
+		int size() {
+			return chars.size();
 		}
 
 		String charsAsString() {
@@ -105,6 +113,17 @@ public final class LSTRDictionary {
 	}
 
 	public final static Dict bind(final LFont font, final String mes) {
+		if (font == null) {
+			LTextureDebugLog.writeRare("font-dict-bind-null-font",
+					"font-dict-bind-null-font text=\"" + mes + "\"", 5000);
+			return Dict.newDict();
+		}
+		if (!LSystem.isThreadDrawing()) {
+			LTextureDebugLog.writeRare("font-dict-bind-off-gl:" + fontKey(font),
+					"font-dict-bind-off-gl font=" + fontKey(font) + " text=\""
+							+ mes + "\"",
+					5000);
+		}
 		synchronized (LOCK) {
 			return bindLocked(font, mes);
 		}
@@ -116,6 +135,10 @@ public final class LSTRDictionary {
 		}
 		final String preloadChars = chars;
 		if (!LSystem.isThreadDrawing()) {
+			LTextureDebugLog.writeRare("font-global-chars-queued-off-gl",
+					"font-global-chars-queued-off-gl requested="
+							+ preloadChars.length(),
+					5000);
 			LSystem.load(new Updateable() {
 				@Override
 				public void action() {
@@ -127,13 +150,25 @@ public final class LSTRDictionary {
 		synchronized (LOCK) {
 			Dict globalDict = Dict.newDict();
 			globalDict.addChars(globalChars);
-			if (!globalDict.addChars(chars)) {
+			int addedCount = globalDict.addCharsCount(chars);
+			if (addedCount == 0) {
 				return;
 			}
 			globalChars = globalDict.charsAsString();
+			LTextureDebugLog.write("font-global-chars-update added="
+					+ addedCount + " total=" + globalDict.size());
 			for (java.util.Map.Entry<LFont, Dict> entry : fontList.entrySet()) {
 				Dict dict = entry.getValue();
-				if (dict != null && dict.addChars(globalChars)) {
+				if (dict != null) {
+					int dictAdded = dict.addCharsCount(globalChars);
+					if (dictAdded == 0) {
+						continue;
+					}
+					int oldSize = dict.size() - dictAdded;
+					LTextureDebugLog.write("font-charset-rebuild reason=global"
+							+ " font=" + fontKey(entry.getKey()) + " old="
+							+ oldSize + " added=" + dictAdded + " total="
+							+ dict.size());
 					dict.rebuildFont(entry.getKey());
 				}
 			}
@@ -142,12 +177,23 @@ public final class LSTRDictionary {
 
 	public final static void drawString(LFont font, String message, float x,
 			float y, float angle, LColor c) {
+		if (font == null) {
+			LTextureDebugLog.writeRare("font-dict-draw-null-font",
+					"font-dict-draw-null-font text=\"" + message + "\"",
+					5000);
+			return;
+		}
 		synchronized (LOCK) {
 			Dict pDict = bindLocked(font, message);
 			if (pDict.font != null) {
 				synchronized (pDict.font) {
 					pDict.font.drawString(message, x, y, angle, c);
 				}
+			} else {
+				LTextureDebugLog.writeRare("font-dict-draw-no-atlas:"
+						+ fontKey(font), "font-dict-draw-no-atlas font="
+						+ fontKey(font) + " chars=" + pDict.size()
+						+ " text=\"" + message + "\"", 5000);
 			}
 		}
 	}
@@ -155,6 +201,12 @@ public final class LSTRDictionary {
 	public final static void drawString(LFont font, String message, float x,
 			float y, float sx, float sy, float ax, float ay, float angle,
 			LColor c) {
+		if (font == null) {
+			LTextureDebugLog.writeRare("font-dict-draw-null-font",
+					"font-dict-draw-null-font text=\"" + message + "\"",
+					5000);
+			return;
+		}
 		synchronized (LOCK) {
 			Dict pDict = bindLocked(font, message);
 			if (pDict.font != null) {
@@ -162,6 +214,11 @@ public final class LSTRDictionary {
 					pDict.font.drawString(message, x, y, sx, sy, ax, ay, angle,
 							c);
 				}
+			} else {
+				LTextureDebugLog.writeRare("font-dict-draw-no-atlas:"
+						+ fontKey(font), "font-dict-draw-no-atlas font="
+						+ fontKey(font) + " chars=" + pDict.size()
+						+ " text=\"" + message + "\"", 5000);
 			}
 		}
 	}
@@ -173,10 +230,24 @@ public final class LSTRDictionary {
 			fontList.put(font, dict);
 		}
 		String message = (mes == null ? "" : mes) + added + globalChars;
-		if (dict.addChars(message)) {
+		int addedCount = dict.addCharsCount(message);
+		if (addedCount > 0) {
+			int oldSize = dict.size() - addedCount;
+			LTextureDebugLog.write("font-charset-rebuild reason=bind font="
+					+ fontKey(font) + " old=" + oldSize + " added="
+					+ addedCount + " total=" + dict.size() + " text=\"" + mes
+					+ "\"");
 			dict.rebuildFont(font);
 		}
 		return dict;
+	}
+
+	private static String fontKey(LFont font) {
+		if (font == null) {
+			return "null";
+		}
+		return font.getFontName() + "/" + font.getStyle() + "/"
+				+ font.getSize();
 	}
 
 	/**
