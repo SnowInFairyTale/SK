@@ -3,17 +3,20 @@ package com.loon.core.graphics.opengl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.loon.core.LSystem;
 
 public final class LTextureDebugLog {
 
-	private static final long MAX_BYTES = 512 * 1024;
 	private static final long MIN_INTERVAL_MS = 250;
 	private static final Object LOCK = new Object();
 
 	private static File logFile;
+	private static String logDate;
 	private static long lastWriteTime;
 	private static String lastMessage;
 	private static final HashMap<String, Long> RARE_WRITE_TIMES = new HashMap<String, Long>();
@@ -35,7 +38,6 @@ public final class LTextureDebugLog {
 			if (file == null) {
 				return;
 			}
-			trimIfNeeded(file);
 			FileWriter writer = null;
 			try {
 				writer = new FileWriter(file, true);
@@ -75,7 +77,9 @@ public final class LTextureDebugLog {
 	}
 
 	private static File getLogFile() {
-		if (logFile != null) {
+		String today = new SimpleDateFormat("yyyyMMdd", Locale.US)
+				.format(new Date());
+		if (logFile != null && today.equals(logDate)) {
 			return logFile;
 		}
 		if (LSystem.screenActivity == null) {
@@ -88,27 +92,8 @@ public final class LTextureDebugLog {
 		if (!dir.exists() && !dir.mkdirs()) {
 			return null;
 		}
-		logFile = new File(dir, "texture_trace.log");
+		logDate = today;
+		logFile = new File(dir, "texture_trace_" + today + ".log");
 		return logFile;
-	}
-
-	private static void trimIfNeeded(File file) {
-		if (file.length() <= MAX_BYTES) {
-			return;
-		}
-		FileWriter writer = null;
-		try {
-			writer = new FileWriter(file, false);
-			writer.write(System.currentTimeMillis()
-					+ " texture trace truncated\n");
-		} catch (IOException ignored) {
-		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException ignored) {
-				}
-			}
-		}
 	}
 }

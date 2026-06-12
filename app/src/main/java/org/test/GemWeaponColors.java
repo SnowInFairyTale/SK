@@ -6,7 +6,7 @@ import com.loon.core.graphics.LColor;
 public final class GemWeaponColors {
 
 	/** Purple gem weapon color. */
-	public static final LColor PURPLE = new LColor(0.58f, 0.28f, 0.92f, 1f);
+	public static final LColor PURPLE = new LColor(0.88f, 0.38f, 1f, 1f);
 	/** Red gem — same red previously applied to spears. */
 	public static final LColor RED = new LColor(1f, 0f, 0f, 1f);
 	/** Gold gem — same gold previously applied to axes. */
