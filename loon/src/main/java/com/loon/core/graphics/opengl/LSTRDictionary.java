@@ -33,9 +33,6 @@ public final class LSTRDictionary {
 	private final static HashMap<LFont, Dict> fontList = new HashMap<LFont, Dict>(
 			20);
 
-	private static HashMap<String, LSTRFont> lazyEnglish = new HashMap<String, LSTRFont>(
-			10);
-
 	public final static String added = "0123456789";
 
 	public final static char split = '$';
@@ -182,57 +179,7 @@ public final class LSTRDictionary {
 		return lazyKey.toString();
 	}
 
-	/**
-	 * 生成一组西方字符缓存键值
-	 * 
-	 * @param font
-	 * @return
-	 */
-	private static String makeLazyWestKey(LFont font) {
-		if (lazyKey == null) {
-			lazyKey = new StringBuffer();
-			lazyKey.append(font.getFontName().toLowerCase());
-			lazyKey.append(font.getStyle());
-			lazyKey.append(font.getSize());
-		} else {
-			lazyKey.delete(0, lazyKey.length());
-			lazyKey.append(font.getFontName().toLowerCase());
-			lazyKey.append(font.getStyle());
-			lazyKey.append(font.getSize());
-		}
-		return lazyKey.toString();
-	}
-
-	/**
-	 * 清空西文字体缓存
-	 */
-	public static void clearEnglishLazy() {
-		synchronized (lazyEnglish) {
-			for (LSTRFont str : lazyEnglish.values()) {
-				if (str != null) {
-					str.dispose();
-					str = null;
-				}
-			}
-			lazyEnglish.clear();
-		}
-	}
-
-	public static LSTRFont getGLFont(LFont f) {
-		if (lazyEnglish.size() > LSystem.DEFAULT_MAX_CACHE_SIZE) {
-			clearEnglishLazy();
-		}
-		String key = makeLazyWestKey(f);
-		LSTRFont font = lazyEnglish.get(key);
-		if (font == null) {
-			font = new LSTRFont(f, true);
-			lazyEnglish.put(key, font);
-		}
-		return font;
-	}
-
 	public final static void dispose() {
-		clearEnglishLazy();
 		clearStringLazy();
 	}
 
