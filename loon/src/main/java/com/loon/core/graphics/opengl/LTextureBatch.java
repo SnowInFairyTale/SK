@@ -574,8 +574,8 @@ public final class LTextureBatch implements LRelease {
 
 		xOff = srcX * invTexWidth + texture.xOff;
 		yOff = srcY * invTexHeight + texture.yOff;
-		widthRatio = (srcX + srcWidth) * invTexWidth;
-		heightRatio = (srcY + srcHeight) * invTexHeight;
+		widthRatio = srcWidth * invTexWidth;
+		heightRatio = srcHeight * invTexHeight;
 
 		final float fx2 = x + width;
 		final float fy2 = y + height;
@@ -740,8 +740,8 @@ public final class LTextureBatch implements LRelease {
 
 		xOff = srcX * invTexWidth + texture.xOff;
 		yOff = srcY * invTexHeight + texture.yOff;
-		widthRatio = (srcX + srcWidth) * invTexWidth;
-		heightRatio = (srcY + srcHeight) * invTexHeight;
+		widthRatio = srcWidth * invTexWidth;
+		heightRatio = srcHeight * invTexHeight;
 
 		if (flipX) {
 			float tmp = xOff;
@@ -788,8 +788,8 @@ public final class LTextureBatch implements LRelease {
 
 		xOff = srcX * invTexWidth + texture.xOff;
 		yOff = srcY * invTexHeight + texture.yOff;
-		widthRatio = (srcX + srcWidth) * invTexWidth;
-		heightRatio = (srcY + srcHeight) * invTexHeight;
+		widthRatio = srcWidth * invTexWidth;
+		heightRatio = srcHeight * invTexHeight;
 
 		final float fx2 = x + width;
 		final float fy2 = y + height;
