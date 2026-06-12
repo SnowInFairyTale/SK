@@ -218,6 +218,10 @@ public class LSTRFont implements LRelease {
 			}
 			LTexture texture = new LTexture(GLLoader.getTextureData(imgTemp),
 					Format.LINEAR);
+			texture.setDebugName("font-atlas:" + font.getFontName() + "/"
+					+ font.getStyle() + "/" + font.getSize() + " custom="
+					+ (customCharsArray == null ? 0 : customCharsArray.length)
+					+ " size=" + textureWidth + "x" + textureHeight);
 
 			fontBatch = new LTextureBatch(texture);
 
@@ -274,6 +278,17 @@ public class LSTRFont implements LRelease {
 		if (useCache) {
 			display = displays.get(chars);
 			if (display == null) {
+				LTextureDebugLog.writeRare("font-cache-create:"
+						+ font.getFontName() + ":" + font.getSize() + ":"
+						+ chars,
+						"font-cache-create text=\"" + chars + "\" font="
+								+ font.getFontName() + "/" + font.getStyle()
+								+ "/" + font.getSize() + " atlas="
+								+ (fontBatch == null
+										|| fontBatch.getTexture() == null ? "null"
+												: fontBatch.getTexture()
+														.getDebugName()),
+						1000);
 				fontBatch.glBegin();
 				char[] charList = chars.toCharArray();
 				for (int i = 0; i < charList.length; i++) {

@@ -53,8 +53,13 @@ final class TextSprite {
 		float imageHeight = image.getHeight();
 		float buttonLabelTopOffset = Constants.textLabelButtonTopOffset(font,
 				imageHeight);
-		SharedTextSprite shared = new SharedTextSprite(key, image.getTexture(),
-				image.getWidth(), imageHeight, buttonLabelTopOffset);
+		LTexture texture = image.getTexture();
+		texture.setDebugName("text:\"" + text + "\" font="
+				+ font.getFontName() + "/" + font.getStyle() + "/"
+				+ font.getSize() + " size=" + image.getWidth() + "x"
+				+ imageHeight);
+		SharedTextSprite shared = new SharedTextSprite(key, texture, image
+				.getWidth(), imageHeight, buttonLabelTopOffset);
 		synchronized (CACHE) {
 			SharedTextSprite cached = CACHE.get(key);
 			if (cached != null) {

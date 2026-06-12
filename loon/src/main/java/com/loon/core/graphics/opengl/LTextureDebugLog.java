@@ -22,6 +22,7 @@ public final class LTextureDebugLog {
 	}
 
 	public static void write(String message) {
+		message = sanitize(message);
 		long now = System.currentTimeMillis();
 		synchronized (LOCK) {
 			if (message.equals(lastMessage)
@@ -50,6 +51,14 @@ public final class LTextureDebugLog {
 				}
 			}
 		}
+	}
+
+	private static String sanitize(String message) {
+		if (message == null) {
+			return "null";
+		}
+		return message.replace('\n', ' ').replace('\r', ' ')
+				.replace('\t', ' ');
 	}
 
 	public static void writeRare(String category, String message,

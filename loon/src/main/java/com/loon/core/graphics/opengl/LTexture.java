@@ -90,6 +90,8 @@ public class LTexture implements LRelease {
 
 	private final int debugID = nextDebugID();
 
+	private String debugName;
+
 	private LColor[] colors;
 
 	private int subX, subY, subWidth, subHeight;
@@ -188,6 +190,7 @@ public class LTexture implements LRelease {
 		this.isClose = texture.isClose;
 		this.isStatic = texture.isStatic;
 		this.isVisible = texture.isVisible;
+		this.debugName = texture.debugName;
 		System.arraycopy(texture.crops, 0, crops, 0, crops.length);
 	}
 
@@ -934,12 +937,32 @@ public class LTexture implements LRelease {
 	}
 
 	public final String getDebugName() {
+		if (debugName != null) {
+			return debugName;
+		}
 		String name = getFileName();
 		if (name != null) {
 			return name;
 		}
 		return "generated#" + debugID + "@" + getWidth() + "x"
 				+ getHeight();
+	}
+
+	public final LTexture setDebugName(String name) {
+		this.debugName = sanitizeDebugName(name);
+		return this;
+	}
+
+	private static String sanitizeDebugName(String name) {
+		if (name == null) {
+			return null;
+		}
+		String result = name.replace('\n', ' ').replace('\r', ' ')
+				.replace('\t', ' ');
+		if (result.length() > 120) {
+			result = result.substring(0, 117) + "...";
+		}
+		return result;
 	}
 
 	public synchronized void bind(int unit) {
