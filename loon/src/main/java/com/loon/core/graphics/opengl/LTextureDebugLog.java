@@ -3,6 +3,7 @@ package com.loon.core.graphics.opengl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.loon.core.LSystem;
 
@@ -15,6 +16,7 @@ public final class LTextureDebugLog {
 	private static File logFile;
 	private static long lastWriteTime;
 	private static String lastMessage;
+	private static final HashMap<String, Long> RARE_WRITE_TIMES = new HashMap<String, Long>();
 
 	private LTextureDebugLog() {
 	}
@@ -48,6 +50,19 @@ public final class LTextureDebugLog {
 				}
 			}
 		}
+	}
+
+	public static void writeRare(String category, String message,
+			long minIntervalMs) {
+		long now = System.currentTimeMillis();
+		synchronized (LOCK) {
+			Long lastTime = RARE_WRITE_TIMES.get(category);
+			if (lastTime != null && now - lastTime.longValue() < minIntervalMs) {
+				return;
+			}
+			RARE_WRITE_TIMES.put(category, Long.valueOf(now));
+		}
+		write(message);
 	}
 
 	private static File getLogFile() {

@@ -2165,6 +2165,12 @@ public final class GLEx implements LTrans {
 			return;
 		}
 		if (!LSystem.isThreadDrawing() || gl11 == null) {
+			LTextureDebugLog.writeRare("vbo-update-skip",
+					"vbo-update-skip threadDrawing=" + LSystem.isThreadDrawing()
+							+ " gl11Null=" + (gl11 == null) + " texture="
+							+ texture.getTextureID() + ":"
+							+ texture.getDebugName(),
+					5000);
 			return;
 		}
 		IntBuffer buff = genBuffers(1);
@@ -2180,6 +2186,11 @@ public final class GLEx implements LTrans {
 			return -1;
 		}
 		if (!LSystem.isThreadDrawing() || gl11 == null) {
+			LTextureDebugLog.writeRare("vbo-create-buffer-skip",
+					"vbo-create-buffer-skip threadDrawing="
+							+ LSystem.isThreadDrawing() + " gl11Null="
+							+ (gl11 == null),
+					5000);
 			return -1;
 		}
 		IntBuffer buffer = NativeSupport.newIntBuffer(1);
@@ -2201,6 +2212,11 @@ public final class GLEx implements LTrans {
 
 	final static void bufferDataARR(int bufferID, FloatBuffer data, int usage) {
 		if (!LSystem.isThreadDrawing() || gl11 == null || bufferID <= 0) {
+			LTextureDebugLog.writeRare("vbo-buffer-data-skip",
+					"vbo-buffer-data-skip threadDrawing="
+							+ LSystem.isThreadDrawing() + " gl11Null="
+							+ (gl11 == null) + " bufferID=" + bufferID,
+					5000);
 			return;
 		}
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, bufferID);
@@ -2212,6 +2228,11 @@ public final class GLEx implements LTrans {
 	final static void bufferSubDataARR(int bufferID, int offset,
 			FloatBuffer data) {
 		if (!LSystem.isThreadDrawing() || gl11 == null || bufferID <= 0) {
+			LTextureDebugLog.writeRare("vbo-buffer-subdata-skip",
+					"vbo-buffer-subdata-skip threadDrawing="
+							+ LSystem.isThreadDrawing() + " gl11Null="
+							+ (gl11 == null) + " bufferID=" + bufferID,
+					5000);
 			return;
 		}
 		gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, bufferID);
@@ -2227,6 +2248,8 @@ public final class GLEx implements LTrans {
 		}
 		if (!LSystem.isThreadDrawing()) {
 			final int id = bufferID;
+			LTextureDebugLog.writeRare("delete-buffer-off-gl",
+					"delete-buffer-off-gl-queued id=" + id, 5000);
 			LSystem.load(new com.loon.core.event.Updateable() {
 				@Override
 				public void action() {
@@ -2236,6 +2259,8 @@ public final class GLEx implements LTrans {
 			return;
 		}
 		if (gl11 == null) {
+			LTextureDebugLog.writeRare("delete-buffer-no-gl",
+					"delete-buffer-no-gl id=" + bufferID, 5000);
 			return;
 		}
 		delBufferID[0] = bufferID;
@@ -2248,6 +2273,8 @@ public final class GLEx implements LTrans {
 		}
 		if (!LSystem.isThreadDrawing()) {
 			final int id = textureID;
+			LTextureDebugLog.writeRare("delete-texture-off-gl",
+					"delete-texture-off-gl-queued id=" + id, 5000);
 			LSystem.load(new com.loon.core.event.Updateable() {
 				@Override
 				public void action() {
@@ -2257,6 +2284,8 @@ public final class GLEx implements LTrans {
 			return;
 		}
 		if (gl10 == null) {
+			LTextureDebugLog.writeRare("delete-texture-no-gl",
+					"delete-texture-no-gl id=" + textureID, 5000);
 			return;
 		}
 		if (lazyTextureID == textureID) {

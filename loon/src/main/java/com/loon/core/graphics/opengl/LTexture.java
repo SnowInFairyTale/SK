@@ -277,6 +277,9 @@ public class LTexture implements LRelease {
 		if (!LSystem.isThreadDrawing()) {
 			if (!loadQueued) {
 				loadQueued = true;
+				LTextureDebugLog.writeRare("texture-load-off-gl:"
+						+ getDebugName(), "texture-load-off-gl-queued texture="
+						+ textureInfo(), 5000);
 				final LTexture self = this;
 				LSystem.load(new Updateable() {
 					@Override
@@ -287,6 +290,12 @@ public class LTexture implements LRelease {
 						self.loadTexture();
 					}
 				});
+			} else {
+				LTextureDebugLog.writeRare("texture-load-off-gl-duplicate:"
+						+ getDebugName(),
+						"texture-load-off-gl-duplicate texture="
+								+ textureInfo(),
+						5000);
 			}
 			return;
 		}
@@ -295,15 +304,36 @@ public class LTexture implements LRelease {
 			parent.loadTexture();
 			textureID = parent.textureID;
 			isLoaded = parent.isLoaded;
+			if (!parent.isLoaded || parent.textureID <= 0) {
+				LTextureDebugLog.writeRare("texture-child-parent-load-miss:"
+						+ getDebugName(),
+						"texture-child-parent-load-miss child=" + textureInfo()
+								+ " parent=" + parent.textureInfo(),
+						5000);
+			}
 			return;
 		}
-		if (imageData == null || isLoaded || GLEx.gl == null) {
+		if (imageData == null) {
+			LTextureDebugLog.writeRare("texture-load-no-imagedata:"
+					+ getDebugName(), "texture-load-no-imagedata texture="
+					+ textureInfo(), 5000);
+			return;
+		}
+		if (isLoaded) {
+			return;
+		}
+		if (GLEx.gl == null) {
+			LTextureDebugLog.writeRare("texture-load-no-gl:" + getDebugName(),
+					"texture-load-no-gl texture=" + textureInfo(), 5000);
 			return;
 		}
 		if (imageData.source == null && imageData.fileName != null) {
 			imageData = GLLoader.getTextureData(imageData.fileName);
 		}
 		if (imageData.source == null && imageData.fileName == null) {
+			LTextureDebugLog.writeRare("texture-load-no-source:"
+					+ getDebugName(), "texture-load-no-source texture="
+					+ textureInfo(), 5000);
 			return;
 		}
 		isLoaded = true;
@@ -374,6 +404,9 @@ public class LTexture implements LRelease {
 
 	private synchronized int createTextureID() {
 		if (textureID > 0) {
+			LTextureDebugLog.writeRare("texture-create-replacing-id:"
+					+ getDebugName(), "texture-create-replacing-id texture="
+					+ textureInfo(), 5000);
 			GLEx.deleteTexture(this.textureID);
 			this.textureID = -1;
 			GLEx.deleteBuffer(this.bufferID);
@@ -381,6 +414,12 @@ public class LTexture implements LRelease {
 		}
 		GLEx.gl10.glGenTextures(1, GENERATED_TEXTUREID, 0);
 		return (textureID = GENERATED_TEXTUREID[0]);
+	}
+
+	private String textureInfo() {
+		return textureID + ":" + getDebugName() + "/loaded=" + isLoaded
+				+ "/closed=" + isClose + "/reload=" + reload + "/parent="
+				+ (parent == null ? "null" : parent.getDebugName());
 	}
 
 	public boolean isReplace() {

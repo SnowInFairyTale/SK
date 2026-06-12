@@ -81,7 +81,12 @@ public class LTextures {
 						return texture;
 					}
 				}
-				lazyTextures.remove(key, texture);
+				if (lazyTextures.remove(key, texture)) {
+					LTextureDebugLog.writeRare("texture-cache-stale",
+							"texture-cache-stale-remove key=" + key
+									+ " texture=" + textureInfo(texture),
+							5000);
+				}
 				continue;
 			}
 			LTexture created = new LTexture(fileName, format);
@@ -90,6 +95,11 @@ public class LTextures {
 			if (raced == null) {
 				return created;
 			}
+			LTextureDebugLog.writeRare("texture-cache-put-race",
+					"texture-cache-put-race key=" + key + " created="
+							+ textureInfo(created) + " existing="
+							+ textureInfo(raced),
+					5000);
 		}
 	}
 
@@ -120,13 +130,23 @@ public class LTextures {
 						return texture;
 					}
 				}
-				lazyTextures.remove(key, texture);
+				if (lazyTextures.remove(key, texture)) {
+					LTextureDebugLog.writeRare("texture-cache-stale",
+							"texture-cache-stale-remove key=" + key
+									+ " texture=" + textureInfo(texture),
+							5000);
+				}
 				continue;
 			}
 			LTexture raced = lazyTextures.putIfAbsent(key, tex2d);
 			if (raced == null) {
 				return tex2d;
 			}
+			LTextureDebugLog.writeRare("texture-cache-put-race",
+					"texture-cache-put-race key=" + key + " created="
+							+ textureInfo(tex2d) + " existing="
+							+ textureInfo(raced),
+					5000);
 		}
 	}
 
@@ -144,9 +164,18 @@ public class LTextures {
 					return texture.refCount;
 				}
 				if (remove) {
-					lazyTextures.remove(key, texture);
+					if (!lazyTextures.remove(key, texture)) {
+						LTextureDebugLog.writeRare(
+								"texture-cache-remove-race",
+								"texture-cache-remove-race key=" + key
+										+ " texture=" + textureInfo(texture),
+								5000);
+					}
 				}
 				if (texture.isClose) {
+					LTextureDebugLog.writeRare("texture-cache-remove-closed",
+							"texture-cache-remove-closed key=" + key
+							+ " texture=" + textureInfo(texture), 5000);
 					return texture.refCount;
 				}
 				texture.isLoaded = false;
@@ -157,6 +186,10 @@ public class LTextures {
 			closeTexture(texture);
 			return refCount;
 		}
+		LTextureDebugLog.writeRare("texture-cache-remove-miss",
+				"texture-cache-remove-miss key=" + key + " remove=" + remove
+						+ " count=" + lazyTextures.size(),
+				5000);
 		return -1;
 	}
 
@@ -171,6 +204,9 @@ public class LTextures {
 		if (lazyTextures.size() > 0) {
 			LTexture[] textures = lazyTextures.values().toArray(
 					new LTexture[0]);
+			LTextureDebugLog.writeRare("texture-cache-reload",
+					"texture-cache-reload-start count=" + textures.length,
+					1000);
 			for (final LTexture texture : textures) {
 				if (texture != null && !texture.isClose) {
 					synchronized (texture) {
@@ -189,6 +225,15 @@ public class LTextures {
 											LTexture child = texture.childs
 													.get(i);
 											if (child != null) {
+												if (child.isClose) {
+													LTextureDebugLog.writeRare(
+															"texture-reload-closed-child",
+															"texture-reload-closed-child parent="
+																	+ textureInfo(texture)
+																	+ " child="
+																	+ textureInfo(child),
+															5000);
+												}
 												synchronized (child) {
 													child.textureID = texture.textureID;
 													child.isLoaded = texture.isLoaded;
@@ -211,6 +256,11 @@ public class LTextures {
 						};
 						LSystem.load(u);
 					}
+				} else if (texture != null) {
+					LTextureDebugLog.writeRare("texture-cache-reload-closed",
+							"texture-cache-reload-skip-closed texture="
+									+ textureInfo(texture),
+							5000);
 				}
 			}
 		}
@@ -284,6 +334,12 @@ public class LTextures {
 	}
 
 	private static void closeTexture(final LTexture texture) {
+		if (texture.textureID <= 0) {
+			LTextureDebugLog.writeRare("texture-close-no-gl-id",
+					"texture-close-no-gl-id texture="
+					+ textureInfo(texture) + " parent="
+					+ textureInfo(texture.parent), 5000);
+		}
 		Updateable u = new Updateable() {
 			@Override
 			public void action() {
@@ -313,5 +369,14 @@ public class LTextures {
 			texture.childs.clear();
 			texture.childs = null;
 		}
+	}
+
+	private static String textureInfo(LTexture texture) {
+		if (texture == null) {
+			return "null";
+		}
+		return texture.textureID + ":" + texture.getDebugName() + "/loaded="
+				+ texture.isLoaded + "/closed=" + texture.isClose + "/ref="
+				+ texture.refCount;
 	}
 }
