@@ -31,11 +31,17 @@ public abstract class SoundImpl<I> implements Sound {
 	
 	protected List<Callback<Sound>> callbacks;
 	protected Throwable error;
-	protected boolean playing, looping;
+	protected boolean playing, looping, released;
 	protected float volume = 1;
 	protected I impl;
 
-	public void onLoaded(I impl) {
+	public synchronized void onLoaded(I impl) {
+		if (released) {
+			this.impl = impl;
+			releaseImpl();
+			this.impl = null;
+			return;
+		}
 		this.impl = impl;
 		callbacks = CallbackList.dispatchSuccessClear(callbacks, this);
 		setVolumeImpl(volume);
@@ -45,23 +51,35 @@ public abstract class SoundImpl<I> implements Sound {
 		}
 	}
 
-	public void onLoadError(Throwable error) {
+	public synchronized void onLoadError(Throwable error) {
+		if (released) {
+			return;
+		}
 		this.error = error;
 		callbacks = CallbackList.dispatchFailureClear(callbacks, error);
 	}
 
 	@Override
-	public boolean prepare() {
+	public synchronized boolean prepare() {
+		if (released) {
+			return false;
+		}
 		return (impl != null) ? prepareImpl() : false;
 	}
 
 	@Override
-	public boolean isPlaying() {
+	public synchronized boolean isPlaying() {
+		if (released) {
+			return false;
+		}
 		return (impl != null) ? playingImpl() : playing;
 	}
 
 	@Override
-	public boolean play() {
+	public synchronized boolean play() {
+		if (released) {
+			return false;
+		}
 		this.playing = true;
 		if (impl != null) {
 			return playImpl();
@@ -71,36 +89,51 @@ public abstract class SoundImpl<I> implements Sound {
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		this.playing = false;
+		if (released) {
+			return;
+		}
 		if (impl != null) {
 			stopImpl();
 		}
 	}
 
 	@Override
-	public void setLooping(boolean looping) {
+	public synchronized void setLooping(boolean looping) {
 		this.looping = looping;
+		if (released) {
+			return;
+		}
 		if (impl != null) {
 			setLoopingImpl(looping);
 		}
 	}
 
 	@Override
-	public float volume() {
+	public synchronized float volume() {
 		return volume;
 	}
 
 	@Override
-	public void setVolume(float volume) {
+	public synchronized void setVolume(float volume) {
 		this.volume = MathUtils.clamp(volume, 0, 1);
+		if (released) {
+			return;
+		}
 		if (impl != null) {
 			setVolumeImpl(this.volume);
 		}
 	}
 
 	@Override
-	public void release() {
+	public synchronized void release() {
+		if (released) {
+			return;
+		}
+		released = true;
+		playing = false;
+		callbacks = null;
 		if (impl != null) {
 			releaseImpl();
 			impl = null;
@@ -108,11 +141,14 @@ public abstract class SoundImpl<I> implements Sound {
 	}
 
 	@Override
-	public final void addCallback(Callback<Sound> callback) {
+	public final synchronized void addCallback(Callback<Sound> callback) {
 		if (impl != null) {
 			callback.onSuccess(this);
 		} else if (error != null) {
 			callback.onFailure(error);
+		} else if (released) {
+			callback.onFailure(new IllegalStateException(
+					"Sound has been released"));
 		} else {
 			callbacks = CallbackList.createAdd(callbacks, callback);
 		}

@@ -38,6 +38,9 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 	@Override
 	public void onLoaded(MediaPlayer impl) {
 		super.onLoaded(impl);
+		if (this.impl != impl) {
+			return;
+		}
 		impl.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
@@ -48,39 +51,72 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 
 	@Override
 	protected boolean playingImpl() {
-		return impl.isPlaying();
+		return impl != null && impl.isPlaying();
 	}
 
 	@Override
 	protected boolean playImpl() {
-		audio.onPlaying(this);
-		impl.seekTo(position);
-		impl.start();
-		position = 0;
-		return true;
+		if (impl == null) {
+			return false;
+		}
+		try {
+			audio.onPlaying(this);
+			impl.seekTo(position);
+			impl.start();
+			position = 0;
+			return true;
+		} catch (IllegalStateException e) {
+			audio.onStopped(this);
+			return false;
+		}
 	}
 
 	@Override
 	protected void stopImpl() {
 		audio.onStopped(this);
-		impl.pause();
+		if (impl != null) {
+			try {
+				if (impl.isPlaying()) {
+					impl.pause();
+				}
+			} catch (IllegalStateException ignored) {
+			}
+		}
+		position = 0;
 	}
 
 	@Override
 	protected void setLoopingImpl(boolean looping) {
-		impl.setLooping(looping);
+		if (impl != null) {
+			impl.setLooping(looping);
+		}
 	}
 
 	@Override
 	protected void setVolumeImpl(float volume) {
-		impl.setVolume(volume, volume);
+		if (impl != null) {
+			impl.setVolume(volume, volume);
+		}
 	}
 
 	@Override
 	protected void releaseImpl() {
-		if (impl.isPlaying())
-			impl.stop();
-		impl.release();
+		audio.onReleased(this);
+		try {
+			if (impl != null && impl.isPlaying()) {
+				impl.stop();
+			}
+		} catch (IllegalStateException ignored) {
+		}
+		if (impl != null) {
+			impl.release();
+		}
+	}
+
+	@Override
+	public void release() {
+		audio.onReleased(this);
+		super.release();
 	}
 
 	private void resolve() {
@@ -90,8 +126,11 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 	@Override
 	void onPause() {
 		if (impl != null) {
-			if (impl.isPlaying()) {
-				position = impl.getCurrentPosition();
+			try {
+				if (impl.isPlaying()) {
+					position = impl.getCurrentPosition();
+				}
+			} catch (IllegalStateException ignored) {
 			}
 			impl.release();
 			impl = null;
@@ -100,6 +139,8 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 
 	@Override
 	void onResume() {
-		resolve();
+		if (!released) {
+			resolve();
+		}
 	}
 }

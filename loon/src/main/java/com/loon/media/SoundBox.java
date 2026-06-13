@@ -30,11 +30,11 @@ public abstract class SoundBox {
 	private HashMap<String, Sound> sounds = new HashMap<String, Sound>(
 			CollectionUtils.INITIAL_CAPACITY);
 
-	public void playSound(String path) {
+	public synchronized void playSound(String path) {
 		playSound(path, false);
 	}
 
-	public void playSound(String path, boolean loop) {
+	public synchronized void playSound(String path, boolean loop) {
 		Sound sound = sounds.get(path);
 		if (sound == null) {
 			sound = Assets.getSound(path);
@@ -46,21 +46,21 @@ public abstract class SoundBox {
 		sound.play();
 	}
 
-	public void volume(String path, float volume) {
+	public synchronized void volume(String path, float volume) {
 		Sound sound = sounds.get(path);
 		if (sound != null) {
 			sound.setVolume(volume);
 		}
 	}
 
-	public void stopSound(String path) {
+	public synchronized void stopSound(String path) {
 		Sound sound = sounds.get(path);
 		if (sound != null) {
 			sound.stop();
 		}
 	}
 
-	public void stopSound() {
+	public synchronized void stopSound() {
 		for (Sound s : sounds.values()) {
 			if (s != null) {
 				s.stop();
@@ -68,7 +68,7 @@ public abstract class SoundBox {
 		}
 	}
 
-	public void release() {
+	public synchronized void release() {
 		for (Sound s : sounds.values()) {
 			if (s != null) {
 				s.release();

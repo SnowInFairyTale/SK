@@ -34,6 +34,7 @@ import com.loon.utils.CollectionUtils;
 //0.3.3版新增的单例资源加载器，默认只有同步加载，建议使用时与多线程配合(比如丢到Screen的onLoad函数下，效果上就等于异步了)。
 public class Assets {
 
+	private static final Object AUDIO_LOCK = new Object();
 	private static Audio _audio;
 
 	protected static final String[] SUFFIXES = { ".wav", ".mp3" };
@@ -62,38 +63,46 @@ public class Assets {
 	}
 
 	public static void onResume() {
-		if (_audio == null) {
-			_audio = new Audio();
+		synchronized (AUDIO_LOCK) {
+			if (_audio != null) {
+				_audio.onResume();
+			}
 		}
-		_audio.onResume();
 	}
 
 	public static void onPause() {
-		if (_audio == null) {
-			_audio = new Audio();
+		synchronized (AUDIO_LOCK) {
+			if (_audio != null) {
+				_audio.onPause();
+			}
 		}
-		_audio.onPause();
 	}
 
 	public static void onDestroy() {
-		if (_audio == null) {
-			_audio = new Audio();
+		synchronized (AUDIO_LOCK) {
+			if (_audio != null) {
+				_audio.onDestroy();
+				_audio = null;
+			}
 		}
-		_audio.onDestroy();
 	}
 
 	public static Sound getSound(String path) {
-		if (_audio == null) {
-			_audio = new Audio();
+		synchronized (AUDIO_LOCK) {
+			if (_audio == null) {
+				_audio = new Audio();
+			}
+			return _audio.createSound(path);
 		}
-		return _audio.createSound(path);
 	}
 
 	public static Sound getMusic(String path) {
-		if (_audio == null) {
-			_audio = new Audio();
+		synchronized (AUDIO_LOCK) {
+			if (_audio == null) {
+				_audio = new Audio();
+			}
+			return _audio.createMusic(path);
 		}
-		return _audio.createMusic(path);
 	}
 
 	public static InputStream getStream(String resName) throws IOException {

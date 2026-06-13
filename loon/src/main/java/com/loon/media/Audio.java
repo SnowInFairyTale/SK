@@ -65,7 +65,9 @@ public class Audio {
 	private final HashSet<AndroidSound<?>> playing = new HashSet<AndroidSound<?>>();
 
 	private final HashMap<Integer, PooledSound> loadingSounds = new HashMap<Integer, PooledSound>();
+	private final HashSet<AndroidSound<MediaPlayer>> loadingMusic = new HashSet<AndroidSound<MediaPlayer>>();
 	private final SoundPool pool;
+	private volatile boolean destroyed;
 
 	final static boolean notSupport() {
 		return (LSystem.isDevice("GT-S5830B") || LSystem.isDevice("GT-I9100"));
@@ -86,22 +88,28 @@ public class Audio {
 
 		@Override
 		protected boolean playingImpl() {
-			return false;
+			return streamId != 0 && playing;
 		}
 
 		@Override
 		protected boolean playImpl() {
-			if (notSupport()) {
+			if (destroyed || notSupport() || soundId == 0) {
+				playing = false;
 				return false;
+			}
+			if (streamId != 0) {
+				pool.stop(streamId);
+				streamId = 0;
 			}
 			streamId = pool.play(soundId, volume, volume, 1, looping ? -1 : 0,
 					1);
-			return (streamId != 0);
+			playing = streamId != 0;
+			return playing;
 		}
 
 		@Override
 		protected void stopImpl() {
-			if (notSupport()) {
+			if (destroyed || notSupport()) {
 				return;
 			}
 			if (streamId != 0) {
@@ -112,7 +120,7 @@ public class Audio {
 
 		@Override
 		protected void setLoopingImpl(boolean looping) {
-			if (notSupport()) {
+			if (destroyed || notSupport()) {
 				return;
 			}
 			if (streamId != 0) {
@@ -122,7 +130,7 @@ public class Audio {
 
 		@Override
 		protected void setVolumeImpl(float volume) {
-			if (notSupport()) {
+			if (destroyed || notSupport()) {
 				return;
 			}
 			if (streamId != 0) {
@@ -132,39 +140,124 @@ public class Audio {
 
 		@Override
 		protected void releaseImpl() {
-			if (notSupport()) {
+			synchronized (loadingSounds) {
+				loadingSounds.remove(Integer.valueOf(soundId));
+			}
+			if (destroyed || notSupport() || soundId == 0) {
 				return;
 			}
+			stopImpl();
 			pool.unload(soundId);
+		}
+
+		@Override
+		public void release() {
+			boolean pending = impl == null && soundId != 0;
+			super.release();
+			if (pending && !destroyed && !notSupport()) {
+				synchronized (loadingSounds) {
+					loadingSounds.remove(Integer.valueOf(soundId));
+				}
+				pool.unload(soundId);
+			}
 		}
 	};
 
 	public Audio() {
 		this.pool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+		this.pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+			@Override
+			public void onLoadComplete(SoundPool soundPool, int sampleId,
+					int status) {
+				loading(sampleId, status);
+			}
+		});
 	}
 
-	private void loading(int soundId) {
-		PooledSound sound = loadingSounds.get(soundId);
+	private void loading(int soundId, int status) {
+		PooledSound sound;
+		synchronized (loadingSounds) {
+			sound = loadingSounds.remove(Integer.valueOf(soundId));
+		}
 		if (sound != null) {
-			dispatchLoaded(sound, soundId);
+			if (status == 0) {
+				dispatchLoaded(sound, Integer.valueOf(soundId));
+			} else {
+				dispatchLoadError(sound, new Exception("Sound load failed [id="
+						+ soundId + ", status=" + status + "]"));
+			}
 		} else {
-			dispatchLoadError(sound, new Exception("Sound load failed [id="
-					+ soundId + "]"));
+			// The sound may have been released while SoundPool was still loading it.
+			if (!destroyed && soundId != 0) {
+				pool.unload(soundId);
+			}
 		}
 	}
 
-	public SoundImpl<?> createSound(AssetFileDescriptor fd) {
-		PooledSound sound = new PooledSound(pool.load(fd, 1));
-		loadingSounds.put(sound.soundId, sound);
-		loading(sound.soundId);
-		return sound;
+	private boolean addLoadingMusic(AndroidSound<MediaPlayer> sound) {
+		synchronized (loadingMusic) {
+			if (destroyed || sound.released) {
+				return false;
+			}
+			loadingMusic.add(sound);
+			return true;
+		}
 	}
 
-	public SoundImpl<?> createSound(FileDescriptor fd, long offset, long length) {
-		PooledSound sound = new PooledSound(pool.load(fd, offset, length, 1));
-		loadingSounds.put(sound.soundId, sound);
-		loading(sound.soundId);
-		return sound;
+	private boolean removeLoadingMusic(AndroidSound<MediaPlayer> sound) {
+		synchronized (loadingMusic) {
+			loadingMusic.remove(sound);
+			return !destroyed && !sound.released;
+		}
+	}
+
+	void onReleased(AndroidSound<MediaPlayer> sound) {
+		synchronized (loadingMusic) {
+			loadingMusic.remove(sound);
+		}
+		onStopped(sound);
+	}
+
+	public synchronized SoundImpl<?> createSound(AssetFileDescriptor fd) {
+		if (destroyed) {
+			return createSoundError(new IllegalStateException(
+					"Audio has been destroyed"));
+		}
+		synchronized (loadingSounds) {
+			try {
+				PooledSound sound = new PooledSound(pool.load(fd, 1));
+				if (sound.soundId == 0) {
+					sound.onLoadError(new Exception("Sound load failed [id=0]"));
+					return sound;
+				}
+				loadingSounds.put(Integer.valueOf(sound.soundId), sound);
+				return sound;
+			} catch (Exception t) {
+				return createSoundError(t);
+			}
+		}
+	}
+
+	public synchronized SoundImpl<?> createSound(FileDescriptor fd, long offset,
+			long length) {
+		if (destroyed) {
+			return createSoundError(new IllegalStateException(
+					"Audio has been destroyed"));
+		}
+		synchronized (loadingSounds) {
+			try {
+				PooledSound sound = new PooledSound(pool.load(fd, offset, length,
+						1));
+				if (sound.soundId == 0) {
+					sound.onLoadError(new Exception("Sound load failed [id=0]"));
+					return sound;
+				}
+				loadingSounds.put(Integer.valueOf(sound.soundId), sound);
+				return sound;
+			} catch (Exception t) {
+				return createSoundError(t);
+			}
+		}
 	}
 
 	private static AssetFileDescriptor openFd(String fileName)
@@ -172,33 +265,61 @@ public class Audio {
 		return LSystem.getActivity().getAssets().openFd(fileName);
 	}
 
-	public SoundImpl<?> createSound(final String path) {
+	public synchronized SoundImpl<?> createSound(final String path) {
+		AssetFileDescriptor fd = null;
 		try {
-			return createSound(openFd(path));
+			fd = openFd(path);
+			return createSound(fd);
 		} catch (IOException ioe) {
-			PooledSound sound = new PooledSound(0);
-			sound.onLoadError(ioe);
-			return sound;
+			return createSoundError(ioe);
+		} finally {
+			if (fd != null) {
+				try {
+					fd.close();
+				} catch (IOException ignored) {
+				}
+			}
 		}
 	}
 
-	public SoundImpl<?> createMusic(final String path) {
+	public synchronized SoundImpl<?> createMusic(final String path) {
+		if (destroyed) {
+			return createSoundError(new IllegalStateException(
+					"Audio has been destroyed"));
+		}
 		return new BigClip(this, new Resolver<MediaPlayer>() {
 			@Override
 			public void resolve(final AndroidSound<MediaPlayer> sound) {
 				final MediaPlayer mp = new MediaPlayer();
+				if (!addLoadingMusic(sound)) {
+					mp.release();
+					return;
+				}
 				LSystem.callScreenRunnable(new Runnable() {
 					@Override
 					public void run() {
+						if (destroyed || sound.released) {
+							removeLoadingMusic(sound);
+							mp.release();
+							return;
+						}
+						AssetFileDescriptor fd = null;
 						try {
-							AssetFileDescriptor fd = openFd(path);
+							fd = openFd(path);
+							mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 							mp.setDataSource(fd.getFileDescriptor(),
 									fd.getStartOffset(), fd.getLength());
-							fd.close();
 							mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 								@Override
 								public void onPrepared(final MediaPlayer mp) {
-									dispatchLoaded(sound, mp);
+									if (removeLoadingMusic(sound)) {
+										dispatchLoaded(sound, mp);
+									} else {
+										try {
+											mp.release();
+										} catch (Throwable ignored) {
+										}
+									}
 								}
 							});
 							mp.setOnErrorListener(new OnErrorListener() {
@@ -206,16 +327,37 @@ public class Audio {
 								@Override
 								public boolean onError(MediaPlayer mp,
 										int what, int extra) {
+									removeLoadingMusic(sound);
 									String errmsg = "MediaPlayer prepare failure [what="
 											+ what + ", x=" + extra + "]";
-									dispatchLoadError(sound, new Exception(
-											errmsg));
-									return false;
+									if (!destroyed && !sound.released) {
+										dispatchLoadError(sound, new Exception(
+												errmsg));
+									}
+									try {
+										mp.release();
+									} catch (Throwable ignored) {
+									}
+									return true;
 								}
 							});
 							mp.prepareAsync();
 						} catch (Exception e) {
-							dispatchLoadError(sound, e);
+							removeLoadingMusic(sound);
+							try {
+								mp.release();
+							} catch (Throwable ignored) {
+							}
+							if (!destroyed && !sound.released) {
+								dispatchLoadError(sound, e);
+							}
+						} finally {
+							if (fd != null) {
+								try {
+									fd.close();
+								} catch (IOException ignored) {
+								}
+							}
 						}
 					}
 				});
@@ -223,41 +365,79 @@ public class Audio {
 		});
 	}
 
-	public void onPause() {
-		for (PooledSound p : loadingSounds.values()) {
-			pool.pause(p.soundId);
+	public synchronized void onPause() {
+		if (destroyed) {
+			return;
 		}
-		for (AndroidSound<?> sound : playing) {
+		pool.autoPause();
+		HashSet<AndroidSound<?>> wasPlaying;
+		synchronized (playing) {
+			wasPlaying = new HashSet<AndroidSound<?>>(playing);
+		}
+		for (AndroidSound<?> sound : wasPlaying) {
 			sound.onPause();
 		}
 	}
 
-	public void onResume() {
-		for (PooledSound p : loadingSounds.values()) {
-			pool.resume(p.soundId);
+	public synchronized void onResume() {
+		if (destroyed) {
+			return;
 		}
-		HashSet<AndroidSound<?>> wasPlaying = new HashSet<AndroidSound<?>>(
-				playing);
-		playing.clear();
+		pool.autoResume();
+		HashSet<AndroidSound<?>> wasPlaying;
+		synchronized (playing) {
+			wasPlaying = new HashSet<AndroidSound<?>>(playing);
+			playing.clear();
+		}
 		for (AndroidSound<?> sound : wasPlaying) {
 			sound.onResume();
 		}
 	}
 
-	public void onDestroy() {
-		for (AndroidSound<?> sound : playing) {
+	public synchronized void onDestroy() {
+		if (destroyed) {
+			return;
+		}
+		destroyed = true;
+		HashSet<AndroidSound<?>> wasPlaying;
+		synchronized (playing) {
+			wasPlaying = new HashSet<AndroidSound<?>>(playing);
+			playing.clear();
+		}
+		for (AndroidSound<?> sound : wasPlaying) {
 			sound.release();
 		}
-		playing.clear();
+		HashSet<AndroidSound<MediaPlayer>> wasLoadingMusic;
+		synchronized (loadingMusic) {
+			wasLoadingMusic = new HashSet<AndroidSound<MediaPlayer>>(
+					loadingMusic);
+			loadingMusic.clear();
+		}
+		for (AndroidSound<MediaPlayer> sound : wasLoadingMusic) {
+			sound.release();
+		}
+		synchronized (loadingSounds) {
+			loadingSounds.clear();
+		}
 		pool.release();
 	}
 
 	void onPlaying(AndroidSound<?> sound) {
-		playing.add(sound);
+		synchronized (playing) {
+			playing.add(sound);
+		}
 	}
 
 	void onStopped(AndroidSound<?> sound) {
-		playing.remove(sound);
+		synchronized (playing) {
+			playing.remove(sound);
+		}
+	}
+
+	private SoundImpl<?> createSoundError(Throwable error) {
+		PooledSound sound = new PooledSound(0);
+		sound.onLoadError(error);
+		return sound;
 	}
 
 }
