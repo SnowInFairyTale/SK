@@ -9,7 +9,7 @@ import com.loon.core.LSystem;
 
 public final class VibrationManager {
 
-	private static boolean enabled = true;
+	private static boolean enabled = false;
 	private static final long TOWER_BUTTON_DURATION_MS = 20L;
 
 	private VibrationManager() {
