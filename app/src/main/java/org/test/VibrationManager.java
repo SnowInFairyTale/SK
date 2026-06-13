@@ -9,7 +9,7 @@ import com.loon.core.LSystem;
 
 public final class VibrationManager {
 
-	private static final long TOWER_BUTTON_DURATION_MS = 20L;
+	private static final long TOWER_BUTTON_DURATION_MS = 50L;
 
 	private VibrationManager() {
 	}
