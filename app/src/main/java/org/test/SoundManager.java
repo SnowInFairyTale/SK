@@ -23,17 +23,17 @@ public class SoundManager {
 
 	private static MainGame game;
 
-	private static final String[][] SOUND_FILES = {
-			{ AXE_ATTACK, "sounds/axe_attack.mp3" },
-			{ SPEAR_ATTACK, "sounds/spear_attack.ogg" },
-			{ BUILDING, "sounds/building.ogg" },
-			{ BUTTON_CLICK, "sounds/button_click.wav" },
-			{ CASH_DROP, "sounds/cach_drop.mp3" },
-			{ FAILED, "sounds/failed.mp3" },
-			{ SUCCESS, "sounds/success.mp3" },
-			{ UPGARD, "sounds/upgard.mp3" },
-			{ LUR_ATTACK, "sounds/lur_attack.mp3" },
-			{ GEM_DROP, "sounds/gem_drop.mp3" } };
+	private static final Object[][] SOUND_FILES = {
+			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.9f) },
+			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.9f) },
+			{ BUILDING, "sounds/building.ogg", Float.valueOf(0.9f) },
+			{ BUTTON_CLICK, "sounds/button_click.wav", Float.valueOf(0.9f) },
+			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.85f) },
+			{ FAILED, "sounds/failed.mp3", Float.valueOf(0.9f) },
+			{ SUCCESS, "sounds/success.mp3", Float.valueOf(0.9f) },
+			{ UPGARD, "sounds/upgard.mp3", Float.valueOf(0.9f) },
+			{ LUR_ATTACK, "sounds/lur_attack.mp3", Float.valueOf(1f) },
+			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(0.9f) } };
 
 	public static synchronized void Initialize(MainGame mainGame) {
 		game = mainGame;
@@ -42,7 +42,7 @@ public class SoundManager {
 
 	public static synchronized void Preload() {
 		for (int i = 0; i < SOUND_FILES.length; i++) {
-			getSound(SOUND_FILES[i][0]);
+			getSound((String) SOUND_FILES[i][0]);
 		}
 	}
 
@@ -84,6 +84,7 @@ public class SoundManager {
 				return null;
 			}
 			sound = Assets.getSound(path);
+			sound.setVolume(getVolume(name));
 			sounds.put(name, sound);
 		}
 		return sound;
@@ -91,11 +92,20 @@ public class SoundManager {
 
 	private static String getPath(String name) {
 		for (int i = 0; i < SOUND_FILES.length; i++) {
-			if (SOUND_FILES[i][0].equals(name)) {
-				return SOUND_FILES[i][1];
+			if (((String) SOUND_FILES[i][0]).equals(name)) {
+				return (String) SOUND_FILES[i][1];
 			}
 		}
 		return null;
+	}
+
+	private static float getVolume(String name) {
+		for (int i = 0; i < SOUND_FILES.length; i++) {
+			if (((String) SOUND_FILES[i][0]).equals(name)) {
+				return ((Float) SOUND_FILES[i][2]).floatValue();
+			}
+		}
+		return 0.9f;
 	}
 
 	private static int defaultMinDelay(String name) {
