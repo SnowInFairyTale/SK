@@ -104,6 +104,7 @@ public abstract class MenuScreen extends GameScreen {
 	}
 
 	protected void OnSelectEntry(int entryIndex) {
+		SoundManager.PlaySoundHighPriority();
 		this.menuEntries.get(entryIndex).OnSelectEntry();
 	}
 

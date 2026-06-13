@@ -215,6 +215,7 @@ public class GameplayScreen extends GameScreen {
 
 	public final void Lose() {
 		this.gameEndedState = GameEndedState.Lose;
+		SoundManager.PlaySound(SoundManager.FAILED);
 		this.ClearAllActiveMonsters();
 		this.GamePaused(false);
 		setGameState(GameState.Ended);
@@ -486,6 +487,7 @@ public class GameplayScreen extends GameScreen {
 					this.RemoveTower(this.tower);
 				} else {
 					this.tower.Place();
+					SoundManager.PlaySound(SoundManager.BUILDING);
 					this.placedTowers.add(this.tower);
 				}
 			} else {
@@ -555,6 +557,7 @@ public class GameplayScreen extends GameScreen {
 					if (((getGameState() == GameState.PlacingInitialTowers) && this.startGameButton
 							.CentralCollisionArea().intersects(rectangle))
 							&& flag) {
+						SoundManager.PlaySoundHighPriority();
 						this.game.Components().remove(this.startGameButton);
 						this.startGameButton = null;
 						this.StartGame();
@@ -564,6 +567,7 @@ public class GameplayScreen extends GameScreen {
 							&& ((this.showMenuButton.getIsVisible() && this.showMenuButton
 									.CentralCollisionArea().intersects(
 											rectangle)) && flag)) {
+						SoundManager.PlaySoundHighPriority();
 						if (this.startGameButton != null) {
 							this.startGameButton.Hide();
 						}
@@ -579,6 +583,7 @@ public class GameplayScreen extends GameScreen {
 										.GetGemSlotAt(rectangle);
 								if (gemType != GemType.None && flag
 										&& this.getGems().getCount(gemType) > 0) {
+									SoundManager.PlaySoundHighPriority();
 									this.selectedTower.TryApplyGem(gemType);
 									break;
 								}
@@ -588,6 +593,7 @@ public class GameplayScreen extends GameScreen {
 												.CentralCollisionAreaSellButton()
 												.intersects(rectangle)
 										&& flag) {
+									SoundManager.PlaySoundHighPriority();
 									this.SellTower(this.selectedTower);
 									this.ResetSelectedMonsterOrTower();
 									break;
@@ -597,6 +603,7 @@ public class GameplayScreen extends GameScreen {
 												.CentralCollisionAreaUpgradeButton()
 												.intersects(rectangle)
 										&& flag) {
+									SoundManager.PlaySoundHighPriority();
 									this.selectedTower.Upgrade();
 									this.ResetSelectedMonsterOrTower();
 									break;
@@ -610,6 +617,7 @@ public class GameplayScreen extends GameScreen {
 								continue;
 							}
 
+							SoundManager.PlaySoundHighPriority();
 							this.StartedPlacing(button);
 
 							break;
@@ -700,6 +708,7 @@ public class GameplayScreen extends GameScreen {
 				.getGameplayScreen().getDifficulty(), this.game
 				.getGameplayScreen().getLevel());
 		this.gameEndedState = GameEndedState.Win;
+		SoundManager.PlaySound(SoundManager.SUCCESS);
 		this.ClearAllActiveMonsters();
 		this.GamePaused(false);
 		setGameState(GameState.Ended);

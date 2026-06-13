@@ -486,6 +486,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 							.GetTargetMonstersForLurWeapon();
 					if ((targetMonstersForLurWeapon != null)
 							&& (this.lurWeapon == null)) {
+						SoundManager.PlaySound(SoundManager.LUR_ATTACK);
 						this.lurWeapon = new LurWeapon(this.game, this,
 								targetMonstersForLurWeapon);
 						super.getGame().Components().add(this.lurWeapon);
@@ -497,16 +498,19 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 					if (targetMonster != null) {
 						switch (this.getTowerType()) {
 						case Axe:
+							SoundManager.PlaySound(SoundManager.AXE_ATTACK);
 							this.missile = new MissileAxe(this.game,
 									targetMonster, this);
 							break;
 
 						case Spear:
+							SoundManager.PlaySound(SoundManager.SPEAR_ATTACK);
 							this.missile = new MissileSpear(this.game,
 									targetMonster, this);
 							break;
 
 						case AirDefence:
+							SoundManager.PlaySound(SoundManager.SPEAR_ATTACK);
 							this.missile = new MissileSpear(this.game,
 									targetMonster, this);
 							break;
@@ -526,6 +530,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	public final void Upgrade() {
 		if (this.CanUpgrade()) {
+			SoundManager.PlaySound(SoundManager.UPGARD);
 			this.StartUpgrade();
 		}
 	}

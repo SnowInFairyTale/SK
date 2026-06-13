@@ -133,7 +133,7 @@ public class MainMenuScreen extends MenuScreen {
 	}
 
 	private void PreloadSound() {
-
+		SoundManager.Preload();
 	}
 
 	private void PreloadTextures() {
@@ -173,7 +173,9 @@ public class MainMenuScreen extends MenuScreen {
 	}
 
 	private void ToggleSoundEnabledSelected() {
+		this.game.setSoundEnabled(!this.game.getSoundEnabled());
 		this.SetSoundTexture();
+		SoundManager.PlaySoundHighPriority();
 	}
 
 }

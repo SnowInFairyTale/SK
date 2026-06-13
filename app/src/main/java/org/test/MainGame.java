@@ -67,6 +67,7 @@ public class MainGame extends DrawableScreen {
 		this.screenManager = new ScreenManager(this);
 		this.setSoundEnabled(true);
 		this.setVibrationEnabled(this.getSoundEnabled());
+		SoundManager.Initialize(this);
 		this.screenManager.AddScreen(new BackgroundScreen("loading"));
 		this.screenManager.AddScreen(new LoadingScreen(this));
 		super.Components().add(this.screenManager);

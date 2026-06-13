@@ -175,10 +175,12 @@ public abstract class Monster extends AnimatedSprite {
 				this.setDead(true);
 				this.game.getGameplayScreen().getCash()
 						.Increase(this.getValue());
+				SoundManager.PlaySound(SoundManager.CASH_DROP);
 				if (this instanceof MonsterBoss) {
 					GemType gemDrop = BossGemDrops.roll();
 					if (gemDrop != GemType.None) {
 						this.game.getGameplayScreen().getGems().add(gemDrop);
+						SoundManager.PlaySound(SoundManager.GEM_DROP);
 						this.game.Components().add(new GemDropInfo(this.game,
 								super.getDrawPosition(), gemDrop));
 					}
