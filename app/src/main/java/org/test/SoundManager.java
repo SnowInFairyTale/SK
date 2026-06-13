@@ -85,7 +85,7 @@ public class SoundManager {
 		if (battleMusic == null) {
 			battleMusic = Assets.getMusic("sounds/bj.mp3");
 			battleMusic.setLooping(true);
-			battleMusic.setVolume(0.5f);
+			battleMusic.setVolume(0.4f);
 		}
 		if (!battleMusic.isPlaying()) {
 			battleMusic.play();
