@@ -14,7 +14,7 @@ public abstract class TowerButton extends DrawableGameComponent implements
 		IGameComponent {
 
 	private static final int BUTTON_SIZE = 120;
-	private static final float BUTTON_Y = 820f;
+	private static final float BUTTON_Y = 840f;
 
 	private Vector2f drawPosition = new Vector2f();
 
