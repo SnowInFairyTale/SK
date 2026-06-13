@@ -20,6 +20,8 @@ import com.loon.core.timer.GameTime;
 
 public class GameplayScreen extends GameScreen {
 
+	private static final int LOST_TOUCH_CANCEL_FRAMES = 4;
+
 	private LTexture currentBackground;
 	private LFont fontSize26Extra;
 	private MainGame game;
@@ -29,6 +31,7 @@ public class GameplayScreen extends GameScreen {
 	private GamePausedScreen gamePausedScreen;
 	private boolean endScreenShown;
 	private boolean isPlacing;
+	private int placingLostTouchFrames;
 	private float loseOrWinScreenDelay = 2000f;
 	private MonsterToolbar monsterToolbar;
 	private java.util.ArrayList<Tower> placedTowers = new java.util.ArrayList<Tower>();
@@ -444,9 +447,20 @@ public class GameplayScreen extends GameScreen {
 				this.towers.add(this.tower);
 				this.game.Components().add(this.tower);
 				this.isPlacing = true;
+				this.placingLostTouchFrames = 0;
 			} else {
-				this.StoppedPlacing();
+				this.CancelPlacing();
 			}
+		}
+	}
+
+	private void CancelPlacing() {
+		this.currentBackground = this.gameBackground;
+		this.isPlacing = false;
+		this.placingLostTouchFrames = 0;
+		if (this.tower != null) {
+			this.RemoveTower(this.tower);
+			this.tower = null;
 		}
 	}
 
@@ -458,6 +472,7 @@ public class GameplayScreen extends GameScreen {
 	public final void StoppedPlacing() {
 		this.currentBackground = this.gameBackground;
 		this.isPlacing = false;
+		this.placingLostTouchFrames = 0;
 		if (this.tower != null) {
 			if (this.tower.CanPlace()) {
 				boolean flag2 = false;
@@ -561,6 +576,12 @@ public class GameplayScreen extends GameScreen {
 					RectBox rectangle = new RectBox(
 							(int) this.getLastTouchPosition().x,
 							(int) this.getLastTouchPosition().y, 1, 1);
+					this.placingLostTouchFrames = 0;
+					if (this.isPlacing
+							&& (location.getState() == LTouchLocationState.Released)) {
+						this.StoppedPlacing();
+						break;
+					}
 					if (((getGameState() == GameState.PlacingInitialTowers) && this.startGameButton
 							.CentralCollisionArea().intersects(rectangle))
 							&& flag) {
@@ -665,7 +686,10 @@ public class GameplayScreen extends GameScreen {
 			}
 		} else if (this.isPlacing
 				&& ((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))) {
-			this.StoppedPlacing();
+			this.placingLostTouchFrames++;
+			if (this.placingLostTouchFrames >= LOST_TOUCH_CANCEL_FRAMES) {
+				this.CancelPlacing();
+			}
 		}
 		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 	}
