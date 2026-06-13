@@ -210,11 +210,13 @@ public class GameplayScreen extends GameScreen {
 				.getLevelSettings().getBackgroundWithGridTextureFile());
 		this.fontSize26Extra = Constants.font(52);
 		this.currentBackground = this.gameBackground;
+		SoundManager.PlayBattleMusic();
 		super.LoadContent();
 	}
 
 	public final void Lose() {
 		this.gameEndedState = GameEndedState.Lose;
+		SoundManager.StopBattleMusic();
 		SoundManager.PlaySound(SoundManager.FAILED);
 		this.ClearAllActiveMonsters();
 		this.GamePaused(false);
@@ -498,6 +500,7 @@ public class GameplayScreen extends GameScreen {
 
 	@Override
 	public void UnloadContent() {
+		SoundManager.StopBattleMusic();
 		if (getGameState() != GameState.Ended) {
 			GameComponentCollection components = super.getScreenManager()
 					.getGame().Components();
@@ -707,6 +710,7 @@ public class GameplayScreen extends GameScreen {
 				.getGameplayScreen().getDifficulty(), this.game
 				.getGameplayScreen().getLevel());
 		this.gameEndedState = GameEndedState.Win;
+		SoundManager.StopBattleMusic();
 		SoundManager.PlaySound(SoundManager.SUCCESS);
 		this.ClearAllActiveMonsters();
 		this.GamePaused(false);

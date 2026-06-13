@@ -17,11 +17,13 @@ public class SoundManager {
 	public static final String UPGARD = "upgard";
 	public static final String LUR_ATTACK = "lur_attack";
 	public static final String GEM_DROP = "gem_drop";
+	public static final String BATTLE_MUSIC = "bj";
 
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
 
 	private static MainGame game;
+	private static Sound battleMusic;
 
 	private static final Object[][] SOUND_FILES = {
 			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.9f) },
@@ -74,6 +76,26 @@ public class SoundManager {
 
 	public static void PlaySoundHighPriority() {
 		PlaySound(BUTTON_CLICK, 50);
+	}
+
+	public static synchronized void PlayBattleMusic() {
+		if ((game != null) && !game.getSoundEnabled()) {
+			return;
+		}
+		if (battleMusic == null) {
+			battleMusic = Assets.getMusic("sounds/bj.mp3");
+			battleMusic.setLooping(true);
+			battleMusic.setVolume(0.5f);
+		}
+		if (!battleMusic.isPlaying()) {
+			battleMusic.play();
+		}
+	}
+
+	public static synchronized void StopBattleMusic() {
+		if (battleMusic != null) {
+			battleMusic.stop();
+		}
 	}
 
 	private static Sound getSound(String name) {
