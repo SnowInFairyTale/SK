@@ -23,6 +23,11 @@ public class SoundManager {
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
 
+	private static final int BUTTON_CLICK_MIN_DELAY_MS = 60;
+	private static final int ATTACK_MIN_DELAY_MS = 80;
+	private static final int DROP_MIN_DELAY_MS = 80;
+	private static final int NO_MIN_DELAY_MS = 0;
+
 	private static MainGame game;
 	private static Sound battleMusic;
 
@@ -159,15 +164,15 @@ public class SoundManager {
 
 	private static int defaultMinDelay(String name) {
 		if (BUTTON_CLICK.equals(name)) {
-			return 60;
+			return BUTTON_CLICK_MIN_DELAY_MS;
 		}
 		if (AXE_ATTACK.equals(name) || SPEAR_ATTACK.equals(name)
 				|| LUR_ATTACK.equals(name)) {
-			return 80;
+			return ATTACK_MIN_DELAY_MS;
 		}
 		if (CASH_DROP.equals(name) || GEM_DROP.equals(name)) {
-			return 80;
+			return DROP_MIN_DELAY_MS;
 		}
-		return 0;
+		return NO_MIN_DELAY_MS;
 	}
 }
