@@ -119,6 +119,35 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 		super.release();
 	}
 
+	public synchronized void pausePlayback() {
+		if (released) {
+			return;
+		}
+		playing = false;
+		audio.onStopped(this);
+		if (impl != null) {
+			try {
+				if (impl.isPlaying()) {
+					position = impl.getCurrentPosition();
+					impl.pause();
+				}
+			} catch (IllegalStateException ignored) {
+			}
+		}
+	}
+
+	public synchronized void resumePlayback() {
+		if (released) {
+			return;
+		}
+		playing = true;
+		if (impl != null) {
+			playImpl();
+		} else {
+			resolve();
+		}
+	}
+
 	private void resolve() {
 		resolver.resolve(BigClip.this);
 	}

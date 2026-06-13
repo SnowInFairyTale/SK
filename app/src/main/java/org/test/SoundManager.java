@@ -3,6 +3,7 @@ package org.test;
 import java.util.HashMap;
 
 import com.loon.core.Assets;
+import com.loon.media.BigClip;
 import com.loon.media.Sound;
 
 public class SoundManager {
@@ -95,6 +96,25 @@ public class SoundManager {
 	public static synchronized void StopBattleMusic() {
 		if (battleMusic != null) {
 			battleMusic.stop();
+		}
+	}
+
+	public static synchronized void PauseBattleMusic() {
+		if (battleMusic instanceof BigClip) {
+			((BigClip) battleMusic).pausePlayback();
+		} else if (battleMusic != null) {
+			battleMusic.stop();
+		}
+	}
+
+	public static synchronized void ResumeBattleMusic() {
+		if ((game != null) && !game.getSoundEnabled()) {
+			return;
+		}
+		if (battleMusic instanceof BigClip) {
+			((BigClip) battleMusic).resumePlayback();
+		} else {
+			PlayBattleMusic();
 		}
 	}
 

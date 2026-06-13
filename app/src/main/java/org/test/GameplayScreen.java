@@ -131,6 +131,9 @@ public class GameplayScreen extends GameScreen {
 		if (getGameState() == GameState.Started) {
 			setGameState(GameState.Paused);
 		}
+		if (addGamePausedScreen) {
+			SoundManager.PauseBattleMusic();
+		}
 		this.ResetSelectedMonsterOrTower();
 		this.setGameOpacity(this.getGameOpacityWhenPaused());
 		if (addGamePausedScreen && (this.gamePausedScreen == null)) {
@@ -150,6 +153,7 @@ public class GameplayScreen extends GameScreen {
 			this.startGameButton.Show();
 		}
 		this.gamePausedScreen = null;
+		SoundManager.ResumeBattleMusic();
 		this.ShowButtons();
 	}
 
