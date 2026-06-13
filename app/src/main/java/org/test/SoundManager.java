@@ -33,15 +33,15 @@ public class SoundManager {
 
 	private static final Object[][] SOUND_FILES = {
 			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.85f) },
-			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.7f) },
+			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.6f) },
 			{ BUILDING, "sounds/building.ogg", Float.valueOf(1f) },
 			{ BUTTON_CLICK, "sounds/button_click.wav", Float.valueOf(0.85f) },
-			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.6f) },
+			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.5f) },
 			{ FAILED, "sounds/failed.mp3", Float.valueOf(1f) },
 			{ SUCCESS, "sounds/success.mp3", Float.valueOf(1f) },
 			{ UPGARD, "sounds/upgard.mp3", Float.valueOf(1f) },
 			{ LUR_ATTACK, "sounds/lur_attack.mp3", Float.valueOf(1f) },
-			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(1f) } };
+			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(0.85f) } };
 
 	public static synchronized void Initialize(MainGame mainGame) {
 		game = mainGame;
@@ -93,7 +93,7 @@ public class SoundManager {
 		if (battleMusic == null) {
 			battleMusic = Assets.getMusic("sounds/bj.mp3");
 			battleMusic.setLooping(true);
-			battleMusic.setVolume(0.3f);
+			battleMusic.setVolume(0.1f);
 		}
 		if (!battleMusic.isPlaying()) {
 			battleMusic.play();
