@@ -97,10 +97,6 @@ public class Audio {
 				playing = false;
 				return false;
 			}
-			if (streamId != 0) {
-				pool.stop(streamId);
-				streamId = 0;
-			}
 			streamId = pool.play(soundId, volume, volume, 1, looping ? -1 : 0,
 					1);
 			playing = streamId != 0;

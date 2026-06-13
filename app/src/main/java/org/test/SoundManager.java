@@ -67,7 +67,9 @@ public class SoundManager {
 			return;
 		}
 		lastPlayedAt.put(name, Long.valueOf(now));
-		sound.stop();
+		if (shouldRestart(name)) {
+			sound.stop();
+		}
 		sound.play();
 	}
 
@@ -148,6 +150,11 @@ public class SoundManager {
 			}
 		}
 		return 1f;
+	}
+
+	private static boolean shouldRestart(String name) {
+		return BUTTON_CLICK.equals(name) || UPGARD.equals(name)
+				|| BUILDING.equals(name);
 	}
 
 	private static int defaultMinDelay(String name) {
