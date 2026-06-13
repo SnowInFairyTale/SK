@@ -29,7 +29,7 @@ public class SoundManager {
 	private static final Object[][] SOUND_FILES = {
 			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.85f) },
 			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.85f) },
-			{ BUILDING, "sounds/building.ogg", Float.valueOf(0.85f) },
+			{ BUILDING, "sounds/building.ogg", Float.valueOf(1f) },
 			{ BUTTON_CLICK, "sounds/button_click.wav", Float.valueOf(0.85f) },
 			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.7f) },
 			{ FAILED, "sounds/failed.mp3", Float.valueOf(0.85f) },
@@ -86,7 +86,7 @@ public class SoundManager {
 		if (battleMusic == null) {
 			battleMusic = Assets.getMusic("sounds/bj.mp3");
 			battleMusic.setLooping(true);
-			battleMusic.setVolume(0.4f);
+			battleMusic.setVolume(0.5f);
 		}
 		if (!battleMusic.isPlaying()) {
 			battleMusic.play();
