@@ -23,10 +23,10 @@ public class SoundManager {
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
 
-	private static final int BUTTON_CLICK_MIN_DELAY_MS = 60;
-	private static final int ATTACK_MIN_DELAY_MS = 80;
-	private static final int DROP_MIN_DELAY_MS = 80;
-	private static final int NO_MIN_DELAY_MS = 0;
+	private static final int BUTTON_CLICK_MIN_DELAY_MS = 300;
+	private static final int ATTACK_MIN_DELAY_MS = 300;
+	private static final int DROP_MIN_DELAY_MS = 300;
+	private static final int NO_MIN_DELAY_MS = 300;
 
 	private static MainGame game;
 	private static Sound battleMusic;
