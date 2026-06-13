@@ -603,7 +603,6 @@ public class GameplayScreen extends GameScreen {
 												.CentralCollisionAreaUpgradeButton()
 												.intersects(rectangle)
 										&& flag) {
-									SoundManager.PlaySoundHighPriority();
 									this.selectedTower.Upgrade();
 									this.ResetSelectedMonsterOrTower();
 									break;
