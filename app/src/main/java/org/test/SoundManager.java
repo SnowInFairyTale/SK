@@ -26,16 +26,16 @@ public class SoundManager {
 	private static Sound battleMusic;
 
 	private static final Object[][] SOUND_FILES = {
-			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.9f) },
-			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.9f) },
-			{ BUILDING, "sounds/building.ogg", Float.valueOf(0.9f) },
-			{ BUTTON_CLICK, "sounds/button_click.wav", Float.valueOf(0.9f) },
-			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.85f) },
-			{ FAILED, "sounds/failed.mp3", Float.valueOf(0.9f) },
-			{ SUCCESS, "sounds/success.mp3", Float.valueOf(0.9f) },
-			{ UPGARD, "sounds/upgard.mp3", Float.valueOf(0.9f) },
+			{ AXE_ATTACK, "sounds/axe_attack.mp3", Float.valueOf(0.85f) },
+			{ SPEAR_ATTACK, "sounds/spear_attack.ogg", Float.valueOf(0.85f) },
+			{ BUILDING, "sounds/building.ogg", Float.valueOf(0.85f) },
+			{ BUTTON_CLICK, "sounds/button_click.wav", Float.valueOf(0.85f) },
+			{ CASH_DROP, "sounds/cach_drop.mp3", Float.valueOf(0.7f) },
+			{ FAILED, "sounds/failed.mp3", Float.valueOf(0.85f) },
+			{ SUCCESS, "sounds/success.mp3", Float.valueOf(0.85f) },
+			{ UPGARD, "sounds/upgard.mp3", Float.valueOf(1f) },
 			{ LUR_ATTACK, "sounds/lur_attack.mp3", Float.valueOf(1f) },
-			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(0.9f) } };
+			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(0.85f) } };
 
 	public static synchronized void Initialize(MainGame mainGame) {
 		game = mainGame;
@@ -127,7 +127,7 @@ public class SoundManager {
 				return ((Float) SOUND_FILES[i][2]).floatValue();
 			}
 		}
-		return 0.9f;
+		return 1f;
 	}
 
 	private static int defaultMinDelay(String name) {
