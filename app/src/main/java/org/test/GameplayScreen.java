@@ -645,6 +645,7 @@ public class GameplayScreen extends GameScreen {
 							}
 
 							SoundManager.PlaySoundHighPriority();
+							VibrationManager.VibrateTowerButton(this.game);
 							this.StartedPlacing(button);
 
 							break;
