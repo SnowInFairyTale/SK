@@ -25,7 +25,6 @@ public class SoundManager {
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
 	private static final HashMap<String, Integer> attackDelayByName = new HashMap<String, Integer>();
 
-	private static final int BUTTON_CLICK_MIN_DELAY_MS = 300;
 	private static final int AXE_ATTACK_MIN_DELAY_MS = 300;
 	private static final int AXE_ATTACK_MAX_DELAY_MS = 600;
 	private static final int SPEAR_ATTACK_MIN_DELAY_MS = 300;
@@ -33,7 +32,7 @@ public class SoundManager {
 	private static final int LUR_ATTACK_MIN_DELAY_MS = 300;
 	private static final int DROP_MIN_DELAY_MS = 300;
 	private static final int GEM_DROP_MIN_DELAY_MS = 0;
-	private static final int NO_MIN_DELAY_MS = 300;
+	private static final int NO_MIN_DELAY_MS = 100;
 	private static final float ATTACK_VOLUME_MIN = 0.8f;
 	private static final float ATTACK_VOLUME_MAX = 1f;
 	private static final float ATTACK_RATE_MIN = 0.94f;
@@ -98,7 +97,7 @@ public class SoundManager {
 	}
 
 	public static void PlaySoundHighPriority() {
-		PlaySound(BUTTON_CLICK, 50);
+		PlaySound(BUTTON_CLICK);
 	}
 
 	public static synchronized void PlayBattleMusic() {
@@ -226,9 +225,6 @@ public class SoundManager {
 	}
 
 	private static int fixedMinDelayFor(String name) {
-		if (BUTTON_CLICK.equals(name)) {
-			return BUTTON_CLICK_MIN_DELAY_MS;
-		}
 		if (CASH_DROP.equals(name)) {
 			return DROP_MIN_DELAY_MS;
 		}
