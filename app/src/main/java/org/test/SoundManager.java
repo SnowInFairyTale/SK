@@ -71,7 +71,7 @@ public class SoundManager {
 	}
 
 	public static void PlaySound(String name) {
-		PlaySound(name, defaultMinDelay(name));
+		PlaySound(name, minDelayFor(name));
 	}
 
 	public static synchronized void PlaySound(String name, int minDelay) {
@@ -79,9 +79,8 @@ public class SoundManager {
 			return;
 		}
 		long now = System.currentTimeMillis();
-		int effectiveMinDelay = resolveMinDelay(name, minDelay);
 		Long last = lastPlayedAt.get(name);
-		if ((last != null) && ((now - last.longValue()) < effectiveMinDelay)) {
+		if ((last != null) && ((now - last.longValue()) < minDelay)) {
 			return;
 		}
 		Sound sound = getSound(name);
@@ -210,12 +209,12 @@ public class SoundManager {
 		return DEFAULT_RATE;
 	}
 
-	private static int resolveMinDelay(String name, int defaultDelay) {
+	private static int minDelayFor(String name) {
 		if (isAttackSound(name)) {
 			Integer delay = attackDelayByName.get(name);
 			return delay == null ? 0 : delay.intValue();
 		}
-		return defaultDelay;
+		return fixedMinDelayFor(name);
 	}
 
 	private static int randomAttackDelay(String name) {
@@ -230,12 +229,9 @@ public class SoundManager {
 		return LUR_ATTACK_MIN_DELAY_MS;
 	}
 
-	private static int defaultMinDelay(String name) {
+	private static int fixedMinDelayFor(String name) {
 		if (BUTTON_CLICK.equals(name)) {
 			return BUTTON_CLICK_MIN_DELAY_MS;
-		}
-		if (isAttackSound(name)) {
-			return 0;
 		}
 		if (CASH_DROP.equals(name)) {
 			return DROP_MIN_DELAY_MS;
