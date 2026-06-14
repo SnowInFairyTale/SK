@@ -23,12 +23,14 @@ public class SoundManager {
 
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
+	private static final HashMap<String, Long> lastActualPlayedAt = new HashMap<String, Long>();
 
 	private static final int BUTTON_CLICK_MIN_DELAY_MS = 300;
 	private static final int ATTACK_MIN_DELAY_MS = 300;
 	private static final int DROP_MIN_DELAY_MS = 300;
 	private static final int GEM_DROP_MIN_DELAY_MS = 0;
 	private static final int NO_MIN_DELAY_MS = 300;
+	private static final int ATTACK_FORCE_PLAY_AFTER_MS = 900;
 	private static final float ATTACK_PLAY_PROBABILITY = 0.7f;
 	private static final float ATTACK_VOLUME_MIN = 0.8f;
 	private static final float ATTACK_VOLUME_MAX = 1f;
@@ -79,7 +81,7 @@ public class SoundManager {
 		if ((last != null) && ((now - last.longValue()) < minDelay)) {
 			return;
 		}
-		if (!shouldPlayByProbability(name)) {
+		if (!shouldPlayByProbability(name, now)) {
 			lastPlayedAt.put(name, Long.valueOf(now));
 			return;
 		}
@@ -88,6 +90,7 @@ public class SoundManager {
 			return;
 		}
 		lastPlayedAt.put(name, Long.valueOf(now));
+		lastActualPlayedAt.put(name, Long.valueOf(now));
 		if (shouldRestart(name)) {
 			sound.stop();
 		}
@@ -183,8 +186,12 @@ public class SoundManager {
 				|| LUR_ATTACK.equals(name);
 	}
 
-	private static boolean shouldPlayByProbability(String name) {
+	private static boolean shouldPlayByProbability(String name, long now) {
 		if (isAttackSound(name)) {
+			Long lastActual = lastActualPlayedAt.get(name);
+			if ((lastActual == null) || ((now - lastActual.longValue()) >= ATTACK_FORCE_PLAY_AFTER_MS)) {
+				return true;
+			}
 			return MathUtils.random() <= ATTACK_PLAY_PROBABILITY;
 		}
 		return true;
