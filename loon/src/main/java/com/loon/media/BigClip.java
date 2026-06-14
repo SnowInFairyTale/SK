@@ -61,6 +61,7 @@ public class BigClip extends AndroidSound<MediaPlayer> {
 		}
 		try {
 			audio.onPlaying(this);
+			impl.setVolume(playVolume, playVolume);
 			impl.seekTo(position);
 			impl.start();
 			position = 0;

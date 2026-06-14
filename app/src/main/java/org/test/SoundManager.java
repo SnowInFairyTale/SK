@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.loon.core.Assets;
 import com.loon.media.BigClip;
 import com.loon.media.Sound;
+import com.loon.utils.MathUtils;
 
 public class SoundManager {
 
@@ -26,7 +27,18 @@ public class SoundManager {
 	private static final int BUTTON_CLICK_MIN_DELAY_MS = 300;
 	private static final int ATTACK_MIN_DELAY_MS = 300;
 	private static final int DROP_MIN_DELAY_MS = 300;
+	private static final int GEM_DROP_MIN_DELAY_MS = 0;
 	private static final int NO_MIN_DELAY_MS = 300;
+	private static final float ATTACK_PLAY_PROBABILITY = 0.7f;
+	private static final float ATTACK_VOLUME_MIN = 0.8f;
+	private static final float ATTACK_VOLUME_MAX = 1f;
+	private static final float ATTACK_RATE_MIN = 0.94f;
+	private static final float ATTACK_RATE_MAX = 1.06f;
+	private static final float CASH_VOLUME_MIN = 0.8f;
+	private static final float CASH_VOLUME_MAX = 1f;
+	private static final float CASH_RATE_MIN = 0.97f;
+	private static final float CASH_RATE_MAX = 1.03f;
+	private static final float DEFAULT_RATE = 1f;
 
 	private static MainGame game;
 	private static Sound battleMusic;
@@ -67,6 +79,10 @@ public class SoundManager {
 		if ((last != null) && ((now - last.longValue()) < minDelay)) {
 			return;
 		}
+		if (!shouldPlayByProbability(name)) {
+			lastPlayedAt.put(name, Long.valueOf(now));
+			return;
+		}
 		Sound sound = getSound(name);
 		if (sound == null) {
 			return;
@@ -75,7 +91,7 @@ public class SoundManager {
 		if (shouldRestart(name)) {
 			sound.stop();
 		}
-		sound.play();
+		sound.play(resolvePlayVolume(name), resolvePlayRate(name));
 	}
 
 	public static void PlaySound() {
@@ -162,16 +178,53 @@ public class SoundManager {
 				|| BUILDING.equals(name);
 	}
 
+	private static boolean isAttackSound(String name) {
+		return AXE_ATTACK.equals(name) || SPEAR_ATTACK.equals(name)
+				|| LUR_ATTACK.equals(name);
+	}
+
+	private static boolean shouldPlayByProbability(String name) {
+		if (isAttackSound(name)) {
+			return MathUtils.random() <= ATTACK_PLAY_PROBABILITY;
+		}
+		return true;
+	}
+
+	private static float resolvePlayVolume(String name) {
+		float baseVolume = getVolume(name);
+		if (isAttackSound(name)) {
+			return baseVolume
+					* MathUtils.random(ATTACK_VOLUME_MIN, ATTACK_VOLUME_MAX);
+		}
+		if (CASH_DROP.equals(name)) {
+			return baseVolume
+					* MathUtils.random(CASH_VOLUME_MIN, CASH_VOLUME_MAX);
+		}
+		return baseVolume;
+	}
+
+	private static float resolvePlayRate(String name) {
+		if (isAttackSound(name)) {
+			return MathUtils.random(ATTACK_RATE_MIN, ATTACK_RATE_MAX);
+		}
+		if (CASH_DROP.equals(name)) {
+			return MathUtils.random(CASH_RATE_MIN, CASH_RATE_MAX);
+		}
+		return DEFAULT_RATE;
+	}
+
 	private static int defaultMinDelay(String name) {
 		if (BUTTON_CLICK.equals(name)) {
 			return BUTTON_CLICK_MIN_DELAY_MS;
 		}
-		if (AXE_ATTACK.equals(name) || SPEAR_ATTACK.equals(name)
-				|| LUR_ATTACK.equals(name)) {
+		if (isAttackSound(name)) {
 			return ATTACK_MIN_DELAY_MS;
 		}
-		if (CASH_DROP.equals(name) || GEM_DROP.equals(name)) {
+		if (CASH_DROP.equals(name)) {
 			return DROP_MIN_DELAY_MS;
+		}
+		if (GEM_DROP.equals(name)) {
+			return GEM_DROP_MIN_DELAY_MS;
 		}
 		return NO_MIN_DELAY_MS;
 	}

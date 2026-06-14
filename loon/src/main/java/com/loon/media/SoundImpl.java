@@ -33,6 +33,8 @@ public abstract class SoundImpl<I> implements Sound {
 	protected Throwable error;
 	protected boolean playing, looping, released;
 	protected float volume = 1;
+	protected float playVolume = 1;
+	protected float playRate = 1;
 	protected I impl;
 
 	public synchronized void onLoaded(I impl) {
@@ -77,10 +79,17 @@ public abstract class SoundImpl<I> implements Sound {
 
 	@Override
 	public synchronized boolean play() {
+		return play(this.volume, 1f);
+	}
+
+	@Override
+	public synchronized boolean play(float volume, float rate) {
 		if (released) {
 			return false;
 		}
 		this.playing = true;
+		this.playVolume = MathUtils.clamp(volume, 0, 1);
+		this.playRate = MathUtils.clamp(rate, 0.5f, 2f);
 		if (impl != null) {
 			return playImpl();
 		} else {

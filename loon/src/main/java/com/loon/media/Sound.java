@@ -36,6 +36,11 @@ public interface Sound {
 		}
 
 		@Override
+		public boolean play(float volume, float rate) {
+			return false;
+		}
+
+		@Override
 		public void stop() {
 		}
 
@@ -83,6 +88,8 @@ public interface Sound {
 	boolean prepare();
 
 	boolean play();
+
+	boolean play(float volume, float rate);
 
 	void stop();
 

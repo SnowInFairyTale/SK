@@ -97,8 +97,8 @@ public class Audio {
 				playing = false;
 				return false;
 			}
-			streamId = pool.play(soundId, volume, volume, 1, looping ? -1 : 0,
-					1);
+			streamId = pool.play(soundId, playVolume, playVolume, 1,
+					looping ? -1 : 0, playRate);
 			playing = streamId != 0;
 			return playing;
 		}
