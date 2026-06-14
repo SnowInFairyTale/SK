@@ -23,15 +23,17 @@ public class SoundManager {
 
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
-	private static final HashMap<String, Long> lastActualPlayedAt = new HashMap<String, Long>();
+	private static final HashMap<String, Integer> attackDelayByName = new HashMap<String, Integer>();
 
 	private static final int BUTTON_CLICK_MIN_DELAY_MS = 300;
-	private static final int ATTACK_MIN_DELAY_MS = 300;
+	private static final int AXE_ATTACK_MIN_DELAY_MS = 300;
+	private static final int AXE_ATTACK_MAX_DELAY_MS = 600;
+	private static final int SPEAR_ATTACK_MIN_DELAY_MS = 300;
+	private static final int SPEAR_ATTACK_MAX_DELAY_MS = 450;
+	private static final int LUR_ATTACK_MIN_DELAY_MS = 300;
 	private static final int DROP_MIN_DELAY_MS = 300;
 	private static final int GEM_DROP_MIN_DELAY_MS = 0;
 	private static final int NO_MIN_DELAY_MS = 300;
-	private static final int ATTACK_FORCE_PLAY_AFTER_MS = 900;
-	private static final float ATTACK_PLAY_PROBABILITY = 0.7f;
 	private static final float ATTACK_VOLUME_MIN = 0.8f;
 	private static final float ATTACK_VOLUME_MAX = 1f;
 	private static final float ATTACK_RATE_MIN = 0.94f;
@@ -77,12 +79,9 @@ public class SoundManager {
 			return;
 		}
 		long now = System.currentTimeMillis();
+		int effectiveMinDelay = resolveMinDelay(name, minDelay);
 		Long last = lastPlayedAt.get(name);
-		if ((last != null) && ((now - last.longValue()) < minDelay)) {
-			return;
-		}
-		if (!shouldPlayByProbability(name, now)) {
-			lastPlayedAt.put(name, Long.valueOf(now));
+		if ((last != null) && ((now - last.longValue()) < effectiveMinDelay)) {
 			return;
 		}
 		Sound sound = getSound(name);
@@ -90,7 +89,9 @@ public class SoundManager {
 			return;
 		}
 		lastPlayedAt.put(name, Long.valueOf(now));
-		lastActualPlayedAt.put(name, Long.valueOf(now));
+		if (isAttackSound(name)) {
+			attackDelayByName.put(name, Integer.valueOf(randomAttackDelay(name)));
+		}
 		if (shouldRestart(name)) {
 			sound.stop();
 		}
@@ -186,17 +187,6 @@ public class SoundManager {
 				|| LUR_ATTACK.equals(name);
 	}
 
-	private static boolean shouldPlayByProbability(String name, long now) {
-		if (isAttackSound(name)) {
-			Long lastActual = lastActualPlayedAt.get(name);
-			if ((lastActual == null) || ((now - lastActual.longValue()) >= ATTACK_FORCE_PLAY_AFTER_MS)) {
-				return true;
-			}
-			return MathUtils.random() <= ATTACK_PLAY_PROBABILITY;
-		}
-		return true;
-	}
-
 	private static float resolvePlayVolume(String name) {
 		float baseVolume = getVolume(name);
 		if (isAttackSound(name)) {
@@ -220,12 +210,32 @@ public class SoundManager {
 		return DEFAULT_RATE;
 	}
 
+	private static int resolveMinDelay(String name, int defaultDelay) {
+		if (isAttackSound(name)) {
+			Integer delay = attackDelayByName.get(name);
+			return delay == null ? 0 : delay.intValue();
+		}
+		return defaultDelay;
+	}
+
+	private static int randomAttackDelay(String name) {
+		if (AXE_ATTACK.equals(name)) {
+			return MathUtils.random(AXE_ATTACK_MIN_DELAY_MS,
+					AXE_ATTACK_MAX_DELAY_MS);
+		}
+		if (SPEAR_ATTACK.equals(name)) {
+			return MathUtils.random(SPEAR_ATTACK_MIN_DELAY_MS,
+					SPEAR_ATTACK_MAX_DELAY_MS);
+		}
+		return LUR_ATTACK_MIN_DELAY_MS;
+	}
+
 	private static int defaultMinDelay(String name) {
 		if (BUTTON_CLICK.equals(name)) {
 			return BUTTON_CLICK_MIN_DELAY_MS;
 		}
 		if (isAttackSound(name)) {
-			return ATTACK_MIN_DELAY_MS;
+			return 0;
 		}
 		if (CASH_DROP.equals(name)) {
 			return DROP_MIN_DELAY_MS;
