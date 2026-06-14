@@ -97,10 +97,6 @@ public class SoundManager {
 		sound.play(resolvePlayVolume(name), resolvePlayRate(name));
 	}
 
-	public static void PlaySound() {
-		PlaySound(BUTTON_CLICK);
-	}
-
 	public static void PlaySoundHighPriority() {
 		PlaySound(BUTTON_CLICK, 50);
 	}
