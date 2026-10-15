@@ -6,10 +6,8 @@ import com.loon.core.geom.RectBox;
 import com.loon.core.geom.Vector2f;
 import com.loon.core.graphics.LColor;
 import com.loon.core.input.LInput;
-import com.loon.core.input.LInputFactory;
 import com.loon.core.input.LTouchCollection;
 import com.loon.core.input.LInputFactory.Key;
-import com.loon.core.input.LInputFactory.Touch;
 import com.loon.core.input.LTouchLocation;
 import com.loon.core.input.LTouchLocationState;
 import com.loon.core.timer.GameTime;
@@ -65,6 +63,7 @@ public abstract class MenuScreen extends GameScreen {
 	public void HandleInput(GameTime gameTime, LInput input) {
 		if (Key.isKeyPressed(Key.BACK)) {
 			this.OnCancel();
+			return;
 		}
 		LTouchCollection collection = TouchInput.getState();
 		if (collection.size() > 0) {
@@ -73,8 +72,9 @@ public abstract class MenuScreen extends GameScreen {
 					for (int i = 0; i < this.menuEntries.size(); i++) {
 						MenuEntry entry = this.menuEntries.get(i);
 						if (this.GetMenuEntryHitBounds(entry).contains(
-								Touch.x(), Touch.y())) {
+								touch.getPosition().x, touch.getPosition().y)) {
 							this.OnSelectEntry(i);
+							return;
 						}
 					}
 				}

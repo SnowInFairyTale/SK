@@ -34,6 +34,7 @@ public class ScreenManager extends DrawableGameComponent
 
 	public final void AddScreen(GameScreen screen)
 	{
+		GameScreen previousInputScreen = getInputScreen();
 		screen.setScreenManager(this);
 		screen.setIsExiting(false);
 		if (this.isInitialized)
@@ -41,6 +42,10 @@ public class ScreenManager extends DrawableGameComponent
 			screen.LoadContent();
 		}
 		this.screens.add(screen);
+		if (previousInputScreen != getInputScreen())
+		{
+			TouchInput.discardCurrentGesture();
+		}
 	}
 
 
@@ -109,11 +114,15 @@ public class ScreenManager extends DrawableGameComponent
 
 	public final void RemoveScreen(GameScreen screen)
 	{
+		GameScreen previousInputScreen = getInputScreen();
 		if (this.isInitialized)
 		{
 			screen.UnloadContent();
 		}
-		this.screens.remove(screen);
+		if (this.screens.remove(screen) && previousInputScreen != getInputScreen())
+		{
+			TouchInput.discardCurrentGesture();
+		}
 		this.screensToUpdate.remove(screen);
 		if (this.screens.size() > 0)
 		{
@@ -123,6 +132,19 @@ public class ScreenManager extends DrawableGameComponent
 
 	public final void SerializeState()
 	{}
+
+	private GameScreen getInputScreen()
+	{
+		for (int i = this.screens.size() - 1; i >= 0; i--)
+		{
+			GameScreen screen = this.screens.get(i);
+			if (screen.getScreenState() != ScreenState.Hidden)
+			{
+				return screen;
+			}
+		}
+		return null;
+	}
 
 	private void TraceScreens()
 	{
@@ -145,6 +167,7 @@ public class ScreenManager extends DrawableGameComponent
 	@Override
 	public void update(GameTime gameTime)
 	{
+		TouchInput.beginFrame();
 		this.screensToUpdate.clear();
 		for (GameScreen screen : this.screens)
 		{
@@ -156,23 +179,30 @@ public class ScreenManager extends DrawableGameComponent
 		{
 			GameScreen screen2 = this.screensToUpdate.get(this.screensToUpdate.size() - 1);
 			this.screensToUpdate.remove(this.screensToUpdate.size() - 1);
+			// Keep this frame's input owner even if it closes during Update/HandleInput.
+			boolean blocksInput = screen2.getScreenState() != ScreenState.Hidden;
 			if (screen2.getScreenState() != ScreenState.Hidden)
 			{
 				screen2.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 			}
 			if ((screen2.getScreenState() == ScreenState.TransitionOn) || (screen2.getScreenState() == ScreenState.Active))
 			{
-				if (!otherScreenHasFocus)
+				if (!otherScreenHasFocus && !screen2.getIsExiting()
+						&& this.screens.contains(screen2))
 				{
 					screen2.HandleInput(gameTime, game);
-					otherScreenHasFocus = true;
 				}
 				if (!screen2.getIsPopup())
 				{
 					coveredByOtherScreen = true;
 				}
 			}
+			if (blocksInput || screen2.getScreenState() != ScreenState.Hidden)
+			{
+				otherScreenHasFocus = true;
+			}
 		}
+		TouchInput.endFrame();
 		if (this.traceEnabled)
 		{
 			this.TraceScreens();

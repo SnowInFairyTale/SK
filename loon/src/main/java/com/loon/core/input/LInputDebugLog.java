@@ -8,6 +8,9 @@ import com.loon.core.LSystem;
 
 final class LInputDebugLog {
 
+	// Set to true when diagnosing touch issues, then rebuild.
+	private static final boolean ENABLED = false;
+
 	private static final long MAX_BYTES = 256 * 1024;
 	private static final long MIN_INTERVAL_MS = 250;
 	private static final Object LOCK = new Object();
@@ -20,6 +23,9 @@ final class LInputDebugLog {
 	}
 
 	static void write(String message) {
+		if (!ENABLED) {
+			return;
+		}
 		long now = System.currentTimeMillis();
 		synchronized (LOCK) {
 			if (message.equals(lastMessage)

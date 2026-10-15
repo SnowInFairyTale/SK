@@ -34,6 +34,13 @@ public class LTouchCollection extends java.util.LinkedList<LTouchLocation> {
 
 	private boolean isConnected;
 
+	// Changes only when a new gesture starts, not when another finger joins it.
+	private long gestureId;
+
+	public final long getGestureId() {
+		return gestureId;
+	}
+
 	public boolean AnyTouch() {
 		for (LTouchLocation location : this) {
 			if ((location.getState() == LTouchLocationState.Pressed)
@@ -57,6 +64,9 @@ public class LTouchCollection extends java.util.LinkedList<LTouchLocation> {
 
 	public LTouchCollection(Collection<LTouchLocation> locations) {
 		super(locations);
+		if (locations instanceof LTouchCollection) {
+			gestureId = ((LTouchCollection) locations).gestureId;
+		}
 	}
 
 	public final void update() {
@@ -94,21 +104,32 @@ public class LTouchCollection extends java.util.LinkedList<LTouchLocation> {
 	}
 
 	public final void add(int id, Vector2f position) {
-		for (int i = 0; i < size(); i++) {
-			if (this.get(i).id == id) {
-				clear();
-			}
-		}
+		beginTouch(id);
 		add(new LTouchLocation(id, LTouchLocationState.Pressed, position));
 	}
 
 	public final void add(int id, float x, float y) {
+		beginTouch(id);
+		add(new LTouchLocation(id, LTouchLocationState.Pressed, x, y));
+	}
+
+	private void beginTouch(int id) {
 		for (int i = 0; i < size(); i++) {
 			if (this.get(i).id == id) {
-				clear();
+				LTouchLocationState previous = this.get(i).getState();
+				if (previous == LTouchLocationState.Released
+						|| previous == LTouchLocationState.Invalid) {
+					// Android can reuse an ID before the next frame consumes its release.
+					remove(i);
+				} else {
+					clear();
+				}
+				break;
 			}
 		}
-		add(new LTouchLocation(id, LTouchLocationState.Pressed, x, y));
+		if (!AnyTouch()) {
+			gestureId++;
+		}
 	}
 
 	public final void update(int id, LTouchLocationState state, float posX,

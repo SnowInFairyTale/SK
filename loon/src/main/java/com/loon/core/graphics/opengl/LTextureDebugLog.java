@@ -12,6 +12,9 @@ import com.loon.core.LSystem;
 
 public final class LTextureDebugLog {
 
+	// Set to true when diagnosing texture or font issues, then rebuild.
+	private static final boolean ENABLED = false;
+
 	private static final long MIN_INTERVAL_MS = 250;
 	private static final Object LOCK = new Object();
 
@@ -25,6 +28,9 @@ public final class LTextureDebugLog {
 	}
 
 	public static void write(String message) {
+		if (!ENABLED) {
+			return;
+		}
 		message = sanitize(message);
 		long now = System.currentTimeMillis();
 		synchronized (LOCK) {
@@ -65,6 +71,9 @@ public final class LTextureDebugLog {
 
 	public static void writeRare(String category, String message,
 			long minIntervalMs) {
+		if (!ENABLED) {
+			return;
+		}
 		long now = System.currentTimeMillis();
 		synchronized (LOCK) {
 			Long lastTime = RARE_WRITE_TIMES.get(category);

@@ -12,7 +12,6 @@ import com.loon.core.graphics.LFont;
 import com.loon.core.graphics.opengl.LTexture;
 import com.loon.core.graphics.opengl.LTextures;
 import com.loon.core.input.LInput;
-import com.loon.core.input.LInputFactory;
 import com.loon.core.input.LTouchCollection;
 import com.loon.core.input.LTouchLocation;
 import com.loon.core.input.LTouchLocationState;
@@ -177,13 +176,144 @@ public class GameplayScreen extends GameScreen {
 
 	@Override
 	public void HandleInput(GameTime gameTime, LInput input) {
-		/*
-		 * PlayerIndex index = null; super.HandleInput(gameTime, input);
-		 * RefObject<PlayerIndex> tempRef_index = new
-		 * RefObject<PlayerIndex>(index); boolean tempVar =
-		 * input.IsNewButtonPress(Buttons.Back, null, tempRef_index); index =
-		 * tempRef_index.argvalue; if (tempVar) { this.GamePaused(true); }
-		 */
+		if (getIsExiting() || (getGameState() != GameState.Started
+				&& getGameState() != GameState.PlacingInitialTowers)) {
+			return;
+		}
+		LTouchCollection state = TouchInput.getState();
+		if (state.size() > 0) {
+			for (LTouchLocation location : state) {
+				LTouchLocation location3 = state.get(0);
+				if (location.getId() == location3.getId()) {
+					LTouchLocation location2 = null;
+					boolean flag = true;
+					RefObject<LTouchLocation> tempRef_location2 = new RefObject<LTouchLocation>(
+							location2);
+					location.tryGetPreviousLocation(tempRef_location2);
+					location2 = tempRef_location2.argvalue;
+					flag = location2.getState() == LTouchLocationState.Pressed;
+					this.setLastTouchPosition(new Vector2f(
+							(float) ((int) location.getPosition().x),
+							(float) ((int) location.getPosition().y)));
+					RectBox rectangle = new RectBox(
+							(int) this.getLastTouchPosition().x,
+							(int) this.getLastTouchPosition().y, 1, 1);
+					this.placingLostTouchFrames = 0;
+					if (this.isPlacing
+							&& (location.getState() == LTouchLocationState.Released)) {
+						this.StoppedPlacing();
+						break;
+					}
+					if (((getGameState() == GameState.PlacingInitialTowers) && this.startGameButton
+							.CentralCollisionArea().intersects(rectangle))
+							&& flag) {
+						SoundManager.PlaySoundHighPriority();
+						this.game.Components().remove(this.startGameButton);
+						this.startGameButton = null;
+						this.StartGame();
+						break;
+					}
+					if (((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))
+							&& ((this.showMenuButton.getIsVisible() && this.showMenuButton
+									.CentralCollisionArea().intersects(
+											rectangle)) && flag)) {
+						SoundManager.PlaySoundHighPriority();
+						if (this.startGameButton != null) {
+							this.startGameButton.Hide();
+						}
+						this.GamePaused(true);
+						break;
+					}
+					if ((getGameState() == GameState.Started)
+							|| (getGameState() == GameState.PlacingInitialTowers)) {
+						if ((this.towerToolbar != null)
+								&& (this.selectedTower != null)) {
+							if (this.towerToolbar.isGemSelectionMode()) {
+								GemType gemType = this.towerToolbar
+										.GetGemSlotAt(rectangle);
+								if (gemType != GemType.None && flag
+										&& this.getGems().getCount(gemType) > 0) {
+									SoundManager.PlaySoundHighPriority();
+									this.selectedTower.TryApplyGem(gemType);
+									break;
+								}
+							} else {
+								if (this.selectedTower.CanSell()
+										&& this.towerToolbar
+												.CentralCollisionAreaSellButton()
+												.intersects(rectangle)
+										&& flag) {
+									SoundManager.PlaySoundHighPriority();
+									this.SellTower(this.selectedTower);
+									this.ResetSelectedMonsterOrTower();
+									break;
+								}
+								if (this.selectedTower.CanUpgrade()
+										&& this.towerToolbar
+												.CentralCollisionAreaUpgradeButton()
+												.intersects(rectangle)
+										&& flag) {
+									this.selectedTower.Upgrade();
+									this.ResetSelectedMonsterOrTower();
+									break;
+								}
+							}
+						}
+						for (TowerButton button : this.towerButtons) {
+							if (!button.CentralCollisionArea().intersects(
+									rectangle)
+									|| !flag) {
+								continue;
+							}
+
+							SoundManager.PlaySoundHighPriority();
+							VibrationManager.VibrateTowerButton(this.game);
+							this.StartedPlacing(button);
+
+							break;
+						}
+						if ((this.getWaveManager() != null) && !this.isPlacing) {
+							Monster selectedMonster = this.getWaveManager()
+									.GetSelectedMonster(rectangle);
+							if (selectedMonster != null) {
+								this.ResetSelectedMonsterOrTower(false);
+								MonsterInfoScreen.purgeLeakedPreviews(this.game);
+								this.selectedMonster = selectedMonster;
+								this.selectedMonster.StartedSelection();
+								this.RemoveTowerToolbarIfNotNull();
+								this.monsterToolbar = new MonsterToolbar(
+										this.game, this.selectedMonster);
+								this.game.Components().add(this.monsterToolbar);
+								this.HideButtons();
+								break;
+							}
+						}
+						Tower selectedTower = this.GetSelectedTower(rectangle);
+						if (!this.isPlacing && (selectedTower != null)) {
+							if (this.selectedTower != null) {
+								this.selectedTower.StoppedSelection();
+							}
+							this.ResetSelectedMonsterOrTower(false);
+							this.selectedTower = selectedTower;
+							this.selectedTower.StartedSelection();
+							this.RemoveTowerToolbarIfNotNull();
+							this.HideButtons();
+							this.towerToolbar = new TowerToolbar(this.game,
+									this.selectedTower);
+							this.game.Components().add(this.towerToolbar);
+							break;
+						}
+						this.ResetSelectedMonsterOrTower();
+					}
+				}
+			}
+		} else if (this.isPlacing
+				&& ((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))) {
+			this.placingLostTouchFrames++;
+			if (this.placingLostTouchFrames >= LOST_TOUCH_CANCEL_FRAMES) {
+				this.CancelPlacing();
+			}
+		}
 	}
 
 	private void HideButtons() {
@@ -557,140 +687,6 @@ public class GameplayScreen extends GameScreen {
 			}
 			super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 			return;
-		}
-		LTouchCollection state = TouchInput.getState();
-		if (state.size() > 0) {
-			for (LTouchLocation location : state) {
-				LTouchLocation location3 = state.get(0);
-				if (location.getId() == location3.getId()) {
-					LTouchLocation location2 = null;
-					boolean flag = true;
-					RefObject<LTouchLocation> tempRef_location2 = new RefObject<LTouchLocation>(
-							location2);
-					location.tryGetPreviousLocation(tempRef_location2);
-					location2 = tempRef_location2.argvalue;
-					flag = location2.getState() == LTouchLocationState.Pressed;
-					this.setLastTouchPosition(new Vector2f(
-							(float) ((int) location.getPosition().x),
-							(float) ((int) location.getPosition().y)));
-					RectBox rectangle = new RectBox(
-							(int) this.getLastTouchPosition().x,
-							(int) this.getLastTouchPosition().y, 1, 1);
-					this.placingLostTouchFrames = 0;
-					if (this.isPlacing
-							&& (location.getState() == LTouchLocationState.Released)) {
-						this.StoppedPlacing();
-						break;
-					}
-					if (((getGameState() == GameState.PlacingInitialTowers) && this.startGameButton
-							.CentralCollisionArea().intersects(rectangle))
-							&& flag) {
-						SoundManager.PlaySoundHighPriority();
-						this.game.Components().remove(this.startGameButton);
-						this.startGameButton = null;
-						this.StartGame();
-						break;
-					}
-					if (((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))
-							&& ((this.showMenuButton.getIsVisible() && this.showMenuButton
-									.CentralCollisionArea().intersects(
-											rectangle)) && flag)) {
-						SoundManager.PlaySoundHighPriority();
-						if (this.startGameButton != null) {
-							this.startGameButton.Hide();
-						}
-						this.GamePaused(true);
-						break;
-					}
-					if ((getGameState() == GameState.Started)
-							|| (getGameState() == GameState.PlacingInitialTowers)) {
-						if ((this.towerToolbar != null)
-								&& (this.selectedTower != null)) {
-							if (this.towerToolbar.isGemSelectionMode()) {
-								GemType gemType = this.towerToolbar
-										.GetGemSlotAt(rectangle);
-								if (gemType != GemType.None && flag
-										&& this.getGems().getCount(gemType) > 0) {
-									SoundManager.PlaySoundHighPriority();
-									this.selectedTower.TryApplyGem(gemType);
-									break;
-								}
-							} else {
-								if (this.selectedTower.CanSell()
-										&& this.towerToolbar
-												.CentralCollisionAreaSellButton()
-												.intersects(rectangle)
-										&& flag) {
-									SoundManager.PlaySoundHighPriority();
-									this.SellTower(this.selectedTower);
-									this.ResetSelectedMonsterOrTower();
-									break;
-								}
-								if (this.selectedTower.CanUpgrade()
-										&& this.towerToolbar
-												.CentralCollisionAreaUpgradeButton()
-												.intersects(rectangle)
-										&& flag) {
-									this.selectedTower.Upgrade();
-									this.ResetSelectedMonsterOrTower();
-									break;
-								}
-							}
-						}
-						for (TowerButton button : this.towerButtons) {
-							if (!button.CentralCollisionArea().intersects(
-									rectangle)
-									|| !flag) {
-								continue;
-							}
-
-							SoundManager.PlaySoundHighPriority();
-							VibrationManager.VibrateTowerButton(this.game);
-							this.StartedPlacing(button);
-
-							break;
-						}
-						if ((this.getWaveManager() != null) && !this.isPlacing) {
-							Monster selectedMonster = this.getWaveManager()
-									.GetSelectedMonster(rectangle);
-							if (selectedMonster != null) {
-								this.ResetSelectedMonsterOrTower(false);
-								MonsterInfoScreen.purgeLeakedPreviews(this.game);
-								this.selectedMonster = selectedMonster;
-								this.selectedMonster.StartedSelection();
-								this.RemoveTowerToolbarIfNotNull();
-								this.monsterToolbar = new MonsterToolbar(
-										this.game, this.selectedMonster);
-								this.game.Components().add(this.monsterToolbar);
-								this.HideButtons();
-								break;
-							}
-						}
-						Tower selectedTower = this.GetSelectedTower(rectangle);
-						if (!this.isPlacing && (selectedTower != null)) {
-							if (this.selectedTower != null) {
-								this.selectedTower.StoppedSelection();
-							}
-							this.ResetSelectedMonsterOrTower(false);
-							this.selectedTower = selectedTower;
-							this.selectedTower.StartedSelection();
-							this.RemoveTowerToolbarIfNotNull();
-							this.HideButtons();
-							this.towerToolbar = new TowerToolbar(this.game,
-									this.selectedTower);
-							this.game.Components().add(this.towerToolbar);
-							break;
-						}
-						this.ResetSelectedMonsterOrTower();
-					}
-				}
-			}
-		} else if (this.isPlacing
-				&& ((getGameState() == GameState.Started) || (getGameState() == GameState.PlacingInitialTowers))) {
-			this.placingLostTouchFrames++;
-			if (this.placingLostTouchFrames >= LOST_TOUCH_CANCEL_FRAMES) {
-				this.CancelPlacing();
-			}
 		}
 		super.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 	}
