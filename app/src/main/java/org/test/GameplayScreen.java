@@ -34,6 +34,8 @@ public class GameplayScreen extends GameScreen {
 	private float loseOrWinScreenDelay = 2000f;
 	private MonsterToolbar monsterToolbar;
 	private java.util.ArrayList<Tower> placedTowers = new java.util.ArrayList<Tower>();
+	private final java.util.ArrayList<BladeWheelEffect> groundBladeWheels = new java.util.ArrayList<>();
+	private final HashMap<String, LTexture> effectTextures = new HashMap<>();
 	private Monster selectedMonster;
 	private Tower selectedTower;
 	private ShowMenuButton showMenuButton;
@@ -118,7 +120,27 @@ public class GameplayScreen extends GameScreen {
 	@Override
 	public void draw(SpriteBatch batch, GameTime gameTime) {
 		batch.draw(this.currentBackground, 0f, 0f, this.getGameOpacity());
+		// 光轮本体在背景之上、怪物之下，命中血溅由上层组件绘制。
+		for (BladeWheelEffect effect : this.groundBladeWheels) effect.drawGround(batch);
 		super.draw(batch, gameTime);
+	}
+
+	void addGroundBladeWheel(BladeWheelEffect effect) {
+		this.groundBladeWheels.add(effect);
+	}
+
+	void removeGroundBladeWheel(BladeWheelEffect effect) {
+		this.groundBladeWheels.remove(effect);
+	}
+
+	/** 场景统一持有特效纹理，单次攻击只借用，不重复增加引擎引用计数。 */
+	LTexture getEffectTexture(String path) {
+		LTexture texture = this.effectTextures.get(path);
+		if (texture == null || texture.isClose()) {
+			texture = LTextures.loadTexture(path);
+			this.effectTextures.put(path, texture);
+		}
+		return texture;
 	}
 
 	public final void GameIsActivated() {
@@ -649,6 +671,7 @@ public class GameplayScreen extends GameScreen {
 
 	@Override
 	public void UnloadContent() {
+		this.groundBladeWheels.clear();
 		SoundManager.StopBattleMusic();
 		if (getGameState() != GameState.Ended) {
 			GameComponentCollection components = super.getScreenManager()
@@ -661,6 +684,10 @@ public class GameplayScreen extends GameScreen {
 				}
 			}
 		}
+		for (LTexture texture : this.effectTextures.values()) {
+			if (!texture.isClose()) LTextures.removeTexture(texture, true);
+		}
+		this.effectTextures.clear();
 		super.UnloadContent();
 	}
 

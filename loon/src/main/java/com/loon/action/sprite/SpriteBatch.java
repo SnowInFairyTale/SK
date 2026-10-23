@@ -148,6 +148,7 @@ public class SpriteBatch implements LRelease {
 
 	private HashMap<Integer, SpriteBatch.TextureLine> lineLazy = new HashMap<Integer, SpriteBatch.TextureLine>(
 			1000);
+	private TextureLine dynamicLine;
 
 	private LColor tempColor = new LColor(1f, 1f, 1f, 1f);
 
@@ -600,6 +601,17 @@ public class SpriteBatch implements LRelease {
 			lineLazy.put(hashCode, line);
 		}
 		line.draw(this);
+	}
+
+	/** Variable-width, moving strokes without caching their coordinates. */
+	public void drawLine(float x1, float y1, float x2, float y2, float width) {
+		if (dynamicLine == null) {
+			dynamicLine = new TextureLine();
+		}
+		dynamicLine.setStart(x1, y1);
+		dynamicLine.setEnd(x2, y2);
+		dynamicLine.setStrokeWidth(width);
+		dynamicLine.draw(this);
 	}
 
 	private void checkTexture(final LTexture texture) {

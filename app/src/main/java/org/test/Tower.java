@@ -50,6 +50,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	private boolean isUpgrading;
 	private LTexture levelTexture;
 	private LurWeapon lurWeapon;
+	private final java.util.ArrayList<BladeWheelEffect> bladeWheels = new java.util.ArrayList<>();
 	private Missile missile;
 	private boolean obeyGameOpacity;
 	private LTexture occupiedTexture;
@@ -131,6 +132,11 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	/** Gem type for weapon tinting; {@link GemType#None} when no gem equipped. */
 	public final GemType getWeaponGemType() {
 		return this.gemType;
+	}
+
+	/** 仅在发出一次普攻时调用；飞行中的攻击保留本次判定结果。 */
+	final boolean rollSkillTrigger() {
+		return TowerCombatRules.triggersSkill(this.getTowerType(), this.gemType, Math.random());
 	}
 
 	public final boolean TryApplyGem(GemType type) {
@@ -308,6 +314,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	}
 
 	private void cancelActiveAttack() {
+		this.stopBladeWheels();
 		if (this.lurWeapon != null) {
 			this.lurWeapon.cancel();
 			this.lurWeapon = null;
@@ -316,6 +323,17 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 			this.missile.cancel();
 			this.missile = null;
 		}
+	}
+
+	private void stopBladeWheels() {
+		for (BladeWheelEffect effect : this.bladeWheels) effect.cancel();
+		this.bladeWheels.clear();
+	}
+
+	@Override
+	protected void unloadContent() {
+		this.stopBladeWheels();
+		super.unloadContent();
 	}
 
 	public final void remove() {
@@ -412,6 +430,7 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	}
 
 	private void StartUpgrade() {
+		this.stopBladeWheels();
 		this.currentUpgradeLevel++;
 		this.SetValuesFromTowerLevel(this.currentUpgradeLevel);
 		this.game.getGameplayScreen().getCash().Decrease(this.getUpgradeCost());
@@ -446,6 +465,9 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 	@Override
 	public void update(GameTime gameTime) {
 		super.update(gameTime);
+		for (int i = this.bladeWheels.size() - 1; i >= 0; i--) {
+			if (this.bladeWheels.get(i).isFinished()) this.bladeWheels.remove(i);
+		}
 		this.elapsedTime += 0.03333334f;
 		if (!this.getPlaced()) {
 			Vector2f vector = new Vector2f(50f, -80f);
@@ -490,6 +512,11 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 						this.lurWeapon = new LurWeapon(this.game, this,
 								targetMonstersForLurWeapon);
 						super.getGame().Components().add(this.lurWeapon);
+						if (BladeWheelEffect.ENABLED && this.rollSkillTrigger()) {
+							BladeWheelEffect effect = new BladeWheelEffect(this.game, this, this.lurWeapon);
+							this.bladeWheels.add(effect);
+							super.getGame().Components().add(effect);
+						}
 						this.towerMan.PlayAnimation();
 						this.elapsedTime = 0f;
 					}
@@ -604,6 +631,12 @@ public class Tower extends DrawableGameComponent implements IGameComponent {
 
 	public final Vector2f getPosition() {
 		return this.position;
+	}
+
+	/** 已放置塔上人物的逻辑中心，按人物当前帧尺寸计算。 */
+	final Vector2f getTowerManCenter() {
+		return new Vector2f(this.towerMan.getDrawPosition().x + this.towerMan.getSpriteWidth() * 0.5f,
+				this.towerMan.getDrawPosition().y + this.towerMan.getSpriteHeight() * 0.5f);
 	}
 
 	public final void setPosition(Vector2f value) {

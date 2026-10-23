@@ -98,9 +98,17 @@ public abstract class Missile extends AnimatedSprite {
 		this.game.Components().remove(this);
 	}
 
+	protected void onImpact(Monster target) {
+	}
+
+	/** 命中时再次检查目标类型，同时阻止无效目标的技能和受击反馈。 */
+	protected boolean canHitTarget(Monster target) {
+		return true;
+	}
+
 	@Override
 	public void update(GameTime gameTime) {
-		if (this.finished) {
+		if (this.finished || GameplayScreen.getGameState() != GameState.Started) {
 			return;
 		}
 		super.update(gameTime);
@@ -112,7 +120,15 @@ public abstract class Missile extends AnimatedSprite {
 			this.finished = true;
 			this.setHasHitTarget(true);
 			this.targetMonster.removeReservedHitPoints(this.getDamage());
-			this.targetMonster.Hit(this.getDamage());
+			if (!this.targetMonster.getDead() && this.canHitTarget(this.targetMonster)
+					&& this.game.getGameplayScreen().getWaveManager()
+							.GetAllActiveMonsters().contains(this.targetMonster)) {
+				// 零伤害不触发技能或爆点；正常命中仍由原普攻结算。
+				if (this.getDamage() > 0 && this.targetMonster.getHitPoints() > 0) {
+					this.onImpact(this.targetMonster);
+				}
+				this.targetMonster.Hit(this.getDamage());
+			}
 			this.game.Components().remove(this);
 		}
 		this.dist = distance;

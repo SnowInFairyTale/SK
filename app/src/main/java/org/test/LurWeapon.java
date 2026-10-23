@@ -118,7 +118,7 @@ public class LurWeapon extends DrawableGameComponent implements IGameComponent {
 
 	@Override
 	public void update(GameTime gameTime) {
-		if (this.finished) {
+		if (this.finished || GameplayScreen.getGameState() != GameState.Started) {
 			return;
 		}
 		super.update(gameTime);
@@ -128,6 +128,15 @@ public class LurWeapon extends DrawableGameComponent implements IGameComponent {
 		} else {
 			this.bashRadius = Math.min(this.bashRadius + RADIUS_STEP, range);
 		}
+	}
+
+	/** 当前最外层攻击波半径，供随波发射的光球同步位置。 */
+	float getVisualRadius() {
+		return this.bashRadius * (this.gemAttack ? BASH2_SCALE : 1f);
+	}
+
+	float getVisualMaxRadius() {
+		return this.tower.getRange() * (this.gemAttack ? BASH2_SCALE : 1f);
 	}
 
 	public final void cancel() {
@@ -149,7 +158,10 @@ public class LurWeapon extends DrawableGameComponent implements IGameComponent {
 		for (int i = 0; i < this.targetMonsters.size(); i++) {
 			Monster monster = this.targetMonsters.get(i);
 			monster.removeReservedHitPoints(this.damage);
-			monster.Hit(this.damage);
+			if (TowerCombatRules.canDamage(TowerType.Lur, monster.getMonsterType())
+					&& !monster.getDead() && monster.getHitPoints() > 0) {
+				monster.Hit(this.damage);
+			}
 		}
 		this.game.Components().remove(this);
 	}

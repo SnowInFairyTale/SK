@@ -216,6 +216,16 @@ public class WaveManager extends DrawableGameComponent implements
 		return list;
 	}
 
+	/** 填充调用方持有的快照，复用容量；扣血时仍可安全移除原列表中的怪物。 */
+	void copyActiveMonstersTo(java.util.ArrayList<Monster> destination) {
+		destination.clear();
+		for (int i = 0; i < this.activeWaves.size(); i++) {
+			java.util.ArrayList<Monster> monsters = this.activeWaves.get(i).getMonsters();
+			// 逐项复制，避免 addAll 在每波上创建临时数组。
+			for (int j = 0; j < monsters.size(); j++) destination.add(monsters.get(j));
+		}
+	}
+
 	public final Monster GetSelectedMonster(RectBox touchRect) {
 		for (Wave wave : this.activeWaves) {
 			Monster selectedMonster = wave.GetSelectedMonster(touchRect);

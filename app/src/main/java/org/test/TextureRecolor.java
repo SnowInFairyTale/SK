@@ -73,7 +73,7 @@ public final class TextureRecolor {
 	}
 
 	public static LTexture recolorBlackTo(String textureFile, LColor target) {
-		String key = "v5:" + textureFile + "#"
+		String key = "v6:" + textureFile + "#"
 				+ toArgb(target.r, target.g, target.b, 1f);
 		LTexture cached = cache.get(key);
 		if (cached != null) {
@@ -97,29 +97,24 @@ public final class TextureRecolor {
 		LImage image = source.getImage();
 		int width = image.getWidth();
 		int height = image.getHeight();
-		int[] pixels = new int[width * height];
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				LColor pixel = image.getColorAt(x, y);
-				int a = (int) (pixel.a * 255f + 0.5f);
-
-				if (a <= ALPHA_TRANSPARENT_MAX) {
-					pixels[(y * width) + x] = 0;
-				} else if (isBlackRgb(pixel)) {
-					if (a >= OPAQUE_BLACK_ALPHA_MIN) {
-						pixels[(y * width) + x] = 0;
-					} else {
-						pixels[(y * width) + x] = toArgb(pixel.r, pixel.g,
-								pixel.b, pixel.a);
-					}
-				} else {
-					pixels[(y * width) + x] = toArgb(target.r, target.g,
-							target.b, pixel.a);
-				}
+		// 直接读取 ARGB，避免 LColor(int) 把 alpha=0 转成不透明。
+		int[] pixels = image.getPixels();
+		int targetRgb = toArgb(target.r, target.g, target.b, 1f) & 0x00ffffff;
+		for (int i = 0; i < pixels.length; i++) {
+			int pixel = pixels[i];
+			int alpha = pixel >>> 24;
+			boolean black = ((pixel >>> 16) & 0xff) <= BLACK_CHANNEL_MAX
+					&& ((pixel >>> 8) & 0xff) <= BLACK_CHANNEL_MAX
+					&& (pixel & 0xff) <= BLACK_CHANNEL_MAX;
+			if (alpha <= ALPHA_TRANSPARENT_MAX
+					|| (black && alpha >= OPAQUE_BLACK_ALPHA_MIN)) {
+				pixels[i] = 0;
+			} else if (!black) {
+				// 沿用老武器规则：非黑色像素直接替色，保留原透明度。
+				pixels[i] = (pixel & 0xff000000) | targetRgb;
 			}
+			// 半透明黑色光晕保持原样。
 		}
-
 		return new LTexture(LImage.createRGBImage(pixels, width, height, true));
 	}
 
