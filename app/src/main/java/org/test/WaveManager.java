@@ -136,11 +136,11 @@ public class WaveManager extends DrawableGameComponent implements
 	static int ScaleHitPoints(int baseHitPoints, Difficulty difficulty) {
 		switch (difficulty) {
 		case Easy:
-			return baseHitPoints;
-		case Medium:
 			return (int) (baseHitPoints * 1.2);
-		case Hard:
+		case Medium:
 			return (int) (baseHitPoints * 1.3);
+		case Hard:
+			return (int) (baseHitPoints * 1.4);
 		default:
 			throw new RuntimeException("Unknown difficulty in wavemanager!");
 		}
