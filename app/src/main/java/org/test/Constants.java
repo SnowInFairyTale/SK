@@ -20,11 +20,11 @@ public final class Constants {
 	public static final int VerticalGridOffset = 80;
 
 	public static final int InitialRemainingLives = 20;
-	public static final int InitialCash = 50;
+	public static final int InitialCash = 500;
 
-	public static final int InitialPurpleGems = 0;
-	public static final int InitialRedGems = 0;
-	public static final int InitialGoldGems = 0;
+	public static final int InitialPurpleGems = 2;
+	public static final int InitialRedGems = 1;
+	public static final int InitialGoldGems = 1;
 
 	/** Radians — not pixels. */
 	public static final float PiOver8 = 0.3926991f;

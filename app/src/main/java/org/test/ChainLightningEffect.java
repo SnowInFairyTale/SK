@@ -69,6 +69,7 @@ public final class ChainLightningEffect extends DrawableGameComponent {
 		glowTexture = scene.getEffectTexture("assets/effects/lightning_glow.png");
 		impactTexture = scene.getEffectTexture("assets/effects/lightning_impact.png");
 		owner.Components().add(impactLayer);
+		SoundManager.PlaySound(SoundManager.LIGHTNING);
 	}
 
 	@Override

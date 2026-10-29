@@ -91,6 +91,11 @@ public interface Sound {
 
 	boolean play(float volume, float rate);
 
+	/** Higher priorities protect a stream from lower-priority sound effects. */
+	default boolean play(float volume, float rate, int priority) {
+		return play(volume, rate);
+	}
+
 	void stop();
 
 	void setLooping(boolean looping);

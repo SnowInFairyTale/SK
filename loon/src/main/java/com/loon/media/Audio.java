@@ -97,7 +97,7 @@ public class Audio {
 				playing = false;
 				return false;
 			}
-			streamId = pool.play(soundId, playVolume, playVolume, 1,
+			streamId = pool.play(soundId, playVolume, playVolume, playPriority,
 					looping ? -1 : 0, playRate);
 			playing = streamId != 0;
 			return playing;
@@ -160,7 +160,7 @@ public class Audio {
 	};
 
 	public Audio() {
-		this.pool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+		this.pool = new SoundPool(32, AudioManager.STREAM_MUSIC, 0);
 		this.pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
 			@Override
 			public void onLoadComplete(SoundPool soundPool, int sampleId,

@@ -22,8 +22,8 @@ public final class BladeWheelEffect extends DrawableGameComponent {
 	/** 飞出最外层攻击波后，再扩散此距离达到最大尺寸。 */
 	private static final float WAVE_OUTSIDE_DISTANCE = 24f;
 	/** 接上路径后计算的沿路行程，包含攻击范围内路段，不包含接入路径的飞行。 */
-	private static final float TRAVEL_DISTANCE = 500f;
-	private static final float TRAVEL_SPEED = 330f;
+	private static final float TRAVEL_DISTANCE = 300f;
+	private static final float TRAVEL_SPEED = 230f;
 	/** 自旋角速度，两个光轮互为反向。 */
 	private static final float SPIN_DEGREES_PER_SECOND = 810f;
 	/** 光球、完全展开光轮的显示直径。 */
@@ -113,6 +113,7 @@ public final class BladeWheelEffect extends DrawableGameComponent {
 		bloodTexture = scene.getEffectTexture("assets/effects/blood_splash.png");
 		bloodTexture.loadTexture();
 		scene.addGroundBladeWheel(this);
+		SoundManager.PlaySound(SoundManager.BLADE);
 	}
 
 	@Override

@@ -35,6 +35,7 @@ public abstract class SoundImpl<I> implements Sound {
 	protected float volume = 1;
 	protected float playVolume = 1;
 	protected float playRate = 1;
+	protected int playPriority = 1;
 	protected I impl;
 
 	public synchronized void onLoaded(I impl) {
@@ -45,12 +46,13 @@ public abstract class SoundImpl<I> implements Sound {
 			return;
 		}
 		this.impl = impl;
-		callbacks = CallbackList.dispatchSuccessClear(callbacks, this);
 		setVolumeImpl(volume);
 		setLoopingImpl(looping);
 		if (playing) {
 			playImpl();
 		}
+		// 回调可以立即播放；放在待播处理之后，避免把最后一次回调重复播放。
+		callbacks = CallbackList.dispatchSuccessClear(callbacks, this);
 	}
 
 	public synchronized void onLoadError(Throwable error) {
@@ -84,12 +86,18 @@ public abstract class SoundImpl<I> implements Sound {
 
 	@Override
 	public synchronized boolean play(float volume, float rate) {
+		return play(volume, rate, 1);
+	}
+
+	@Override
+	public synchronized boolean play(float volume, float rate, int priority) {
 		if (released) {
 			return false;
 		}
 		this.playing = true;
 		this.playVolume = MathUtils.clamp(volume, 0, 1);
 		this.playRate = MathUtils.clamp(rate, 0.5f, 2f);
+		this.playPriority = Math.max(0, priority);
 		if (impl != null) {
 			return playImpl();
 		} else {

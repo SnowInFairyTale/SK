@@ -15,13 +15,13 @@ import com.loon.core.timer.GameTime;
 /** 防空塔普攻命中后发出三根光线，向前扫过扇形区域，只伤后续飞行怪。 */
 public final class PiercingArrowEffect extends DrawableGameComponent {
 	static final boolean ENABLED = true;
-	private static final float TRAVEL_DISTANCE = 300f;
+	private static final float TRAVEL_DISTANCE = 250f;
 	/** 总夹角，绘制与伤害共用；三根光线分别位于两侧和中央。 */
 	private static final float ANGLE_DEGREES = 30f;
 	private static final float TRAVEL_SPEED = 600f;
 	private static final float DAMAGE_RATIO = 1f;
 	/** 向外飞行的光线段长度，仅影响外观。 */
-	private static final float LINE_LENGTH = 172f;
+	private static final float LINE_LENGTH = 112f;
 	/** 整张短光束贴图的宽度，包含亮芯和半透明光晕。 */
 	private static final float VISUAL_WIDTH = 28f;
 	/** 外围光晕单独加宽、叠加，亮芯仍按原图比例绘制。 */
@@ -66,8 +66,10 @@ public final class PiercingArrowEffect extends DrawableGameComponent {
 	@Override
 	protected void loadContent() {
 		super.loadContent();
-		texture = scene.getEffectTexture("assets/effects/piercing_ray.png");
+		texture = scene.getEffectTexture("assets/effects/piercing_ray_blue.png");
 		texture.loadTexture();
+		SoundManager.PlaySound(SoundManager.PIERCING);
+		owner.Components().add(new PiercingImpactEffect(owner, area.x, area.y));
 	}
 
 	@Override
@@ -92,6 +94,8 @@ public final class PiercingArrowEffect extends DrawableGameComponent {
 				if (area.touches(before, travelled, target.getPosition().x,
 						target.getPosition().y, target.getRadius())) {
 					hitTargets.add(target);
+					owner.Components().add(new PiercingImpactEffect(owner,
+							target.getPosition().x, target.getPosition().y));
 					target.Hit(damage);
 				}
 			}

@@ -32,15 +32,17 @@ public class TowerCombatRulesTest {
 	}
 
 	@Test
-	public void purpleSpearAndAirDefenceUseExactlyTheFirstQuarterOfRolls() {
+	public void purpleSpearAndAirDefenceUseTheirConfiguredTriggerRates() {
 		for (TowerType tower : new TowerType[] { TowerType.Spear, TowerType.AirDefence }) {
+			int expectedPercent = tower == TowerType.AirDefence ? 50 : 25;
+			double threshold = expectedPercent / 100.0;
 			int triggered = 0;
 			for (int i = 0; i < 100; i++) {
 				if (TowerCombatRules.triggersSkill(tower, GemType.Purple, (i + 0.5) / 100.0)) triggered++;
 			}
-			assertEquals(25, triggered);
-			assertTrue(TowerCombatRules.triggersSkill(tower, GemType.Purple, 0.249999));
-			assertFalse(TowerCombatRules.triggersSkill(tower, GemType.Purple, 0.25));
+			assertEquals(expectedPercent, triggered);
+			assertTrue(TowerCombatRules.triggersSkill(tower, GemType.Purple, threshold - 0.000001));
+			assertFalse(TowerCombatRules.triggersSkill(tower, GemType.Purple, threshold));
 			assertFalse(TowerCombatRules.triggersSkill(tower, GemType.Purple, 0.999999));
 		}
 	}

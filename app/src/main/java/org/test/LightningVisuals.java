@@ -20,7 +20,7 @@ final class LightningVisuals {
 
 	/** 连接线粗细系数（包括底部柔光和分叉）：1 = 基础线宽。
 	 * 数值翻倍则线宽翻倍，不影响怪物位置的柔光和爆点。 */
-	private static final float LINE_WIDTH_SCALE = 0.6f;
+	private static final float LINE_WIDTH_SCALE = 0.7f;
 
 	/** 连接线不透明度系数：0～1，越小越透明，1 = 保留原始不透明度。
 	 * 独立于怪物位置的柔光、爆点，保留原有闪烁和淡出。 */
@@ -154,7 +154,7 @@ final class LightningVisuals {
 	private static void drawLineGlow(Stroke out, float x1, float y1, float x2,
 			float y2, float scale, float alpha) {
 		float width = 13f * scale * Math.max(0f, LINE_WIDTH_SCALE);
-		float opacity = alpha * 0.24f * Math.max(0f, Math.min(1f, LINE_OPACITY_SCALE));
+		float opacity = alpha * 0.40f * Math.max(0f, Math.min(1f, LINE_OPACITY_SCALE));
 		if (width <= 0f || opacity <= 0f) return;
 		// 沿每一小段均匀铺中央截面；白色乘色保留原图颜色。
 		out.line(true, x1, y1, x2, y2, width, 1f, 1f, 1f, opacity);

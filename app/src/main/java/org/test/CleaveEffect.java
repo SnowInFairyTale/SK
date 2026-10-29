@@ -7,16 +7,17 @@ import com.loon.core.graphics.LColor;
 import com.loon.core.graphics.opengl.LTexture;
 import com.loon.core.timer.GameTime;
 
-/** 飞斧命中的扇形分裂：一次结算范围伤害，斩痕独立淡出。 */
+/** 飞斧命中的圆形分裂：一次结算范围伤害，三道留缝弧形波向外扩散。 */
 public final class CleaveEffect extends DrawableGameComponent {
 	/** 总开关。 */
 	private static final boolean ENABLED = true;
 	/** 分裂伤害 / 飞斧单次伤害；主目标仍由飞斧正常结算，不重复扣血。 */
 	private static final float DAMAGE_RATIO = 0.6f;
-	/** 从主目标中心向飞斧来向的前方延伸，作用于扇形内的其他怪物。 */
+	/** 以主目标为中心的伤害半径，视觉弧之间的间隙不影响命中。 */
 	private static final float RANGE = 120f;
-	/** 扇形总夹角，建议 1～180 度。 */
-	private static final float ANGLE_DEGREES = 130f;
+	private static final int WAVE_COUNT = 3;
+	/** 三道波中心相隔 120 度，每道占 100 度，相邻留 20 度间隙。 */
+	private static final float WAVE_ANGLE_DEGREES = 100f;
 	/** 斩痕持续时间，单位秒。 */
 	private static final float DURATION_SECONDS = 0.22f;
 	/** 仅改变视觉尺寸，不改变伤害范围；1 表示斩痕延伸到伤害半径。 */
@@ -46,8 +47,9 @@ public final class CleaveEffect extends DrawableGameComponent {
 	private final MainGame owner;
 	private final GameplayScreen scene;
 	private final CleaveArea area;
-	private final float[] arcX = new float[ARC_SEGMENTS + 1];
-	private final float[] arcY = new float[ARC_SEGMENTS + 1];
+	private final float directionAngle;
+	private final float[][] arcX = new float[WAVE_COUNT][ARC_SEGMENTS + 1];
+	private final float[][] arcY = new float[WAVE_COUNT][ARC_SEGMENTS + 1];
 	private final float[] sparkX = new float[Math.max(0, SPARK_COUNT)];
 	private final float[] sparkY = new float[sparkX.length];
 	private final float[] sparkSpeed = new float[sparkX.length];
@@ -64,17 +66,25 @@ public final class CleaveEffect extends DrawableGameComponent {
 		this.owner = owner;
 		this.scene = owner.getGameplayScreen();
 		area = new CleaveArea(primary.getPosition().x, primary.getPosition().y,
-				direction.x, direction.y, RANGE, ANGLE_DEGREES);
-		for (int i = 0; i <= ARC_SEGMENTS; i++) {
-			float angle = area.directionAngle - area.halfAngle
-					+ 2f * area.halfAngle * i / ARC_SEGMENTS;
-			arcX[i] = (float) Math.cos(angle);
-			arcY[i] = (float) Math.sin(angle);
+				RANGE);
+		directionAngle = (float) Math.atan2(direction.y, direction.x);
+		float waveStep = (float) (Math.PI * 2 / WAVE_COUNT);
+		float waveAngle = (float) Math.toRadians(WAVE_ANGLE_DEGREES);
+		for (int wave = 0; wave < WAVE_COUNT; wave++) {
+			for (int i = 0; i <= ARC_SEGMENTS; i++) {
+				float angle = directionAngle + wave * waveStep - waveAngle * 0.5f
+						+ waveAngle * i / ARC_SEGMENTS;
+				arcX[wave][i] = (float) Math.cos(angle);
+				arcY[wave][i] = (float) Math.sin(angle);
+			}
 		}
 		java.util.Random random = new java.util.Random();
 		for (int i = 0; i < sparkX.length; i++) {
 			float across = (i + random.nextFloat()) / sparkX.length;
-			float angle = area.directionAngle + (across * 2f - 1f) * area.halfAngle;
+			float wavePosition = across * WAVE_COUNT;
+			int wave = Math.min(WAVE_COUNT - 1, (int) wavePosition);
+			float angle = directionAngle + wave * waveStep
+					+ (wavePosition - wave - 0.5f) * waveAngle;
 			sparkX[i] = (float) Math.cos(angle);
 			sparkY[i] = (float) Math.sin(angle);
 			sparkSpeed[i] = 0.65f + random.nextFloat() * 0.55f;
@@ -90,6 +100,7 @@ public final class CleaveEffect extends DrawableGameComponent {
 		ribbonTexture = scene.getEffectTexture("assets/effects/cleave_ribbon.png");
 		impactTexture = scene.getEffectTexture("assets/effects/cleave_impact.png");
 		ribbonTexture.loadTexture();
+		SoundManager.PlaySound(SoundManager.CLEAVE);
 	}
 
 	static void trigger(MainGame owner, Monster primary, Vector2f direction, int attackDamage) {
@@ -130,7 +141,7 @@ public final class CleaveEffect extends DrawableGameComponent {
 				* Math.max(0f, Math.min(1f, OPACITY_SCALE));
 		if (size <= 0f || width <= 0f || alpha <= 0f) return;
 		LColor opacity = scene.getGameOpacity();
-		// 前沿快速向外扩张，同时从扇形左侧扫到右侧；末段只淡出。
+		// 三道波同步向外扩张，各自在自己的弧内扫动，末段只淡出。
 		float expansion = 1f - (1f - progress) * (1f - progress);
 		float radius = area.radius * size * (0.22f + 0.78f * expansion);
 		float sweep = Math.min(1f, 0.18f + progress * 2.4f);
@@ -157,6 +168,13 @@ public final class CleaveEffect extends DrawableGameComponent {
 	}
 
 	private void drawRibbon(SpriteBatch batch, float radius, float sweep, float width) {
+		for (int wave = 0; wave < WAVE_COUNT; wave++) {
+			drawWaveRibbon(batch, radius, sweep, width, arcX[wave], arcY[wave]);
+		}
+	}
+
+	private void drawWaveRibbon(SpriteBatch batch, float radius, float sweep, float width,
+			float[] arcX, float[] arcY) {
 		width *= Math.max(0f, BLADE_GLOW_WIDTH_SCALE);
 		if (ribbonTexture == null || sweep <= 0f || width <= 0f) return;
 		float opacity = Math.max(0f, Math.min(1f, BLADE_GLOW_OPACITY_SCALE));
@@ -190,6 +208,13 @@ public final class CleaveEffect extends DrawableGameComponent {
 	}
 
 	private void drawArc(SpriteBatch batch, float radius, float sweep, float width) {
+		for (int wave = 0; wave < WAVE_COUNT; wave++) {
+			drawWaveArc(batch, radius, sweep, width, arcX[wave], arcY[wave]);
+		}
+	}
+
+	private void drawWaveArc(SpriteBatch batch, float radius, float sweep, float width,
+			float[] arcX, float[] arcY) {
 		if (sweep <= 0f || width <= 0f) return;
 		float end = Math.min(1f, sweep) * ARC_SEGMENTS;
 		for (int i = 0; i < (int) Math.ceil(end); i++) {
@@ -240,7 +265,7 @@ public final class CleaveEffect extends DrawableGameComponent {
 		setTint(opacity, 1f, 1f, 1f, alpha);
 		batch.setColor(tint);
 		batch.draw(impactTexture, area.x, area.y, extent * 0.5f, extent * 0.5f,
-				extent, extent, 1f, 1f, (float) Math.toDegrees(area.directionAngle) + 45f,
+				extent, extent, 1f, 1f, (float) Math.toDegrees(directionAngle) + 45f,
 				0f, 0f, impactTexture.getWidth(), impactTexture.getHeight(), false, false, true);
 	}
 

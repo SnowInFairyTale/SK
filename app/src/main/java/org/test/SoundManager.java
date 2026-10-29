@@ -3,6 +3,7 @@ package org.test;
 import java.util.HashMap;
 
 import com.loon.core.Assets;
+import com.loon.core.Callback;
 import com.loon.media.BigClip;
 import com.loon.media.Sound;
 import com.loon.utils.MathUtils;
@@ -20,6 +21,11 @@ public class SoundManager {
 	public static final String LUR_ATTACK = "lur_attack";
 	public static final String GEM_DROP = "gem_drop";
 	public static final String BATTLE_MUSIC = "bj";
+	public static final String BLADE = "blade";
+	public static final String CLEAVE = "cleave";
+	public static final String LIGHTNING = "lightning";
+	public static final String PIERCING = "piercing";
+	private static final int EFFECT_PRIORITY = 10;
 
 	private static final HashMap<String, Sound> sounds = new HashMap<String, Sound>();
 	private static final HashMap<String, Long> lastPlayedAt = new HashMap<String, Long>();
@@ -56,7 +62,11 @@ public class SoundManager {
 			{ SUCCESS, "sounds/success.mp3", Float.valueOf(1f) },
 			{ UPGARD, "sounds/upgard.mp3", Float.valueOf(1f) },
 			{ LUR_ATTACK, "sounds/lur_attack.mp3", Float.valueOf(1f) },
-			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(1f) } };
+			{ GEM_DROP, "sounds/gem_drop.mp3", Float.valueOf(1f) },
+			{ BLADE, "sounds/blade.wav", Float.valueOf(1f) },
+			{ CLEAVE, "sounds/cleave.mp3", Float.valueOf(1f) },
+			{ LIGHTNING, "sounds/lightning.mp3", Float.valueOf(1f) },
+			{ PIERCING, "sounds/piercing.wav", Float.valueOf(1f) } };
 
 	public static synchronized void Initialize(MainGame mainGame) {
 		game = mainGame;
@@ -77,6 +87,10 @@ public class SoundManager {
 		if ((game != null) && !game.getSoundEnabled()) {
 			return;
 		}
+		if (isEffectSound(name)) {
+			playEffectSound(name);
+			return;
+		}
 		long now = System.currentTimeMillis();
 		Long last = lastPlayedAt.get(name);
 		if ((last != null) && ((now - last.longValue()) < minDelay)) {
@@ -94,6 +108,33 @@ public class SoundManager {
 			sound.stop();
 		}
 		sound.play(resolvePlayVolume(name), resolvePlayRate(name));
+	}
+
+	private static boolean isEffectSound(String name) {
+		return BLADE.equals(name) || CLEAVE.equals(name)
+				|| LIGHTNING.equals(name) || PIERCING.equals(name);
+	}
+
+	private static void playEffectSound(final String name) {
+		Sound sound = getSound(name);
+		if (sound == null) return;
+		// 每次触发各自注册；尚未加载完成时也不合并或丢弃请求。
+		sound.addCallback(new Callback<Sound>() {
+			@Override
+			public void onSuccess(Sound loaded) {
+				if ((game != null) && !game.getSoundEnabled()) return;
+				// 不节流、不 stop，允许同一音效重叠，普通音效不能抢占它。
+				if (!loaded.play(getVolume(name), DEFAULT_RATE, EFFECT_PRIORITY)) {
+					System.err.println("Effect sound playback failed: " + name);
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable error) {
+				System.err.println("Effect sound load failed: " + name);
+				error.printStackTrace();
+			}
+		});
 	}
 
 	public static void PlaySoundHighPriority() {

@@ -34,6 +34,10 @@ public class WaveManager extends DrawableGameComponent implements
 	}
 
 	private static final WaveSpec[] WAVE_SPECS = {
+			new WaveSpec(10, 130, 2f, 1000.0, 2, MonsterType.Chicken),
+			new WaveSpec(10, 130, 2f, 1000.0, 2, MonsterType.Chicken),
+			new WaveSpec(10, 130, 2f, 1000.0, 2, MonsterType.Chicken),
+			new WaveSpec(10, 230, 2f, 1000.0, 2, MonsterType.Chicken),
 			new WaveSpec(8, 20, 2f, 1500.0, 1, MonsterType.Peasant),
 			new WaveSpec(8, 20, 2f, 1000.0, 1, MonsterType.Peasant),
 			new WaveSpec(10, 30, 3.2f, 1000.0, 2, MonsterType.Peon),
