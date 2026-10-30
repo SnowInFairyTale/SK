@@ -12,7 +12,7 @@ public final class CleaveEffect extends DrawableGameComponent {
 	/** 总开关。 */
 	private static final boolean ENABLED = true;
 	/** 分裂伤害 / 飞斧单次伤害；主目标仍由飞斧正常结算，不重复扣血。 */
-	private static final float DAMAGE_RATIO = 0.6f;
+	private static final float DAMAGE_RATIO = 1f;
 	/** 以主目标为中心的伤害半径，视觉弧之间的间隙不影响命中。 */
 	private static final float RANGE = 120f;
 	private static final int WAVE_COUNT = 3;

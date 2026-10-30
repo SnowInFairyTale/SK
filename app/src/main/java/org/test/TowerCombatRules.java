@@ -12,9 +12,9 @@ final class TowerCombatRules {
 		case Lur:
 			return gem == GemType.Gold;
 		case Spear:
-			return gem == GemType.Purple && roll >= 0.0 && roll < 0.25;
+			return gem == GemType.Purple && roll >= 0.0 && roll < 0.40;
 		case AirDefence:
-			return gem == GemType.Purple && roll >= 0.0 && roll < 0.50;
+			return gem == GemType.Purple && roll >= 0.0 && roll < 1.0;
 		default:
 			return false;
 		}

@@ -34,7 +34,7 @@ public class TowerCombatRulesTest {
 	@Test
 	public void purpleSpearAndAirDefenceUseTheirConfiguredTriggerRates() {
 		for (TowerType tower : new TowerType[] { TowerType.Spear, TowerType.AirDefence }) {
-			int expectedPercent = tower == TowerType.AirDefence ? 50 : 25;
+			int expectedPercent = tower == TowerType.AirDefence ? 100 : 40;
 			double threshold = expectedPercent / 100.0;
 			int triggered = 0;
 			for (int i = 0; i < 100; i++) {
@@ -43,7 +43,8 @@ public class TowerCombatRulesTest {
 			assertEquals(expectedPercent, triggered);
 			assertTrue(TowerCombatRules.triggersSkill(tower, GemType.Purple, threshold - 0.000001));
 			assertFalse(TowerCombatRules.triggersSkill(tower, GemType.Purple, threshold));
-			assertFalse(TowerCombatRules.triggersSkill(tower, GemType.Purple, 0.999999));
+			assertEquals(tower == TowerType.AirDefence,
+					TowerCombatRules.triggersSkill(tower, GemType.Purple, 0.999999));
 		}
 	}
 
