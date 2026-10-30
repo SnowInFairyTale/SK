@@ -22,7 +22,7 @@ public final class Constants {
 	public static final int InitialRemainingLives = 20;
 	public static final int InitialCash = 50;
 
-	public static final int InitialPurpleGems = 0;
+	public static final int InitialPurpleGems = 1;
 	public static final int InitialRedGems = 0;
 	public static final int InitialGoldGems = 0;
 
